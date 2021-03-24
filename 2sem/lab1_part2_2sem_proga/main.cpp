@@ -68,10 +68,10 @@ int main() {
 
     char name_in[NameFile]; // имя файла где хранятся данные
     std::cout << "Введите имя файла с исходным текстом:";
-    std::cin >> name_in;      // C:\Users\andre\CLionProjects\2sem\lab1_part2_2sem_proga\data1.txt
-                              // C:\Users\andre\CLionProjects\2sem\lab1_part2_2sem_proga\data2.txt
-                              // C:\Users\andre\CLionProjects\2sem\lab1_part2_2sem_proga\data3.txt
-                              // C:\Users\andre\CLionProjects\2sem\lab1_part2_2sem_proga\data4.txt
+    std::cin >> name_in;      // C:\Users\andre\CLionProjects\leti_progs\2sem\lab1_part2_2sem_proga\data1.txt
+                              // C:\Users\andre\CLionProjects\leti_progs\2sem\lab1_part2_2sem_proga\data2.txt
+                              // C:\Users\andre\CLionProjects\leti_progs\2sem\lab1_part2_2sem_proga\data3.txt
+                              // C:\Users\andre\CLionProjects\leti_progs\2sem\lab1_part2_2sem_proga\data4.txt
 
     f_in.open(name_in,std::ios::in);
     if(f_in.bad()){
@@ -81,7 +81,7 @@ int main() {
         std::cout << "Результаты будут выведены в файл." << std::endl;
         std::cout << "Введите имя файла для вывода результатов:";
         char name_out[NameFile]; // имя файла куда заносятся результаты выполнения программы
-        std::cin >> name_out;               // C:\Users\andre\CLionProjects\2sem\lab1_part2_2sem_proga\result.txt
+        std::cin >> name_out;               // C:\Users\andre\CLionProjects\leti_progs\2sem\lab1_part2_2sem_proga\result.txt
         f_out.open(name_out,std::ios::out);
         if(f_out.bad()){
             std::cout << "Нет возможности сформировать файл с результатом." << std::endl;
