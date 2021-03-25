@@ -14,17 +14,17 @@ int main(){
     char name_output[nameFile]; // имя файла куда выводится результат
 
     std::cout << "Введите имя файла с исходным текстом:\n";
-    //std::cin >> name_input;                     // C:\Users\andre\CLionProjects\2sem\lab2_2sem_proga\data.txt
+    //std::cin >> name_input;                     // C:\Users\andre\CLionProjects\leti_progs\2sem\lab2_2sem_proga\data.txt
 
-    f_in.open(/*name_input*/ "C:\\Users\\andre\\CLionProjects\\2sem\\lab2_2sem_proga\\data.txt",std::ios::in);
+    f_in.open(/*name_input*/ "C:\\Users\\andre\\CLionProjects\\leti_progs\\2sem\\lab2_2sem_proga\\data.txt",std::ios::in);
     if(f_in.bad()){
         std::cout << "Произошла ошибка при открытии файла для ввода текста.";
     }
     else{
         std::cout << "Результаты будут выведены в файл." << std::endl;
         std::cout << "Введите имя файла для вывода результатов:\n";
-        //std::cin >> name_output;                // C:\Users\andre\CLionProjects\2sem\lab2_2sem_proga\result.txt
-        f_out.open(/*name_output*/ "C:\\Users\\andre\\CLionProjects\\2sem\\lab2_2sem_proga\\result.txt",std::ios::out);
+        //std::cin >> name_output;                // C:\Users\andre\CLionProjects\leti_progs\2sem\lab2_2sem_proga\result.txt
+        f_out.open(/*name_output*/ "C:\\Users\\andre\\CLionProjects\\leti_progs\\2sem\\lab2_2sem_proga\\result.txt",std::ios::out);
         if(f_out.bad()){
             std::cout << "Нет возможности сформировать файл с результатом." << std::endl;
             f_in.close();
@@ -48,7 +48,7 @@ int main(){
                 input_bloc(&f_in,&txt,coordinates,status);
                 count_sentences += search_count_sentences(&txt);
                 vivod_bloc(f_out,&txt,coordinates);
-                flag = perevod_bloc(status, coordinates);
+                flag = perevod_bloc(status, coordinates,txt);
             }
             while (flag != Situations::END_OF_FILE);
             output_result(f_out, count_sentences);

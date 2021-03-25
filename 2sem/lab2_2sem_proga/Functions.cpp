@@ -1,3 +1,11 @@
+// 1) разделить Functions.cpp на файлы
+// 2) разобратьс€ с вводом символов в следующих блоках
+// 3) разобратьс€ с переводом строк при считывании блока, в котором меньше 5 строк
+// 4) разобратьс€ с конечным блоком. ¬ строчке с концом файла все символы присутствуют (5 штук).
+// 5) сделать представлени€ программы (кто написал, формулировка задани€)
+// 6) комментарии проставить
+// 7) отредачить все на читабельность и некретичные ошибки
+
 #include <fstream>
 #include "All_Strings.h"
 #include <iostream>
@@ -5,7 +13,7 @@
 
 void perevod_new_line(std::fstream* f_in){
     char s = '!';
-    while(s != '\n'){
+    while((s != '\n') && (!f_in->eof())){
         s = f_in->get();
     }
 }
@@ -17,7 +25,7 @@ Situations input_bloc(std::fstream* f_in,All_Strings* txt, const int coordinates
     for(int i=0; i<(5*coordinates[0]); i++){
         perevod_new_line(f_in);
     }
-
+    txt->setNumber(0);
     // считывание строки
     for(int row=0; row<5; row++){ // проход по строкам
 
@@ -35,6 +43,7 @@ Situations input_bloc(std::fstream* f_in,All_Strings* txt, const int coordinates
                     for(int i = row; i<5; i++) {            // блоки теперь могут строитьс€ только справа
                         *(status + i) = Situations::END_OF_FILE_IN_STRING;
                     }
+                    txt->setNumber(row+1);
                     return Situations::END_OF_FILE;
                 }                                                // так как ниже строк нету
 
@@ -49,39 +58,73 @@ Situations input_bloc(std::fstream* f_in,All_Strings* txt, const int coordinates
                 if(column == 4){                      // если в строке были считаны все 5 символов =>
                     txt->setMark_in_string(row,column+1); // => строка не кончилась и не конец файла
                     *(status+row) = Situations::GOOG;
+                    if(row != 4){
+                        perevod_new_line(f_in);   // переход на новую строку после прочтени€ очередной строки
+                    }
                 }
                 column++;  // переход к новому столбцу (символу в строке)
             }
-
         }
-        perevod_new_line(f_in);   // переход на новую строку после прочтени€ очередной строки
-
+        txt->setNumber(row+1);
     }
     return Situations::BAD;
 }
 
 
-Situations perevod_bloc(const Situations *status, int* coordinates){
+Situations perevod_bloc(const Situations *status, int* coordinates, All_Strings txt){
+    for(int i=0;i<5;i++){
+        if(*(status+i) == Situations::GOOG){
+            std::cout << "GOOD ";
+        }
+        else if(*(status+i) == Situations::END_OF_FILE_IN_STRING){
+            std::cout << "END ";
+        }
+        else if(*(status+i) == Situations::NEW_LINE){
+            std::cout << "NEW_LINE ";
+        }
+    }
+    std::cout << "\n" << coordinates[0] << ' ' << coordinates[1] << '\n';
 
+    int count = 0;
+    for(int i=0; i < txt.getNumber();i++){
+        if( (*(status+i)) == Situations::NEW_LINE){
+            count++;
+        }
+    }
+    if(count == (txt.getNumber())){
+        coordinates[0]++;
+        coordinates[1] = 0;
+        return Situations::GOOG;
+    }
+    if((count == (txt.getNumber()-1)) && ( ( *(status+txt.getNumber()-1) ) == Situations::END_OF_FILE_IN_STRING) ){
+        return Situations::END_OF_FILE;
+    }
 
-    return Situations::END_OF_FILE;
+    coordinates[1]++;
+    return Situations::GOOG;
 }
 
 void vivod_bloc(std::fstream& f_out, All_Strings* txt, int coordinates[2]){
 
     std::cout << "¬ывод блока с координатами: (" << coordinates[0] << ", " << coordinates[1] << ")" << std::endl;
-    for(int row=0;row<5;row++){
-        for(int column=0; column<6;column++){
+    for(int row=0;row<(txt->getNumber());row++){
+        int column = 0;
+        do{
             std::cout << txt->getStr(row,column) << ' ';
+            column++;
         }
+        while(txt->getStr(row,column) != txt->getMark());
         std::cout << '\n';
     }
 
     f_out << "¬ывод блока с координатами: (" << coordinates[0] << ", " << coordinates[1] << ")" << std::endl;
-    for(int row=0;row<5;row++){
-        for(int column=0; column<6;column++){
+    for(int row=0;row<(txt->getNumber());row++){
+        int column = 0;
+        do{
             f_out << txt->getStr(row,column) << ' ';
+            column++;
         }
+        while(txt->getStr(row,column) != txt->getMark());
         f_out << '\n';
     }
 }

@@ -7,7 +7,7 @@
 Situations input_bloc(std::fstream* f_in, All_Strings* txt, const int coordinates[2], Situations* status);
 void perevod_new_line(std::fstream* f_in);
 
-Situations perevod_bloc(const Situations* status, int* coordinates);
+Situations perevod_bloc(const Situations* status, int* coordinates, All_Strings txt);
 
 void vivod_bloc(std::fstream& f_out, All_Strings* txt, int coordinates[2]);
 int search_count_sentences(All_Strings* txt);

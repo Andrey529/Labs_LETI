@@ -1,31 +1,34 @@
 #ifndef LAB2_2SEM_PROGA_ALL_STRINGS_H
 #define LAB2_2SEM_PROGA_ALL_STRINGS_H
 
-const unsigned len_str = 5;    // РјР°РєСЃРёРјР°Р»СЊРЅР°СЏ РґР»РёРЅР° СЃС‚СЂРѕРєРё РІ Р±Р»РѕРєРµ
-const unsigned number_str = 5; //РјР°РєСЃРёРјР°Р»СЊРЅРѕРµ РєРѕР»РёС‡РµСЃС‚РІРѕ СЃС‚СЂРѕРє РІ Р±Р»РѕРєРµ
+const unsigned len_str = 5;    // максимальная длина строки в блоке
+const unsigned number_str = 5; //максимальное количество строк в блоке
 
 class All_Strings{
     char string[number_str][len_str+1];
-    int Number; // С„Р°РєС‚РёС‡РµСЃРєРѕРµ РєРѕР»РёС‡РµСЃС‚РІРѕ СЃС‚СЂРѕРє РІ Р±Р»РѕРєРµ
-    char Mark;  // РјР°СЂРєРµСЂ
+    int Number; // фактическое количество строк в блоке
+    char Mark;  // маркер
 public:
-    void setStr(unsigned row,unsigned column, char s){ // РІРІРѕРґРёРј СЃРёРјРІРѕР» РёРЅРґРµРєСЃР° column РІ СЃС‚СЂРѕРєСѓ row
+    void setStr(unsigned row,unsigned column, char s){ // вводим символ индекса column в строку row
         string[row][column] = s;
     }
-    char getStr(unsigned row, unsigned column){        // РїРѕР»СѓС‡Р°РµРј СЌР»РµРјРµРЅС‚ РїРѕРґ РёРЅРґРµРєСЃРѕРј column РІ СЃС‚СЂРѕРєРµ row
+    char getStr(unsigned row, unsigned column){        // получаем элемент под индексом column в строке row
         return string[row][column];
     }
-    void setMark_in_string(unsigned row, unsigned column){  // СѓСЃС‚Р°РЅРѕРІРєР° РјР°СЂРєРµСЂР° РІ РєРѕРЅРµС† СЃС‚СЂРѕРєРё РїРѕРґ РЅРѕРјРµСЂРѕРј row
+    void setMark_in_string(unsigned row, unsigned column){  // установка маркера в конец строки под номером row
         string[row][column] = Mark;
     }
-    void setMark(char s){                              // СѓСЃС‚Р°РЅР°РІР»РёРІР°РµРј РјР°СЂРєРµСЂ
+    void setMark(char s){                              // устанавливаем маркер
         Mark = s;
     }
-    char getMark(){                                    // РїРѕР»СѓС‡РёС‚СЊ Р·РЅР°С‡РµРЅРёРµ РјР°СЂРєРµСЂР°
+    char getMark(){                                    // получить значение маркера
         return Mark;
     }
-    int getNumber(){                                   // РїРѕР»СѓС‡РёС‚СЊ РєРѕР»РёС‡РµСЃС‚РІРѕ СЃС‚СЂРѕРє РІ Р±Р»РѕРєРµ
+    int getNumber(){                                   // получить количество строк в блоке
         return Number;
+    }
+    void setNumber(unsigned row){
+        Number = row;
     }
 };
 
