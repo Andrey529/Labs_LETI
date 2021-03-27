@@ -28,10 +28,11 @@ Situations input_bloc(std::fstream* f_in,All_Strings* txt, const int coordinates
             // блока справа
 
             //изза /n и /r неправильно переводится курсор для перемещения строк в блоке
-            if(row == 1) f_in->seekg(-3);
-            else if(row == 2) f_in->seekg(-2);
-            else if(row == 3) f_in->seekg(-1);
-
+            if((coordinates[1] != 0) || (coordinates[0] != 0)){
+                if(row == 1) f_in->seekg(-3,std::ios::cur);
+                else if(row == 2) f_in->seekg(-2,std::ios::cur);
+                else if(row == 3) f_in->seekg(-1,std::ios::cur);
+            }
 
             int column=0; // индекс столбца (символа в строке)
             char s;
@@ -57,7 +58,17 @@ Situations input_bloc(std::fstream* f_in,All_Strings* txt, const int coordinates
                 }
                 if(column == 4){                      // если в строке были считаны все 5 символов =>
                     txt->setMark_in_string(row,column+1); // => строка не кончилась и не конец файла
-                    *(status + row) = Situations::GOOG;
+                    s = f_in->get();
+                    if(s == '\n'){
+                        *(status + row) = Situations::NEW_LINE;
+                        f_in->seekg(-4,std::ios::cur);
+                    }
+                    else if(f_in->eof()){
+                        *(status + row) = Situations::END_OF_FILE_IN_STRING;
+                    }
+                    else{
+                        *(status + row) = Situations::GOOG;
+                    }
                     if(row != 4){
                         perevod_new_line(f_in);   // переход на новую строку после прочтения очередной строки
                     }
@@ -91,11 +102,13 @@ Situations perevod_bloc(const Situations *status, int* coordinates, All_Strings 
             count++;
         }
     }
+
     if(count == (txt.getNumber())){
         coordinates[0]++;
         coordinates[1] = 0;
         return Situations::GOOG;
     }
+
     if((count == (txt.getNumber()-1)) && ( ( *(status+txt.getNumber()-1) ) == Situations::END_OF_FILE_IN_STRING) ){
         return Situations::END_OF_FILE;
     }

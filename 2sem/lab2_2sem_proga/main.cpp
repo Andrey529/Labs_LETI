@@ -62,6 +62,5 @@ int main(){
             output_result(f_out, count_sentences);
         }
     }
-
     return 0;
 }
