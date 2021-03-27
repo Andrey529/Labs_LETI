@@ -1,3 +1,14 @@
+/*
+ * 1) переводим блок по вертикали
+ * 2) смотрим на состояние текущей строки в предыдущем блоке
+ *          а) если GOOD, то считываем строку
+ *
+ *          б) переходим к новой строке
+ * */
+
+
+
+
 #include "All_Strings.h"
 #include "Situations.h"
 #include <fstream>
@@ -12,7 +23,64 @@ void perevod_new_line(std::fstream* f_in){
 
 Situations input_bloc(std::fstream* f_in,All_Strings* txt, const int coordinates[2], Situations* status){
 
+    // перевод блока по вертикали
+    for(int i=0; i<5*coordinates[0]; i++){
+        char s = '!';
+        while(s != '\n'){
+            s = f_in->get();
+        }
+    }
 
+    int row = 0;
+    txt->setNumber(0);
+    while( (row<5) ){
+
+
+        if( (*(status+row)) == Situations::GOOG ){
+
+            f_in->seekg(5*coordinates[1],std::ios::cur);
+
+            int column = 0;
+            while( (column<5) ){
+                char s;
+                s = f_in->get();
+
+                if(f_in->eof()){
+                    txt->setMark_in_string(row,column);
+                    *(status+row) = Situations::END_OF_FILE_IN_STRING;
+                    for(int i = row;i<5;i++){
+                        *(status+i) = Situations::END_OF_FILE_IN_STRING;
+                    }
+                    txt->setNumber(row+1);
+                    return Situations::END_OF_FILE;
+                }
+
+                if(s == '\n'){
+                    *(status+row) = Situations::NEW_LINE;
+                    txt->setMark_in_string(row,column);
+                }
+                else{
+                    txt->setStr(row,column,s);
+                }
+                column++;
+
+                if(column == 5){
+                    txt->setMark_in_string(row,column);
+                    s = f_in->get();
+                    if(f_in->eof()){
+
+                    }
+
+
+
+                }
+            }
+            txt->setNumber(row);
+        }
+        row++;
+    }
+
+    return Situations::BAD;
 }
 
 
