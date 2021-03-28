@@ -1,30 +1,14 @@
-/*
- * 1) переводим блок по вертикали
- * 2) смотрим на состояние текущей строки в предыдущем блоке
- *          а) если GOOD, то считываем строку
- *
- *          б) переходим к новой строке
- * */
-
-
-
-
 #include "All_Strings.h"
 #include "Situations.h"
 #include <fstream>
 #include <iostream>
 
-void perevod_new_line(std::fstream* f_in){
-    char s = '!';
-    while((s != '\n') && (!f_in->eof())){
-        s = f_in->get();
-    }
-}
-
 Situations input_bloc(std::fstream* f_in,All_Strings* txt, const int coordinates[2], Situations* status){
 
+    f_in->seekg(0,std::ios::beg);
+
     // перевод блока по вертикали
-    for(int i=0; i<5*coordinates[0]; i++){
+    for(int i=0; i<(5*coordinates[0]); i++){
         char s = '!';
         while(s != '\n'){
             s = f_in->get();
@@ -40,14 +24,14 @@ Situations input_bloc(std::fstream* f_in,All_Strings* txt, const int coordinates
 
             f_in->seekg(5*coordinates[1],std::ios::cur);
 
+            char s;
             int column = 0;
             while( (column<5) ){
-                char s;
+
                 s = f_in->get();
 
                 if(f_in->eof()){
                     txt->setMark_in_string(row,column);
-                    *(status+row) = Situations::END_OF_FILE_IN_STRING;
                     for(int i = row;i<5;i++){
                         *(status+i) = Situations::END_OF_FILE_IN_STRING;
                     }
@@ -58,6 +42,7 @@ Situations input_bloc(std::fstream* f_in,All_Strings* txt, const int coordinates
                 if(s == '\n'){
                     *(status+row) = Situations::NEW_LINE;
                     txt->setMark_in_string(row,column);
+                    break;
                 }
                 else{
                     txt->setStr(row,column,s);
@@ -77,18 +62,17 @@ Situations input_bloc(std::fstream* f_in,All_Strings* txt, const int coordinates
                     else{
                         *(status+row) = Situations::GOOG;
                     }
-                    while( (s != '\n') && (!f_in->eof()) ){
-                        s = f_in->get();
+                    if(row != 4){
+                        while( (s != '\n') && (!f_in->eof()) ){
+                            s = f_in->get();
+                        }
+                    }
+                    if(f_in->eof()){
+                        txt->setNumber(row+1);
+                        return Situations::END_OF_FILE;
                     }
                 }
-
-
-//                if(f_in->eof()){
-//
-//                }
-
             }
-
         }
         row++;
         txt->setNumber(row);
