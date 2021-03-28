@@ -68,16 +68,31 @@ Situations input_bloc(std::fstream* f_in,All_Strings* txt, const int coordinates
                     txt->setMark_in_string(row,column);
                     s = f_in->get();
                     if(f_in->eof()){
-
+                        *(status+row) = Situations::END_OF_FILE_IN_STRING;
                     }
-
-
-
+                    if(s == '\n'){
+                        *(status+row) = Situations::NEW_LINE;
+                        f_in->seekg(-2,std::ios::cur);
+                    }
+                    else{
+                        *(status+row) = Situations::GOOG;
+                    }
+                    while( (s != '\n') && (!f_in->eof()) ){
+                        s = f_in->get();
+                    }
                 }
+
+
+//                if(f_in->eof()){
+//
+//                }
+
             }
-            txt->setNumber(row);
+
         }
         row++;
+        txt->setNumber(row);
+
     }
 
     return Situations::BAD;
