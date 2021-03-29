@@ -1,10 +1,3 @@
-// 2) разобраться с вводом символов в следующих блоках
-// 3) разобраться с переводом строк при считывании блока, в котором меньше 5 строк
-// 4) разобраться с конечным блоком. В строчке с концом файла все символы присутствуют (5 штук).
-// 5) сделать представления программы (кто написал, формулировка задания)
-// 6) комментарии проставить
-// 7) отредачить все на читабельность и некретичные ошибки
-
 
 #include <iostream>
 #include <fstream>
@@ -17,24 +10,24 @@ int main(){
     std::fstream f_in, f_out;
     setlocale(0,"rus");
 
-    const unsigned nameFile = 255; // максимальный размер для имени файла
-    char name_input[nameFile]; // имя файла где хранятся данные (текст)
-    char name_output[nameFile]; // имя файла куда выводится результат
-
-    std::cout << "Введите имя файла с исходным текстом:\n";
+    const unsigned nameFile = 255;
+    char name_input[nameFile];
+    char name_output[nameFile];
+    std::cout << "Р’РІРµРґРёС‚Рµ СЂР°СЃРїРѕР»РѕР¶РµРЅРёСЏ С„Р°Р№Р»Р° СЃ РґР°РЅРЅС‹РјРё:\n";
     //std::cin >> name_input;                     // C:\Users\andre\CLionProjects\leti_progs\2sem\lab2_2sem_proga\data.txt
 
-    f_in.open(/*name_input*/ "C:\\Users\\andre\\CLionProjects\\leti_progs\\2sem\\lab2_2sem_proga\\data.txt",std::ios::in);
+    f_in.open(/*name_input*/ "/home/andrey/Projects/Labs_LETI/2sem/lab2_2sem_proga/data.txt",std::ios::in);
     if(f_in.bad()){
-        std::cout << "Произошла ошибка при открытии файла для ввода текста.";
+        std::cout << "РќРµРІРѕР·РјРѕР¶РЅРѕ РѕС‚РєСЂС‹С‚СЊ С„Р°Р№Р» РґР»СЏ РІРІРѕРґР° РґР°РЅРЅС‹С….";
     }
     else{
-        std::cout << "Результаты будут выведены в файл." << std::endl;
-        std::cout << "Введите имя файла для вывода результатов:\n";
+        std::cout << "Р РµР·СѓР»СЊС‚Р°С‚С‹ Р±СѓРґСѓС‚ РІС‹РІРµРґРµРЅС‹ РІ С„Р°Р№Р»." << std::endl;
+        std::cout << "Р’РІРµРґРёС‚Рµ СЂР°СЃРїРѕР»РѕР¶РµРЅРёСЏ С„Р°Р№Р»Р°, РєСѓРґР° РЅРµРѕР±С…РѕРґРёРјРѕ РІС‹РІРµСЃС‚Рё СЂРµР·СѓР»СЊС‚Р°С‚С‹:\n";
         //std::cin >> name_output;                // C:\Users\andre\CLionProjects\leti_progs\2sem\lab2_2sem_proga\result.txt
-        f_out.open(/*name_output*/ "C:\\Users\\andre\\CLionProjects\\leti_progs\\2sem\\lab2_2sem_proga\\result.txt",std::ios::out);
+        f_out.open(/*name_output*/ "/home/andrey/Projects/Labs_LETI/2sem/lab2_2sem_proga/result.txt",std::ios::out);
+
         if(f_out.bad()){
-            std::cout << "Нет возможности сформировать файл с результатом." << std::endl;
+            std::cout << "РќРµРІРѕР·РјРѕР¶РЅРѕ РІС‹РІРµСЃС‚Рё СЂРµР·СѓР»СЊС‚Р°С‚С‹ РІ С„Р°Р№Р»." << std::endl;
             f_in.close();
             return -1;
         }
@@ -43,9 +36,8 @@ int main(){
             int count_sentences = 0;
             Situations flag = Situations::GOOG;
 
-            // ввод маркера
             char s = '@';
-            std::cout << "Введите маркер:";
+            std::cout << "Р’РІРµРґРёС‚Рµ РјР°СЂРєРµСЂ:";
             //std::cin >> s;
             txt.setMark(s);
             int coordinates[2] = {0,0};

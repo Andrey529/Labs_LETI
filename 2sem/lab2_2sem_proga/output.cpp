@@ -4,18 +4,18 @@
 
 void vivod_bloc(std::fstream& f_out, All_Strings* txt, int coordinates[2]){
 
-    std::cout << "Вывод блока с координатами: (" << coordinates[0] << ", " << coordinates[1] << ")" << std::endl;
+    std::cout << "Р’С‹РІРѕРґ Р±Р»РѕРєР° СЃ РєРѕРѕСЂРґРёРЅР°С‚Р°РјРё: (" << coordinates[0] << ", " << coordinates[1] << ")" << std::endl;
     for(int row=0;row<(txt->getNumber());row++){
         int column = 0;
         while(txt->getStr(row,column) != txt->getMark()){
             std::cout << txt->getStr(row,column) << ' ';
             column++;
         }
-
+        txt->setMark_in_string(row,0);
         std::cout << '\n';
     }
 
-    f_out << "Вывод блока с координатами: (" << coordinates[0] << ", " << coordinates[1] << ")" << std::endl;
+    f_out << "Р’С‹РІРѕРґ Р±Р»РѕРєР° СЃ РєРѕРѕСЂРґРёРЅР°С‚Р°РјРё: (" << coordinates[0] << ", " << coordinates[1] << ")" << std::endl;
     for(int row=0;row<(txt->getNumber());row++){
         int column = 0;
         while(txt->getStr(row,column) != txt->getMark()){
@@ -29,17 +29,17 @@ void vivod_bloc(std::fstream& f_out, All_Strings* txt, int coordinates[2]){
 
 
 void output_result(std::fstream& f_out, int sentence){
-    std::cout << "В введенном тексте всего " << sentence;
-    if( (sentence%10 == 0) || ( ((sentence%10)>=5) && ((sentence%10)<=9) ) ) std::cout << " предложений." << std::endl << std::endl;
+    std::cout << "Р’ РґР°РЅРЅРѕРј С‚РµРєСЃС‚Рµ РІСЃРµРіРѕ " << sentence;
+    if( (sentence%10 == 0) || ( ((sentence%10)>=5) && ((sentence%10)<=9) ) ) std::cout << " РїСЂРµРґР»РѕР¶РµРЅРёР№." << std::endl << std::endl;
     else if( ( ((sentence%10)>=2) && ((sentence%10)<=4) ) && ((sentence%100)!=12) &&
-             ((sentence%100)!=13) && ((sentence%100)!=14) ) std::cout << " предложения." << std::endl << std::endl;
-    else if( ((sentence%10)==1) && ((sentence%100)!=11) ) std::cout << " предложение." << std::endl << std::endl;
-    else if( ((sentence%100)>=11) && ((sentence%100)<=14) ) std::cout << " предложений." << std::endl << std::endl;
+             ((sentence%100)!=13) && ((sentence%100)!=14) ) std::cout << " РїСЂРµРґР»РѕР¶РµРЅРёСЏ." << std::endl << std::endl;
+    else if( ((sentence%10)==1) && ((sentence%100)!=11) ) std::cout << " РїСЂРµРґР»РѕР¶РµРЅРёРµ." << std::endl << std::endl;
+    else if( ((sentence%100)>=11) && ((sentence%100)<=14) ) std::cout << " РїСЂРµРґР»РѕР¶РµРЅРёР№." << std::endl << std::endl;
 
-    f_out << "В введенном тексте всего " << sentence;
-    if( (sentence%10 == 0) || ( ((sentence%10)>=5) && ((sentence%10)<=9) ) ) f_out << " предложений." << std::endl << std::endl;
+    f_out << "Р’ РґР°РЅРЅРѕРј С‚РµРєСЃС‚Рµ РІСЃРµРіРѕ " << sentence;
+    if( (sentence%10 == 0) || ( ((sentence%10)>=5) && ((sentence%10)<=9) ) ) f_out << " РїСЂРµРґР»РѕР¶РµРЅРёР№." << std::endl << std::endl;
     else if( ( ((sentence%10)>=2) && ((sentence%10)<=4) ) && ((sentence%100)!=12) &&
-             ((sentence%100)!=13) && ((sentence%100)!=14) ) f_out << " предложения." << std::endl << std::endl;
-    else if( ((sentence%10)==1) && ((sentence%100)!=11) ) f_out << " предложение." << std::endl << std::endl;
-    else if( ((sentence%100)>=11) && ((sentence%100)<=14) ) f_out << " предложений." << std::endl << std::endl;
+             ((sentence%100)!=13) && ((sentence%100)!=14) ) f_out << " РїСЂРµРґР»РѕР¶РµРЅРёСЏ." << std::endl << std::endl;
+    else if( ((sentence%10)==1) && ((sentence%100)!=11) ) f_out << " РїСЂРµРґР»РѕР¶РµРЅРёРµ." << std::endl << std::endl;
+    else if( ((sentence%100)>=11) && ((sentence%100)<=14) ) f_out << " РїСЂРµРґР»РѕР¶РµРЅРёР№." << std::endl << std::endl;
 }

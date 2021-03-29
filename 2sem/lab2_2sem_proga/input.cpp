@@ -7,7 +7,7 @@ Situations input_bloc(std::fstream* f_in,All_Strings* txt, const int coordinates
 
     f_in->seekg(0,std::ios::beg);
 
-    // ������� ����� �� ���������
+    // перевод блока по вертикали
     for(int i=0; i<(5*coordinates[0]); i++){
         char s = '!';
         while(s != '\n'){
@@ -17,6 +17,21 @@ Situations input_bloc(std::fstream* f_in,All_Strings* txt, const int coordinates
 
     int row = 0;
     txt->setNumber(0);
+
+    // обновления состояния блока, когда он переходит на новую строчку
+    int count = 0;
+    for(int i=0;i<5;i++){
+        if((*(status+i)) == Situations::NEW_LINE){
+            count++;
+        }
+    }
+    if(count == 5){
+        for(int i=0;i<5;i++){
+            *(status+i) = Situations::GOOG;
+        }
+    }
+
+
     while( (row<5) ){
 
         if( (*(status+row)) == Situations::GOOG ){
@@ -56,12 +71,13 @@ Situations input_bloc(std::fstream* f_in,All_Strings* txt, const int coordinates
                     }
                     if(s == '\n'){
                         *(status+row) = Situations::NEW_LINE;
-                        f_in->seekg(-2,std::ios::cur);
+                        f_in->seekg(-1,std::ios::cur);
                     }
                     else{
                         *(status+row) = Situations::GOOG;
                     }
                     if(row != 4){
+                        s = '!';
                         while( (s != '\n') && (!f_in->eof()) ){
                             s = f_in->get();
                         }
@@ -71,6 +87,12 @@ Situations input_bloc(std::fstream* f_in,All_Strings* txt, const int coordinates
                         return Situations::END_OF_FILE;
                     }
                 }
+            }
+        }
+        else if((*(status+row)) == Situations::NEW_LINE){
+            char s = '!';
+            while(s != '\n'){
+                s = f_in->get();
             }
         }
         row++;
