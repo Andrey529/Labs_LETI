@@ -13,23 +13,15 @@ Situations input_bloc(std::fstream* f_in,All_Strings* txt, const int coordinates
         while(s != '\n'){
             s = f_in->get();
         }
-        std::cout << "Ёлемент: " << int(s) << '\n';
     }
 
     int row = 0;
     txt->setNumber(0);
     while( (row<5) ){
 
-
         if( (*(status+row)) == Situations::GOOG ){
 
             f_in->seekg(5*coordinates[1],std::ios::cur);
-
-//            if((coordinates[1] != 0) || (coordinates[0] != 0)){
-//                if(row == 1) f_in->seekg(-1,std::ios::cur);
-//                else if(row == 2) f_in->seekg(-2,std::ios::cur);
-//                else if(row == 3) f_in->seekg(-1,std::ios::cur);
-//            }
 
             char s;
             int column = 0;
