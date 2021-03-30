@@ -14,6 +14,7 @@ void vivod_bloc(std::fstream& f_out, All_Strings* txt, int coordinates[2]){
         std::cout << std::endl;
     }
 
+
     f_out << "Вывод блока с координатами: (" << coordinates[0] << ", " << coordinates[1] << ")" << std::endl;
     for(int row=0;row<5;row++){
         int column = 0;
@@ -27,8 +28,10 @@ void vivod_bloc(std::fstream& f_out, All_Strings* txt, int coordinates[2]){
 }
 
 
-
 void output_result(std::fstream& f_out, int sentence){
+
+    std::cout << std::endl << "===============Контрольный вывод результата===============" << std::endl << std::endl;
+
     std::cout << "В данном тексте всего " << sentence;
     if( (sentence%10 == 0) || ( ((sentence%10)>=5) && ((sentence%10)<=9) ) ) std::cout << " предложений.";
     else if( ( ((sentence%10)>=2) && ((sentence%10)<=4) ) && ((sentence%100)!=12) &&
@@ -36,10 +39,22 @@ void output_result(std::fstream& f_out, int sentence){
     else if( ((sentence%10)==1) && ((sentence%100)!=11) ) std::cout << " предложение.";
     else if( ((sentence%100)>=11) && ((sentence%100)<=14) ) std::cout << " предложений.";
 
+
+    f_out << std::endl << "===============Контрольный вывод результата===============" << std::endl << std::endl;
     f_out << "В данном тексте всего " << sentence;
     if( (sentence%10 == 0) || ( ((sentence%10)>=5) && ((sentence%10)<=9) ) ) f_out << " предложений.";
     else if( ( ((sentence%10)>=2) && ((sentence%10)<=4) ) && ((sentence%100)!=12) &&
              ((sentence%100)!=13) && ((sentence%100)!=14) ) f_out << " предложения.";
     else if( ((sentence%10)==1) && ((sentence%100)!=11) ) f_out << " предложение.";
     else if( ((sentence%100)>=11) && ((sentence%100)<=14) ) f_out << " предложений.";
+}
+
+void privetstvie(std::fstream& f_out){
+    std::cout << "Выполнил: студент группы 0302 Блюдин А.И.\n"
+              << "Формулировка задания: подсчитать количество предложений в тексте\n"
+              << "если любое из них может быть окончено 3 знаками препинания (\".\", \"!\", \"?\")." << std::endl << std::endl;
+
+    f_out     << "Выполнил: студент группы 0302 Блюдин А.И.\n"
+              << "Формулировка задания: подсчитать количество предложений в тексте\n"
+              << "если любое из них может быть окончено 3 знаками препинания (\".\", \"!\", \"?\")." << std::endl << std::endl;
 }

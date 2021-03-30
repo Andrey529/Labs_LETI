@@ -5,7 +5,7 @@
 
 Situations input_bloc(std::fstream* f_in,All_Strings* txt, const int coordinates[2], Situations* status){
 
-    f_in->seekg(0,std::ios::beg);
+    f_in->seekg(0,std::ios::beg); // перевод каретки в начало файла
 
     // перевод блока по вертикали
     for(int i=0; i<(5*coordinates[0]); i++){
@@ -16,7 +16,7 @@ Situations input_bloc(std::fstream* f_in,All_Strings* txt, const int coordinates
     }
 
     int row = 0;
-    txt->setNumber(0);
+    txt->setNumber(0); // устанавливаем количество строк в блоке = 0
 
     // обновления состояния блока, когда он переходит на новую строчку
     int count = 0;
@@ -32,46 +32,47 @@ Situations input_bloc(std::fstream* f_in,All_Strings* txt, const int coordinates
     }
 
 
-    while( (row<5) ){
+    while( (row<5) ){  // проход по строкам
 
-        if( (*(status+row)) == Situations::GOOG ){
+        if( (*(status+row)) == Situations::GOOG ){ // если в прошлом блоке данная строка была полная
+                                                    // и не заканчивалась 1 символом в данной блоке
 
-            f_in->seekg(5*coordinates[1],std::ios::cur);
+            f_in->seekg(5*coordinates[1],std::ios::cur); // переводим каретку в файле по горизонтали
 
             char s;
             int column = 0;
-            while( (column<5) ){
+            while( (column<5) ){ // проход по элементам строки
 
-                s = f_in->peek();
+                s = f_in->peek(); // проверяем следующий элемент
 
-                if(s == -1){
+                if(s == -1){    // если на следующем символе конец файла
                     txt->setMark_in_string(row,column);
-                    for(int i = row;i<5;i++){
+                    for(int i = row;i<5;i++){ // ставим состояние текущей и последующих строк, что конец файла
                         *(status+i) = Situations::END_OF_FILE_IN_STRING;
                     }
                     txt->setNumber(row+1);
                     return Situations::END_OF_FILE;
                 }
 
-                if(s == '\n'){
+                if(s == '\n'){   //  если следующий символ переход к новой строке
                     s = f_in->get();
-                    *(status+row) = Situations::NEW_LINE;
-                    txt->setMark_in_string(row,column);
+                    *(status+row) = Situations::NEW_LINE; // ставим статус в этой строке, что в данном блоке конец строки
+                    txt->setMark_in_string(row,column); // ставим маркер
                     break;
                 }
                 else{
-                    s = f_in->get();
+                    s = f_in->get(); // считываем символ и записываем в блок
                     txt->setStr(row,column,s);
                 }
                 column++;
 
-                if(column == 5){
+                if(column == 5){ // если в блоке текущая строка полностью заполнилась символами
                     txt->setMark_in_string(row,column);
-                    s = f_in->peek();
-                    if(s == -1){
+                    s = f_in->peek(); // проверяем след символ после 5 в строке
+                    if(s == -1){ // если конец файла, ставим состояние строки, что конец строки в данном блоке
                         *(status+row) = Situations::END_OF_FILE_IN_STRING;
                     }
-                    else if(s == '\n'){
+                    else if(s == '\n'){ // если переход к новой строке, то строка переходит на новую в данном блоке
                         *(status+row) = Situations::NEW_LINE;
                         //f_in->seekg(-1,std::ios::cur);
                     }
@@ -80,24 +81,15 @@ Situations input_bloc(std::fstream* f_in,All_Strings* txt, const int coordinates
                     }
 
 
-                    //
-                    s = '!';
+                    s = '!';   // переводим строку на след строку
                     while( (s != '\n') && (f_in->peek() != -1) ){
                         s = f_in->get();
                     }
-                    //
-
-
-
-//                    if(f_in->peek() == -1){
-//                        txt->setNumber(row+1);
-//                        return Situations::END_OF_FILE;
-//                    }
                 }
             }
         }
-        else if((*(status+row)) == Situations::NEW_LINE){
-            char s = '!';
+        else if((*(status+row)) == Situations::NEW_LINE){ // если строка в предыдущем блоке перешла на новую
+            char s = '!';        // переходим на следующую строку
             while(s != '\n'){
                 s = f_in->get();
             }
@@ -105,23 +97,11 @@ Situations input_bloc(std::fstream* f_in,All_Strings* txt, const int coordinates
         row++;
         txt->setNumber(row);
     }
-    return Situations::BAD;
+    return Situations::GOOG;
 }
 
 
 Situations perevod_bloc(const Situations *status, int* coordinates, All_Strings txt){
-    for(int i=0;i<5;i++){
-        if(*(status+i) == Situations::GOOG){
-            std::cout << "GOOD ";
-        }
-        else if(*(status+i) == Situations::END_OF_FILE_IN_STRING){
-            std::cout << "END ";
-        }
-        else if(*(status+i) == Situations::NEW_LINE){
-            std::cout << "NEW_LINE ";
-        }
-    }
-    std::cout << "\n" << coordinates[0] << ' ' << coordinates[1] << '\n';
 
     int count = 0;
     for(int i=0; i < txt.getNumber();i++){
