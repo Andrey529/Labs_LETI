@@ -42,9 +42,9 @@ Situations input_bloc(std::fstream* f_in,All_Strings* txt, const int coordinates
             int column = 0;
             while( (column<5) ){
 
-                s = f_in->get();
+                s = f_in->peek();
 
-                if(f_in->eof()){
+                if(s == -1){
                     txt->setMark_in_string(row,column);
                     for(int i = row;i<5;i++){
                         *(status+i) = Situations::END_OF_FILE_IN_STRING;
@@ -54,38 +54,45 @@ Situations input_bloc(std::fstream* f_in,All_Strings* txt, const int coordinates
                 }
 
                 if(s == '\n'){
+                    s = f_in->get();
                     *(status+row) = Situations::NEW_LINE;
                     txt->setMark_in_string(row,column);
                     break;
                 }
                 else{
+                    s = f_in->get();
                     txt->setStr(row,column,s);
                 }
                 column++;
 
                 if(column == 5){
                     txt->setMark_in_string(row,column);
-                    s = f_in->get();
-                    if(f_in->eof()){
+                    s = f_in->peek();
+                    if(s == -1){
                         *(status+row) = Situations::END_OF_FILE_IN_STRING;
                     }
-                    if(s == '\n'){
+                    else if(s == '\n'){
                         *(status+row) = Situations::NEW_LINE;
-                        f_in->seekg(-1,std::ios::cur);
+                        //f_in->seekg(-1,std::ios::cur);
                     }
                     else{
                         *(status+row) = Situations::GOOG;
                     }
-                    if(row != 4){
-                        s = '!';
-                        while( (s != '\n') && (!f_in->eof()) ){
-                            s = f_in->get();
-                        }
+
+
+                    //
+                    s = '!';
+                    while( (s != '\n') && (f_in->peek() != -1) ){
+                        s = f_in->get();
                     }
-                    if(f_in->eof()){
-                        txt->setNumber(row+1);
-                        return Situations::END_OF_FILE;
-                    }
+                    //
+
+
+
+//                    if(f_in->peek() == -1){
+//                        txt->setNumber(row+1);
+//                        return Situations::END_OF_FILE;
+//                    }
                 }
             }
         }

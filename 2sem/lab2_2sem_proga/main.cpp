@@ -43,7 +43,9 @@ int main(){
             int coordinates[2] = {0,0};
             Situations status[5] = {Situations::GOOG, Situations::GOOG,Situations::GOOG,Situations::GOOG,Situations::GOOG};
 
-
+            for(int i=0; i<5; i++){
+                txt.setMark_in_string(i,0);
+            }
             do{
                 input_bloc(&f_in,&txt,coordinates,status);
                 count_sentences += search_count_sentences(&txt);
@@ -52,8 +54,9 @@ int main(){
             }
             while (flag != Situations::END_OF_FILE);
             output_result(f_out, count_sentences);
+        f_in.close();
+        f_out.close();
         }
     }
-
     return 0;
 }
