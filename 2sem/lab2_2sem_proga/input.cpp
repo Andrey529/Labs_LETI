@@ -3,98 +3,105 @@
 #include <fstream>
 #include <iostream>
 
-void perevod_new_line(std::fstream* f_in){
-    char s = '!';
-    while((s != '\n') && (!f_in->eof())){
-        s = f_in->get();
-    }
-}
-
 Situations input_bloc(std::fstream* f_in,All_Strings* txt, const int coordinates[2], Situations* status){
 
-    // перевод блока по вертикали
-    f_in->seekg(0,std::ios::beg);
+    f_in->seekg(0,std::ios::beg); // РїРµСЂРµРІРѕРґ РєР°СЂРµС‚РєРё РІ РЅР°С‡Р°Р»Рѕ С„Р°Р№Р»Р°
+
+    // РїРµСЂРµРІРѕРґ Р±Р»РѕРєР° РїРѕ РІРµСЂС‚РёРєР°Р»Рё
     for(int i=0; i<(5*coordinates[0]); i++){
-        perevod_new_line(f_in);
+        char s = '!';
+        while(s != '\n'){
+            s = f_in->get();
+        }
     }
 
-    txt->setNumber(0);
-    // считывание строки
-    for(int row=0; row<5; row++){ // проход по строкам
+    int row = 0;
+    txt->setNumber(0); // СѓСЃС‚Р°РЅР°РІР»РёРІР°РµРј РєРѕР»РёС‡РµСЃС‚РІРѕ СЃС‚СЂРѕРє РІ Р±Р»РѕРєРµ = 0
 
-        if(*(status+row) == Situations::GOOG){   // если в прошлом блоке данная строка не кончилась
+    // РѕР±РЅРѕРІР»РµРЅРёСЏ СЃРѕСЃС‚РѕСЏРЅРёСЏ Р±Р»РѕРєР°, РєРѕРіРґР° РѕРЅ РїРµСЂРµС…РѕРґРёС‚ РЅР° РЅРѕРІСѓСЋ СЃС‚СЂРѕС‡РєСѓ
+    int count = 0;
+    for(int i=0;i<5;i++){
+        if((*(status+i)) == Situations::NEW_LINE){
+            count++;
+        }
+    }
+    if(count == 5){
+        for(int i=0;i<5;i++){
+            *(status+i) = Situations::GOOG;
+        }
+    }
 
-            f_in->seekg(5*coordinates[1],std::ios::cur);  // перевод курсора в строке до позиции для считывания очередного
-            // блока справа
 
-            //изза /n и /r неправильно переводится курсор для перемещения строк в блоке
-            if((coordinates[1] != 0) || (coordinates[0] != 0)){
-                if(row == 1) f_in->seekg(-3,std::ios::cur);
-                else if(row == 2) f_in->seekg(-2,std::ios::cur);
-                else if(row == 3) f_in->seekg(-1,std::ios::cur);
-            }
+    while( (row<5) ){  // РїСЂРѕС…РѕРґ РїРѕ СЃС‚СЂРѕРєР°Рј
 
-            int column=0; // индекс столбца (символа в строке)
+        if( (*(status+row)) == Situations::GOOG ){ // РµСЃР»Рё РІ РїСЂРѕС€Р»РѕРј Р±Р»РѕРєРµ РґР°РЅРЅР°СЏ СЃС‚СЂРѕРєР° Р±С‹Р»Р° РїРѕР»РЅР°СЏ
+                                                    // Рё РЅРµ Р·Р°РєР°РЅС‡РёРІР°Р»Р°СЃСЊ 1 СЃРёРјРІРѕР»РѕРј РІ РґР°РЅРЅРѕР№ Р±Р»РѕРєРµ
+
+            f_in->seekg(5*coordinates[1],std::ios::cur); // РїРµСЂРµРІРѕРґРёРј РєР°СЂРµС‚РєСѓ РІ С„Р°Р№Р»Рµ РїРѕ РіРѕСЂРёР·РѕРЅС‚Р°Р»Рё
             char s;
-            while(column<5){
-                s = f_in->get();
-                //*f_in >> s;
-                if(f_in->eof()) {             // если очередной символ в строке -- конец файла, то ставим
-                    txt->setMark_in_string(row,column);    // в данную строку состояние конца файла
-                    for(int i = row; i<5; i++) {            // блоки теперь могут строиться только справа
-                        *(status + i) = Situations::END_OF_FILE_IN_STRING;
+            int column = 0;
+            while( (column<5) ){ // РїСЂРѕС…РѕРґ РїРѕ СЌР»РµРјРµРЅС‚Р°Рј СЃС‚СЂРѕРєРё
+
+                s = f_in->peek(); // РїСЂРѕРІРµСЂСЏРµРј СЃР»РµРґСѓСЋС‰РёР№ СЌР»РµРјРµРЅС‚
+
+                if(s == -1){    // РµСЃР»Рё РЅР° СЃР»РµРґСѓСЋС‰РµРј СЃРёРјРІРѕР»Рµ РєРѕРЅРµС† С„Р°Р№Р»Р°
+                    txt->setMark_in_string(row,column);
+                    for(int i = row;i<5;i++){ // СЃС‚Р°РІРёРј СЃРѕСЃС‚РѕСЏРЅРёРµ С‚РµРєСѓС‰РµР№ Рё РїРѕСЃР»РµРґСѓСЋС‰РёС… СЃС‚СЂРѕРє, С‡С‚Рѕ РєРѕРЅРµС† С„Р°Р№Р»Р°
+                        *(status+i) = Situations::END_OF_FILE_IN_STRING;
                     }
                     txt->setNumber(row+1);
                     return Situations::END_OF_FILE;
-                }                                                // так как ниже строк нету
+                }
 
-                else if(s == '\n') {                    // если очередной символ -- переход к новой строке
-                    txt->setMark_in_string(row,column);  // дальше блоки справа не будут считывать данную строку
-                    *(status+row) = Situations::NEW_LINE;
+                if(s == '\n'){   //  РµСЃР»Рё СЃР»РµРґСѓСЋС‰РёР№ СЃРёРјРІРѕР» РїРµСЂРµС…РѕРґ Рє РЅРѕРІРѕР№ СЃС‚СЂРѕРєРµ
+                    s = f_in->get();
+                    *(status+row) = Situations::NEW_LINE; // СЃС‚Р°РІРёРј СЃС‚Р°С‚СѓСЃ РІ СЌС‚РѕР№ СЃС‚СЂРѕРєРµ, С‡С‚Рѕ РІ РґР°РЅРЅРѕРј Р±Р»РѕРєРµ РєРѕРЅРµС† СЃС‚СЂРѕРєРё
+                    txt->setMark_in_string(row,column); // СЃС‚Р°РІРёРј РјР°СЂРєРµСЂ
                     break;
                 }
                 else{
-                    txt->setStr(row,column,s);        // считываем очередной элемент в строке
+                    s = f_in->get(); // СЃС‡РёС‚С‹РІР°РµРј СЃРёРјРІРѕР» Рё Р·Р°РїРёСЃС‹РІР°РµРј РІ Р±Р»РѕРє
+                    txt->setStr(row,column,s);
                 }
-                if(column == 4){                      // если в строке были считаны все 5 символов =>
-                    txt->setMark_in_string(row,column+1); // => строка не кончилась и не конец файла
-                    s = f_in->get();
-                    if(s == '\n'){
-                        *(status + row) = Situations::NEW_LINE;
-                        f_in->seekg(-4,std::ios::cur);
+
+                column++;
+
+                if(column == 5){ // РµСЃР»Рё РІ Р±Р»РѕРєРµ С‚РµРєСѓС‰Р°СЏ СЃС‚СЂРѕРєР° РїРѕР»РЅРѕСЃС‚СЊСЋ Р·Р°РїРѕР»РЅРёР»Р°СЃСЊ СЃРёРјРІРѕР»Р°РјРё
+                    txt->setMark_in_string(row,column);
+                    s = f_in->peek(); // РїСЂРѕРІРµСЂСЏРµРј СЃР»РµРґ СЃРёРјРІРѕР» РїРѕСЃР»Рµ 5 РІ СЃС‚СЂРѕРєРµ
+                    if(s == -1){ // РµСЃР»Рё РєРѕРЅРµС† С„Р°Р№Р»Р°, СЃС‚Р°РІРёРј СЃРѕСЃС‚РѕСЏРЅРёРµ СЃС‚СЂРѕРєРё, С‡С‚Рѕ РєРѕРЅРµС† СЃС‚СЂРѕРєРё РІ РґР°РЅРЅРѕРј Р±Р»РѕРєРµ
+                        *(status+row) = Situations::END_OF_FILE_IN_STRING;
                     }
-                    else if(f_in->eof()){
-                        *(status + row) = Situations::END_OF_FILE_IN_STRING;
+                    else if(s == '\n'){ // РµСЃР»Рё РїРµСЂРµС…РѕРґ Рє РЅРѕРІРѕР№ СЃС‚СЂРѕРєРµ, С‚Рѕ СЃС‚СЂРѕРєР° РїРµСЂРµС…РѕРґРёС‚ РЅР° РЅРѕРІСѓСЋ РІ РґР°РЅРЅРѕРј Р±Р»РѕРєРµ
+                        *(status+row) = Situations::NEW_LINE;
+                        //f_in->seekg(-1,std::ios::cur);
                     }
                     else{
-                        *(status + row) = Situations::GOOG;
+                        *(status+row) = Situations::GOOG;
                     }
-                    if(row != 4){
-                        perevod_new_line(f_in);   // переход на новую строку после прочтения очередной строки
+
+
+                    s = '!';   // РїРµСЂРµРІРѕРґРёРј СЃС‚СЂРѕРєСѓ РЅР° СЃР»РµРґ СЃС‚СЂРѕРєСѓ
+                    while( (s != '\n') && (f_in->peek() != -1) ){
+                        s = f_in->get();
                     }
                 }
-                column++;  // переход к новому столбцу (символу в строке)
             }
         }
-        txt->setNumber(row+1);
+        else if((*(status+row)) == Situations::NEW_LINE){ // РµСЃР»Рё СЃС‚СЂРѕРєР° РІ РїСЂРµРґС‹РґСѓС‰РµРј Р±Р»РѕРєРµ РїРµСЂРµС€Р»Р° РЅР° РЅРѕРІСѓСЋ
+            char s = '!';        // РїРµСЂРµС…РѕРґРёРј РЅР° СЃР»РµРґСѓСЋС‰СѓСЋ СЃС‚СЂРѕРєСѓ
+            while(s != '\n'){
+                s = f_in->get();
+            }
+        }
+        row++;
+        txt->setNumber(row);
     }
-    return Situations::BAD;
+    return Situations::GOOG;
 }
 
 
 Situations perevod_bloc(const Situations *status, int* coordinates, All_Strings txt){
-    for(int i=0;i<5;i++){
-        if(*(status+i) == Situations::GOOG){
-            std::cout << "GOOD ";
-        }
-        else if(*(status+i) == Situations::END_OF_FILE_IN_STRING){
-            std::cout << "END ";
-        }
-        else if(*(status+i) == Situations::NEW_LINE){
-            std::cout << "NEW_LINE ";
-        }
-    }
-    std::cout << "\n" << coordinates[0] << ' ' << coordinates[1] << '\n';
 
     int count = 0;
     for(int i=0; i < txt.getNumber();i++){
