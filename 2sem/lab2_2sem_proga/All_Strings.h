@@ -4,19 +4,33 @@
 const unsigned len_str = 5;    // максимальная длина строки в блоке
 const unsigned number_str = 5; // максимальное количество строк в блоке
 
+class string{
+    char str[len_str+1];
+public:
+    void setSymbol(unsigned column, char s){
+        str[column] = s;
+    }
+    char getSymbol(unsigned column){
+        return str[column];
+    }
+    void setMark_in_this_str(unsigned column, char Mark){
+        str[column] = Mark;
+    }
+};
+
 class All_Strings{
-    char string[number_str][len_str+1];
+    string str[number_str];
     int Number; // количество строк в блоке
     char Mark;  // маркер
 public:
     void setStr(unsigned row,unsigned column, char s){ // установить символ под номером column в строку под номером row
-        string[row][column] = s;
+        str[row].setSymbol(column,s);
     }
     char getStr(unsigned row, unsigned column){        // получить символ под номером column в строке row
-        return string[row][column];
+        return str[row].getSymbol(column);
     }
     void setMark_in_string(unsigned row, unsigned column){  // установить маркер в строку под номером row
-        string[row][column] = Mark;
+        str[row].setMark_in_this_str(column,Mark);
     }
     void setMark(char s){                              // установить маркер
         Mark = s;
