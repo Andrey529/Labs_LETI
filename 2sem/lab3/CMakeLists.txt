@@ -3,4 +3,4 @@ project(lab3)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(lab3 main.cpp header.h Functions.cpp Functions.h)
+add_executable(lab3 main.cpp informationOfTheElement.h elementList.h List.h situations.h)

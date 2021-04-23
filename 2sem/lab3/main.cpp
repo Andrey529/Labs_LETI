@@ -1,42 +1,69 @@
 #include <iostream>
 #include <fstream>
-#include "header.h"
-#include "Functions.h"
+#include "List.h"
+#include "situations.h"
+
+const unsigned nameFile = 255;  // максимальная длина имени файла
 
 int main() {
 
-    std::fstream f_in, f_out;
+    std::fstream f_in, f_out, f_replace;
     setlocale(0,"rus");
-    const unsigned nameFile = 255;  // РјР°РєСЃРёРјР°Р»СЊРЅР°СЏ РґР»РёРЅР° РёРјРµРЅРё С„Р°Р№Р»Р°
-    char name_input[nameFile];      // РґР»СЏ РІС…РѕРґРЅРѕРіРѕ С„Р°Р№Р»Р° СЃ РґР°РЅРЅС‹РјРё
-    char name_output[nameFile];     // РґР»СЏ РІС‹РІРѕРґР° СЂРµР·СѓР»СЊС‚Р°С‚РѕРІ
-    std::cout << "Р’РІРµРґРёС‚Рµ СЂР°СЃРїРѕР»РѕР¶РµРЅРёСЏ С„Р°Р№Р»Р° СЃ РґР°РЅРЅС‹РјРё:\n";
+    char name_input[nameFile];      // для входного файла с данными
+    char name_output[nameFile];     // для вывода результатов
+    char name_replace[nameFile];    // для замены элемента списка
+    std::cout << "Введите расположения файла с данными:\n";
     //std::cin >> name_input;                     // /home/andrey/Projects/Labs_LETI/2sem/lab2_2sem_proga/data.txt
                                                   // C:\Users\andre\CLionProjects\leti_progs\2sem\lab3\text-files\data.txt
     f_in.open(/*name_input*/"C:\\Users\\andre\\CLionProjects\\leti_progs\\2sem\\lab3\\text-files\\data.txt",std::ios::in);
     if(f_in.bad()){
-        std::cout << "РќРµРІРѕР·РјРѕР¶РЅРѕ РѕС‚РєСЂС‹С‚СЊ С„Р°Р№Р» РґР»СЏ РІРІРѕРґР° РґР°РЅРЅС‹С….";
+        std::cout << "Невозможно открыть файл для ввода данных.";
     }
     else{
-        std::cout << "Р РµР·СѓР»СЊС‚Р°С‚С‹ Р±СѓРґСѓС‚ РІС‹РІРµРґРµРЅС‹ РІ С„Р°Р№Р»." << std::endl;
-        std::cout << "Р’РІРµРґРёС‚Рµ СЂР°СЃРїРѕР»РѕР¶РµРЅРёСЏ С„Р°Р№Р»Р°, РєСѓРґР° РЅРµРѕР±С…РѕРґРёРјРѕ РІС‹РІРµСЃС‚Рё СЂРµР·СѓР»СЊС‚Р°С‚С‹:\n";
+        std::cout << "Результаты будут выведены в файл." << std::endl;
+        std::cout << "Введите расположения файла, куда необходимо вывести результаты:\n";
         //std::cin >> name_output;                // /home/andrey/Projects/Labs_LETI/2sem/lab2_2sem_proga/result.txt
                                                   // C:\Users\andre\CLionProjects\leti_progs\2sem\lab3\text-files\result.txt
         f_out.open(/*name_output*/"C:\\Users\\andre\\CLionProjects\\leti_progs\\2sem\\lab3\\text-files\\result.txt", std::ios::out);
 
         if (f_out.bad()) {
-            std::cout << "РќРµРІРѕР·РјРѕР¶РЅРѕ РІС‹РІРµСЃС‚Рё СЂРµР·СѓР»СЊС‚Р°С‚С‹ РІ С„Р°Р№Р»." << std::endl;
+            std::cout << "Невозможно вывести результаты в файл." << std::endl;
             f_in.close();
         }
-        else {
+        else{
+            f_replace.open(/*name_replace*/"C:\\Users\\andre\\CLionProjects\\leti_progs\\2sem\\lab3\\text-files\\replaceElement.txt",std::ios::in);
 
-            elementList *head;
-            head = nullptr;
-            inputList(f_in, &head);
+            if(f_replace.bad()) {
+                std::cout << "Невозможно ввести данные изменяемого элемента списка." << std::endl;
+                f_in.close();
+                f_out.close();
+            }
+            else{
+                List list(&f_in);
+                if(list.getHead() == nullptr){
+                    // when memory did not allocate
+                    std::cout << "Файл с данными пустой" << std::endl;
+                    f_out << "Файл с данными пустой" << std::endl;
+                    return -1;
+                }
 
-
-            f_in.close();
-            f_out.close();
+                else{
+                    situations situation;
+                    do{
+                        situation = list.addNewElement(&f_in);
+                        if( (!list.listNotEnd(situation)) || (list.memoryDidnotAllocate(situation)) ) {
+                            break;
+                        }
+                    }
+                    while(true);
+                    list.outputList(f_out);
+                    list.replaceElement(&f_replace);
+                    list.outputList(f_out);
+                }
+                f_in.close();
+                f_out.close();
+                f_replace.close();
+            }
         }
     }
     return 0;
