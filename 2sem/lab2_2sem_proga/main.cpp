@@ -1,10 +1,8 @@
-// 2) разобраться с вводом символов в следующих блоках
-// 3) разобраться с переводом строк при считывании блока, в котором меньше 5 строк
-// 4) разобраться с конечным блоком. В строчке с концом файла все символы присутствуют (5 штук).
-// 5) сделать представления программы (кто написал, формулировка задания)
-// 6) комментарии проставить
-// 7) отредачить все на читабельность и некретичные ошибки
-
+/*
+ * Р’С‹РїРѕР»РЅРёР»: СЃС‚СѓРґРµРЅС‚ РіСЂСѓРїРїС‹ 0302 Р‘Р»СЋРґРёРЅ Рђ.Р.
+ * Р¤РѕСЂРјСѓР»РёСЂРѕРІРєР° Р·Р°РґР°РЅРёСЏ: РїРѕРґСЃС‡РёС‚Р°С‚СЊ РєРѕР»РёС‡РµСЃС‚РІРѕ РїСЂРµРґР»РѕР¶РµРЅРёР№ РІ С‚РµРєСЃС‚Рµ
+ * РµСЃР»Рё Р»СЋР±РѕРµ РёР· РЅРёС… РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕРєРѕРЅС‡РµРЅРѕ 3 Р·РЅР°РєР°РјРё РїСЂРµРїРёРЅР°РЅРёСЏ (".", "!", "?").
+ * */
 
 #include <iostream>
 #include <fstream>
@@ -17,51 +15,65 @@ int main(){
     std::fstream f_in, f_out;
     setlocale(0,"rus");
 
-    const unsigned nameFile = 255; // максимальный размер для имени файла
-    char name_input[nameFile]; // имя файла где хранятся данные (текст)
-    char name_output[nameFile]; // имя файла куда выводится результат
+    const unsigned nameFile = 255;  // РјР°РєСЃРёРјР°Р»СЊРЅР°СЏ РґР»РёРЅР° РёРјРµРЅРё С„Р°Р№Р»Р°
+    char name_input[nameFile];      // РґР»СЏ РІС…РѕРґРЅРѕРіРѕ С„Р°Р№Р»Р° СЃ РґР°РЅРЅС‹РјРё
+    char name_output[nameFile];     // РґР»СЏ РІС‹РІРѕРґР° СЂРµР·СѓР»СЊС‚Р°С‚РѕРІ
+    std::cout << "Р’РІРµРґРёС‚Рµ СЂР°СЃРїРѕР»РѕР¶РµРЅРёСЏ С„Р°Р№Р»Р° СЃ РґР°РЅРЅС‹РјРё:\n";
+    std::cin >> name_input;                     // /home/andrey/Projects/Labs_LETI/2sem/lab2_2sem_proga/data.txt
 
-    std::cout << "Введите имя файла с исходным текстом:\n";
-    //std::cin >> name_input;                     // C:\Users\andre\CLionProjects\leti_progs\2sem\lab2_2sem_proga\data.txt
-
-    f_in.open(/*name_input*/ "C:\\Users\\andre\\CLionProjects\\leti_progs\\2sem\\lab2_2sem_proga\\data.txt",std::ios::in);
+    f_in.open(name_input,std::ios::in);
     if(f_in.bad()){
-        std::cout << "Произошла ошибка при открытии файла для ввода текста.";
+        std::cout << "РќРµРІРѕР·РјРѕР¶РЅРѕ РѕС‚РєСЂС‹С‚СЊ С„Р°Р№Р» РґР»СЏ РІРІРѕРґР° РґР°РЅРЅС‹С….";
     }
     else{
-        std::cout << "Результаты будут выведены в файл." << std::endl;
-        std::cout << "Введите имя файла для вывода результатов:\n";
-        //std::cin >> name_output;                // C:\Users\andre\CLionProjects\leti_progs\2sem\lab2_2sem_proga\result.txt
-        f_out.open(/*name_output*/ "C:\\Users\\andre\\CLionProjects\\leti_progs\\2sem\\lab2_2sem_proga\\result.txt",std::ios::out);
+        std::cout << "Р РµР·СѓР»СЊС‚Р°С‚С‹ Р±СѓРґСѓС‚ РІС‹РІРµРґРµРЅС‹ РІ С„Р°Р№Р»." << std::endl;
+        std::cout << "Р’РІРµРґРёС‚Рµ СЂР°СЃРїРѕР»РѕР¶РµРЅРёСЏ С„Р°Р№Р»Р°, РєСѓРґР° РЅРµРѕР±С…РѕРґРёРјРѕ РІС‹РІРµСЃС‚Рё СЂРµР·СѓР»СЊС‚Р°С‚С‹:\n";
+        std::cin >> name_output;                // /home/andrey/Projects/Labs_LETI/2sem/lab2_2sem_proga/result.txt
+        f_out.open(name_output,std::ios::out);
+
         if(f_out.bad()){
-            std::cout << "Нет возможности сформировать файл с результатом." << std::endl;
+            std::cout << "РќРµРІРѕР·РјРѕР¶РЅРѕ РІС‹РІРµСЃС‚Рё СЂРµР·СѓР»СЊС‚Р°С‚С‹ РІ С„Р°Р№Р»." << std::endl;
             f_in.close();
             return -1;
         }
         else{
-            All_Strings txt;
-            int count_sentences = 0;
-            Situations flag = Situations::GOOG;
+            char s;
+            s = f_in.peek();
+            if(s != -1){
+                All_Strings txt;
+                int count_sentences = 0;
+                Situations flag = Situations::GOOG;
 
-            // ввод маркера
-            char s = '@';
-            std::cout << "Введите маркер:";
-            //std::cin >> s;
-            txt.setMark(s);
-            int coordinates[2] = {0,0};
-            Situations status[5] = {Situations::GOOG, Situations::GOOG,Situations::GOOG,Situations::GOOG,Situations::GOOG};
+                std::cout << "Р’РІРµРґРёС‚Рµ РјР°СЂРєРµСЂ:";
+                std::cin >> s;
+                txt.setMark(s);
+                std::cout << std::endl;
+                int coordinates[2] = {0,0};
+                Situations status[5] = {Situations::GOOG, Situations::GOOG,Situations::GOOG,Situations::GOOG,Situations::GOOG};
 
+                privetstvie(f_out);
+                for(int i=0; i<5; i++){
+                    txt.setMark_in_string(i,0);
+                }
+                std::cout << "===============РљРѕРЅС‚СЂРѕР»СЊРЅС‹Р№ РІС‹РІРѕРґ С‚РµРєСЃС‚Р°===============" << std::endl << std::endl;
+                f_out << "===============РљРѕРЅС‚СЂРѕР»СЊРЅС‹Р№ РІС‹РІРѕРґ С‚РµРєСЃС‚Р°===============" << std::endl << std::endl;
 
-            do{
-                input_bloc(&f_in,&txt,coordinates,status);
-                count_sentences += search_count_sentences(&txt);
-                vivod_bloc(f_out,&txt,coordinates);
-                flag = perevod_bloc(status, coordinates,txt);
+                do{
+                    input_bloc(&f_in,&txt,coordinates,status);
+                    count_sentences += search_count_sentences(&txt);
+                    vivod_bloc(f_out,&txt,coordinates);
+                    flag = perevod_bloc(status, coordinates,txt);
+                }
+                while (flag != Situations::END_OF_FILE);
+                output_result(f_out, count_sentences);
             }
-            while (flag != Situations::END_OF_FILE);
-            output_result(f_out, count_sentences);
+            else{
+                std::cout << "Р¤Р°Р№Р» СЃ РґР°РЅРЅС‹РјРё РїСѓСЃС‚РѕР№." << std::endl;
+                f_out << "Р¤Р°Р№Р» СЃ РґР°РЅРЅС‹РјРё РїСѓСЃС‚РѕР№." << std::endl;
+            }
+            f_in.close();
+            f_out.close();
         }
     }
-
     return 0;
 }
