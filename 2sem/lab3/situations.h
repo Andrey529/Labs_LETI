@@ -7,6 +7,9 @@ enum class situations{
     end,
     notEnoughMemory,
     good,
+    badNumberOfReplacementElement,
+    emptyFile,
+    inList1Element,
     bad,
 };
 

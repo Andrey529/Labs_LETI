@@ -2,42 +2,50 @@
 #define LAB3_LIST_H
 #include <fstream>
 #include "elementList.h"
-#include "informationOfTheElement.h"
 #include "situations.h"
 
 class List{
 private:
     elementList *head = nullptr;
     elementList *previous = nullptr;
-    elementList *current = nullptr;
-    elementList *last = nullptr;
 public:
-    List(std::fstream *f_in);
+    situations addFirstElement(std::fstream *f_in);
     bool listNotEnd(situations situations);
     bool memoryDidnotAllocate(situations situation);
     situations addNewElement(std::fstream *f_in);
     elementList *getHead();
     void outputList(std::fstream &f_out);
     situations replaceElement(std::fstream *f_replace);
+    elementList *getElemByNumber(int numberOfElement);
+    elementList *getPreviousElemByNumber(int numberOfElement);
+    ~List();
 };
 
-#endif //LAB3_LIST_H
 
-
-List::List(std::fstream *f_in) {
-    elementList *elem = new elementList;
+situations List::addFirstElement(std::fstream *f_in) {
+    elementList *elem = new (std::nothrow) elementList;
     if(!elem){
         std::cout << "Недостаточно памяти для 1 элемента списка." << std::endl;
-        head = nullptr;
+        return situations::notEnoughMemory;
     }
     else{
-        situations flag = elem->setInf(f_in);
-        if(listNotEnd((flag))){
-            head = elem;
-            previous = elem;
+
+        char s = f_in->peek();
+        if(s == -1){ // файл пустой
+            return situations::emptyFile;
         }
         else{
-            head = nullptr;
+            situations flag = elem->setInf(f_in);
+
+            if(listNotEnd((flag))){
+                head = elem;
+                previous = elem;
+            }
+            else{
+                head = elem;
+                return situations::inList1Element;
+            }
+            return situations::good;
         }
     }
 }
@@ -93,13 +101,80 @@ situations List::replaceElement(std::fstream *f_replace){
     *f_replace >> numberOfReplaceElement;
     char s = f_replace->get(); // разделитель между номером элемента и содержимым элемента
     elem->setInf(f_replace);
-    elementList *el = head;
-//    for(int i=1; i < (numberOfReplaceElement); i++){
-//        el = el->getNextElement();
-//    }
-    elementList *tmp = el->getNextElement();  // запоминаем старый элемент
-    el->setNextElement(elem);            // переназначаем следующий элемент у предыдущего на введенный
-    elem->setNextElement(tmp);           // у введенного переназначенного элемента устанавливаем следующий элемент
-    delete tmp;
+    elem->getInfInConsole();
+    int numberElementsInList = 0;
+
+    // подсчет колва элементов в списке, проверить вроде криво
+    {
+        elementList *el = head;
+        while(el != nullptr){
+            el = el->getNextElement();
+            numberElementsInList++;
+        }
+        std::cout << "In list " << numberElementsInList << " elements" << std::endl;
+    }
+
+    // фильтрация неправильного ввода номера изменяемого элемента списка
+    if( (numberOfReplaceElement <= 0) || (numberOfReplaceElement > numberElementsInList) ){
+        std::cout << "In input file with replacement element, number of replacement element do not true." << std::endl;
+        int i = 0;
+        while(true){
+            std::cout << "\nInput number of replacement number:" << std::endl;
+            std::cin >> numberOfReplaceElement;
+            i++;
+            if( (numberOfReplaceElement > 0) && (numberOfReplaceElement <= numberElementsInList) ){
+                break;
+            }
+            else if(i >= 3){
+                return situations::badNumberOfReplacementElement;
+            }
+        }
+    }
+    // замена элемента если он 1
+    if(numberOfReplaceElement == 1){
+        elementList *tmp = head;
+        head = elem;
+        elem->setNextElement(tmp->getNextElement());
+        delete tmp;
+    }
+    else{
+        // замена элемента который не 1
+        {
+            elementList *tmp = getElemByNumber(numberOfReplaceElement);
+            previous = getPreviousElemByNumber(numberOfReplaceElement);
+            previous->setNextElement(elem);
+            elem->setNextElement(tmp->getNextElement());
+            delete tmp;
+        }
+    }
+
     return situations::good;
 }
+
+elementList *List::getElemByNumber(int numberOfElement){
+    elementList *elem = head;
+    for(int i=1; i<numberOfElement; i++){
+        elem = elem->getNextElement();
+    }
+    return elem;
+}
+
+elementList *List::getPreviousElemByNumber(int numberOfElement){
+    elementList *elem = head;
+    for(int i=1; i<(numberOfElement-1); i++){
+        elem = elem->getNextElement();
+    }
+    return elem;
+}
+
+List::~List(){
+    elementList *elem = head;
+    elementList *tmp;
+    while(elem != nullptr){
+        tmp = elem;
+        elem = elem->getNextElement();
+        delete tmp;
+    }
+}
+
+#endif //LAB3_LIST_H

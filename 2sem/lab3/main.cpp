@@ -39,15 +39,26 @@ int main() {
                 f_out.close();
             }
             else{
-                List list(&f_in);
-                if(list.getHead() == nullptr){
-                    // when memory did not allocate
+                List list;
+                situations flag = list.addFirstElement(&f_in);
+                if(flag == situations::emptyFile){
                     std::cout << "Файл с данными пустой" << std::endl;
                     f_out << "Файл с данными пустой" << std::endl;
                     return -1;
                 }
-
-                else{
+                else if(flag == situations::notEnoughMemory){
+                    // when memory did not allocate
+                    std::cout << "Not enough memory for first element." << std::endl;
+                    f_out << "Not enough memory for first element." << std::endl;
+                    return -2;
+                }
+                else if(flag == situations::inList1Element){
+                    list.outputList(f_out);
+                    list.replaceElement(&f_replace);
+                    list.outputList(f_out);
+                    return 1;
+                }
+                else{ // when in list >= 1 elements
                     situations situation;
                     do{
                         situation = list.addNewElement(&f_in);

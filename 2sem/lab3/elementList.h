@@ -8,9 +8,11 @@ class elementList{
 private:
     informationOfElement inf; // информационная часть
     elementList *nextElement;
-    int number;
 public:
-
+    elementList(){
+        inf.setSymbol(0,'~');
+        nextElement = nullptr;
+    }
     situations setInf(std::fstream *f_in){
         char s;
         int i=0;
@@ -70,12 +72,6 @@ public:
     }
     void setNextElement(elementList *next){
         nextElement = next;
-    }
-    int getNumber(){
-        return number;
-    }
-    void setNumber(int i){
-        number = i;
     }
 };
 
