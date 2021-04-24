@@ -9,40 +9,43 @@ private:
     elementList *head = nullptr;
     elementList *previous = nullptr;
 public:
-    situations addFirstElement(std::fstream *f_in);
-    bool listNotEnd(situations situations);
-    bool memoryDidnotAllocate(situations situation);
-    situations addNewElement(std::fstream *f_in);
-    elementList *getHead();
-    void outputList(std::fstream &f_out);
-    situations replaceElement(std::fstream *f_replace);
-    elementList *getElemByNumber(int numberOfElement);
-    elementList *getPreviousElemByNumber(int numberOfElement);
-    ~List();
+    situations addFirstElement(std::fstream *f_in);      // add first element in list
+    bool listNotEnd(situations situations);              // if list does not end
+    bool memoryDidnotAllocate(situations situation);     // if memory didnot allocate
+    situations addNewElement(std::fstream *f_in);        // add new elements in list
+    elementList *getHead();                              // return the pointer on head element in list
+    void setHead(elementList *elem);                     // set pointer on head element
+    void outputList(std::fstream &f_out);                // output list
+    void setPrevious(elementList *elem);                 // set pointer on previous element
+    situations replaceElement(std::fstream *f_replace);  // replace element by number
+    elementList *getElemByNumber(int numberOfElement);   // get pointer on element by number
+    elementList *getPreviousElemByNumber(int numberOfElement);  // get pointer on previous element by number
+    int countOfElementsInList();                         // counting the number of elements in the list
+    ~List();                                             // delete all list
 };
 
 
 situations List::addFirstElement(std::fstream *f_in) {
     elementList *elem = new (std::nothrow) elementList;
-    if(!elem){
-        std::cout << "Недостаточно памяти для 1 элемента списка." << std::endl;
+    if(!elem){           // if elem == nullptr
+        std::cout << "Does not enough memory for first element in list." << std::endl;
         return situations::notEnoughMemory;
     }
     else{
 
         char s = f_in->peek();
-        if(s == -1){ // файл пустой
+        if(s == -1){ // if file with text is empty
             return situations::emptyFile;
         }
         else{
-            situations flag = elem->setInf(f_in);
+            situations flag = elem->setInf(f_in);  // input element from file
 
-            if(listNotEnd((flag))){
-                head = elem;
-                previous = elem;
+            if(listNotEnd((flag))){   // if it is not last element
+                setHead(elem);
+                setPrevious(elem);
             }
-            else{
-                head = elem;
+            else{           // if it is the last element
+                setHead(elem);
                 return situations::inList1Element;
             }
             return situations::good;
@@ -52,17 +55,17 @@ situations List::addFirstElement(std::fstream *f_in) {
 
 situations List::addNewElement(std::fstream *f_in){
     elementList *elem = new (std::nothrow) elementList;
-    if(!elem){
-        std::cout << "Недостаточно памяти для элемента списка." << std::endl;
+    if(!elem){      // if elem == nullptr
+        std::cout << "Does not enough memory for element in list." << std::endl;
         return situations::notEnoughMemory;
     }
     previous->setNextElement(elem);
     situations flag = elem->setInf(f_in);
-    if(listNotEnd((flag))){
-        previous = elem;
+    if(listNotEnd((flag))){   // if it is not the last element
+        setPrevious(elem);
         return situations::notLastElement;
     }
-    else{
+    else{    // if it is the last element
         elem->setNextElement(nullptr);
         return situations::end;
     }
@@ -80,41 +83,48 @@ elementList *List::getHead(){
     return head;
 }
 
+void List::setHead(elementList *elem){
+    head = elem;
+}
+
+void List::setPrevious(elementList *elem){
+    previous = elem;
+}
+
 void List::outputList(std::fstream &f_out){
     elementList *elem = head;
     while(true){
         elem->getInfInConsole();
         elem->getInfInFile(f_out);
-        if(elem->getNextElement() == nullptr) break;
-        else elem = elem->getNextElement();
+        if(elem->getNextElement() == nullptr){
+            std::cout << "->X" << std::endl;
+            f_out << "->X" << std::endl;
+            break;
+        }
+        else{
+            elem = elem->getNextElement();
+            std::cout << "->" << std::endl;
+            f_out << "->" << std::endl;
+        }
     }
 }
 
 situations List::replaceElement(std::fstream *f_replace){
     elementList *elem = new (std::nothrow) elementList;
     if(!elem){
-        std::cout << "Недостаточно памяти для элемента списка." << std::endl;
+        std::cout << "Does not enough memory for element in list." << std::endl;
         return situations::notEnoughMemory;
     }
 
     int numberOfReplaceElement;
     *f_replace >> numberOfReplaceElement;
-    char s = f_replace->get(); // разделитель между номером элемента и содержимым элемента
+    char s = f_replace->get(); // separator between element number and element content
     elem->setInf(f_replace);
-    elem->getInfInConsole();
-    int numberElementsInList = 0;
+//    elem->getInfInConsole();
+    int numberElementsInList = countOfElementsInList();
 
-    // подсчет колва элементов в списке, проверить вроде криво
-    {
-        elementList *el = head;
-        while(el != nullptr){
-            el = el->getNextElement();
-            numberElementsInList++;
-        }
-        std::cout << "In list " << numberElementsInList << " elements" << std::endl;
-    }
 
-    // фильтрация неправильного ввода номера изменяемого элемента списка
+    // filtering the wrong entry of the number of the list item being changed
     if( (numberOfReplaceElement <= 0) || (numberOfReplaceElement > numberElementsInList) ){
         std::cout << "In input file with replacement element, number of replacement element do not true." << std::endl;
         int i = 0;
@@ -130,20 +140,22 @@ situations List::replaceElement(std::fstream *f_replace){
             }
         }
     }
-    // замена элемента если он 1
+    // replace element after 1 element
     if(numberOfReplaceElement == 1){
-        elementList *tmp = head;
-        head = elem;
+        elementList *tmp = getHead();
+        setHead(elem);
         elem->setNextElement(tmp->getNextElement());
+        tmp->clearMemory();
         delete tmp;
     }
     else{
-        // замена элемента который не 1
+        // replace element by number 1
         {
             elementList *tmp = getElemByNumber(numberOfReplaceElement);
-            previous = getPreviousElemByNumber(numberOfReplaceElement);
+            setPrevious(getPreviousElemByNumber(numberOfReplaceElement));
             previous->setNextElement(elem);
             elem->setNextElement(tmp->getNextElement());
+            tmp->clearMemory();
             delete tmp;
         }
     }
@@ -152,7 +164,7 @@ situations List::replaceElement(std::fstream *f_replace){
 }
 
 elementList *List::getElemByNumber(int numberOfElement){
-    elementList *elem = head;
+    elementList *elem = getHead();
     for(int i=1; i<numberOfElement; i++){
         elem = elem->getNextElement();
     }
@@ -160,19 +172,31 @@ elementList *List::getElemByNumber(int numberOfElement){
 }
 
 elementList *List::getPreviousElemByNumber(int numberOfElement){
-    elementList *elem = head;
+    elementList *elem = getHead();
     for(int i=1; i<(numberOfElement-1); i++){
         elem = elem->getNextElement();
     }
     return elem;
 }
 
+int List::countOfElementsInList(){
+    elementList *el = getHead();
+    int numberElementsInList = 0;
+    while(el != nullptr){
+        el = el->getNextElement();
+        numberElementsInList++;
+    }
+    //        std::cout << "In list " << numberElementsInList << " elements" << std::endl;
+    return numberElementsInList;
+}
+
 List::~List(){
-    elementList *elem = head;
+    elementList *elem = getHead();
     elementList *tmp;
     while(elem != nullptr){
         tmp = elem;
         elem = elem->getNextElement();
+        tmp->clearMemory();
         delete tmp;
     }
 }

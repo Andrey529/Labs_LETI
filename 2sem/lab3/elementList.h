@@ -6,17 +6,21 @@
 
 class elementList{
 private:
-    informationOfElement inf; // информационная часть
-    elementList *nextElement;
+    informationOfElement inf; // contetnt of the element
+    elementList *nextElement; // pointer to the next element of the list
 public:
+    void clearMemory(){
+        inf.clearMemory();
+    }
     elementList(){
         inf.setSymbol(0,'~');
         nextElement = nullptr;
     }
-    situations setInf(std::fstream *f_in){
+
+    situations setInf(std::fstream *f_in){    // input content from file in element of list
         char s;
         int i=0;
-        int lenght(11);
+        int lenght(11); // lenght of content part in element
         while(true){
             s = f_in->get();
             if(i == (lenght-1)){
@@ -28,7 +32,7 @@ public:
                     inf.setMark_inTheEnd(i);
                     return situations::end;
                 }
-                else{
+                else{   // if does not enough memory for content part in element
                     inf.allocateNewMemoryForSomeSymbols(lenght,lenght+10);
                     lenght += 10;
                     inf.setSymbol(i,s);
@@ -47,32 +51,29 @@ public:
             }
             i++;
         }
-    }
-    void getInfInConsole(){
+    }     // set content on element of list
+    void getInfInConsole(){   // output element in console
         for(int i=0; ;i++){
-            std::cout << inf.getSymbol(i) << ' ';
             if(inf.getSymbol(i) == inf.getMark()){
                 break;
             }
+            std::cout << inf.getSymbol(i);
         }
-        std::cout << std::endl;
-    }
-    void getInfInFile(std::fstream &f_out){
+    }                    // output content of element in console
+    void getInfInFile(std::fstream &f_out){ // output element in file
         for(int i=0; ;i++){
-            f_out << inf.getSymbol(i) << ' ';
             if(inf.getSymbol(i) == inf.getMark()){
                 break;
             }
+            f_out << inf.getSymbol(i);
         }
-        f_out << std::endl;
-    }
+    }    // output content of element in file
 
-    elementList *getNextElement(){
+    elementList *getNextElement(){ // get pointer to the next element
         return nextElement;
-    }
-    void setNextElement(elementList *next){
+    }             // get pointer on next element
+    void setNextElement(elementList *next){ // set pointer to the next element
         nextElement = next;
-    }
+    }    // set pointer in this element to the next element
 };
-
 #endif //LAB3_ELEMENTLIST_H
