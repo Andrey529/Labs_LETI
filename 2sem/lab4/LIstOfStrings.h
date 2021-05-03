@@ -23,6 +23,9 @@ public:
 
     void outputListInConsole();
     void outputListInFile(std::fstream &f_out);
+    void outputListInConsoleAndInFile(std::fstream &f_out);
+
+    ~ListOfStrings();
 };
 
 #endif //LAB3_LISTOFSTRINGS_H

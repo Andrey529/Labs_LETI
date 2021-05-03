@@ -71,9 +71,9 @@ void listOfPartsString::setNextElement(listOfPartsString *next){ // set pointer 
     nextElementOfString = next;
 }
 
-void listOfPartsString::clearMemory(){
-    inf.clearMemory();
-}
+//void listOfPartsString::clearMemory(){
+//    inf.clearMemory();
+//}
 
 void listOfPartsString::setMaxLenOfPart(int i) {
     inf.setMaxLen(i);
@@ -81,4 +81,10 @@ void listOfPartsString::setMaxLenOfPart(int i) {
 
 int listOfPartsString::getMaxLenOfPart() {
     return inf.getMaxLen();
+}
+
+listOfPartsString::~listOfPartsString() {
+//    informationOfPartString *tmp = &inf;
+//    delete tmp;
+//    inf.clearMemory();
 }

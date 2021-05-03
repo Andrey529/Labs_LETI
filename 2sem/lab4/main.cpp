@@ -8,20 +8,16 @@ int main() {
         ListOfStrings list1(f_in1);
         ListOfStrings list2(f_in2);
         if(list1.listNotEmpty() && list2.listNotEmpty()){ // if all 2 text entered
-            list1.outputListInConsole();
-            list1.outputListInFile(f_out);
+            list1.outputListInConsoleAndInFile(f_out);
             std::cout << "---------------------------------" << std::endl;
             f_out << "---------------------------------" << std::endl;
-            list2.outputListInConsole();
-            list2.outputListInFile(f_out);
+            list2.outputListInConsoleAndInFile(f_out);
         }
         else if(list1.listNotEmpty()){ // if first text entered, but second did not
-            list1.outputListInConsole();
-            list1.outputListInFile(f_out);
+            list1.outputListInConsoleAndInFile(f_out);
         }
         else if(list2.listNotEmpty()){ // if second text entered, but first did not
-            list2.outputListInConsole();
-            list2.outputListInFile(f_out);
+            list2.outputListInConsoleAndInFile(f_out);
         }
         else{ // if noone text entered
             std::cout << "Not" << std::endl;

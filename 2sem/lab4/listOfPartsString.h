@@ -15,9 +15,11 @@ public:
     void getInfInFile(std::fstream &f_out); // output element in file
     listOfPartsString *getNextElement(); // get pointer to the next element
     void setNextElement(listOfPartsString *next); // set pointer to the next element
-    void clearMemory();  // clear memory of information part
+//    void clearMemory();  // clear memory of information part
     void setMaxLenOfPart(int i);
     int getMaxLenOfPart();
+
+    ~listOfPartsString();
 };
 
 

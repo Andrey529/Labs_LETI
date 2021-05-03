@@ -151,3 +151,14 @@ void elementOfStringList::outputStringInFile(std::fstream &f_out) {
     }
     f_out << "X" << std::endl;
 }
+
+elementOfStringList::~elementOfStringList() {
+    listOfPartsString *partString = getHead();
+    listOfPartsString *tmp;
+
+    while(partString != nullptr){
+        tmp = partString;
+        partString = partString->getNextElement();
+        delete tmp;
+    }
+}

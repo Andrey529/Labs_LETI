@@ -121,3 +121,18 @@ void ListOfStrings::outputListInFile(std::fstream &f_out) {
     }
     f_out << " | " << std::endl << "End" << std::endl;
 }
+
+void ListOfStrings::outputListInConsoleAndInFile(std::fstream &f_out) {
+    outputListInConsole();
+    outputListInFile(f_out);
+}
+
+ListOfStrings::~ListOfStrings() {
+    elementOfStringList *elem = getHead();
+    elementOfStringList *tmp;
+    while(elem != nullptr){
+        tmp = elem;
+        elem = elem->getNextElement();
+        delete tmp;
+    }
+}

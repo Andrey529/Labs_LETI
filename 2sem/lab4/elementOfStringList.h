@@ -28,6 +28,8 @@ public:
 
     void outputStringInConsole();
     void outputStringInFile(std::fstream &f_out);
+
+    ~elementOfStringList();
 };
 
 #endif //LAB3_ELEMENTOFSTRINGLIST_H
