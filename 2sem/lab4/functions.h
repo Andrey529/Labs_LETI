@@ -5,6 +5,5 @@
 
 void representation();
 bool checkFilesIsOpen(std::fstream &f_in1, std::fstream &f_in2, std::fstream &f_out);
-//bool inputList(std::fstream &f_in, ListOfStrings *list);
 
 #endif //LAB3_FUNCTIONS_H

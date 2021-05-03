@@ -82,5 +82,3 @@ void listOfPartsString::setMaxLenOfPart(int i) {
 int listOfPartsString::getMaxLenOfPart() {
     return inf.getMaxLen();
 }
-
-

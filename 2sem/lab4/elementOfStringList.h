@@ -10,21 +10,24 @@ private:
     elementOfStringList *nextString;
 public:
     elementOfStringList();
-    elementOfStringList(listOfPartsString *head, listOfPartsString *previous, elementOfStringList *next);
     void setHead(listOfPartsString *head);
     listOfPartsString *getHead();
     void setNextElement(elementOfStringList *next);
     elementOfStringList *getNextElement();
     void setPrevious(listOfPartsString *previous);
     listOfPartsString *getPrevious();
-    bool listNotEnd(situations situation);
-    bool endOfFile(situations situation);
-    bool lastElement(situations situation);
+    static bool listNotEnd(situations situation);
+    static bool endOfFile(situations situation);
+    static bool lastElement(situations situation);
+    static bool notEnoughMemory(situations situation);
+    static bool emptyFile(situations situation);
+    bool listNotEmpty();
     situations inputString(std::fstream &f_in);
     situations addFirstPartOfString(std::fstream &f_in);
     situations addNewPartOfString(std::fstream &f_in);
+
+    void outputStringInConsole();
+    void outputStringInFile(std::fstream &f_out);
 };
-
-
 
 #endif //LAB3_ELEMENTOFSTRINGLIST_H

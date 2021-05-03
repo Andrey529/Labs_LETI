@@ -5,33 +5,21 @@ elementOfStringList::elementOfStringList() {
     this->previousPartString = nullptr;
     this->nextString = nullptr;
 }
-
-elementOfStringList::elementOfStringList(listOfPartsString *head, listOfPartsString *previous, elementOfStringList *next) {
-    this->headToListOfPatrsString = head;
-    this->previousPartString = previous;
-    this->nextString = next;
-}
-
 void elementOfStringList::setHead(listOfPartsString *head) {
     this->headToListOfPatrsString = head;
 }
-
 listOfPartsString *elementOfStringList::getHead() {
     return this->headToListOfPatrsString;
 }
-
 void elementOfStringList::setNextElement(elementOfStringList *next) {
     this->nextString = next;
 }
-
 elementOfStringList *elementOfStringList::getNextElement() {
     return this->nextString;
 }
-
 void elementOfStringList::setPrevious(listOfPartsString *previous) {
     this->previousPartString = previous;
 }
-
 listOfPartsString *elementOfStringList::getPrevious() {
     return this->previousPartString;
 }
@@ -39,43 +27,23 @@ listOfPartsString *elementOfStringList::getPrevious() {
 bool elementOfStringList::listNotEnd(situations situation) {
     return situation == situations::notLastElement;
 }
-
 bool elementOfStringList::endOfFile(situations situation){
     return situation == situations::endOfFile;
 }
-
 bool elementOfStringList::lastElement(situations situation){
     return situation == situations::lastElement;
 }
-
-situations elementOfStringList::inputString(std::fstream &f_in) {
-    situations flag = situations::good;
-    flag = addFirstPartOfString(f_in);
-    if(flag == situations::notEnoughMemory){
-        return situations::notEnoughMemory;
-    }
-    else if(flag == situations::emptyFile){
-        return situations::emptyFile;
-    }
-    else if(flag == situations::endOfFile){
-        return situations::endOfFile;
-    }
-    else if(flag == situations::lastElement){
-        return situations::lastElement;
-    }
-    do{
-        flag = addNewPartOfString(f_in);
-    }
-    while(listNotEnd(flag));
-    if (flag == situations::endOfFile){
-        return situations::endOfFile;
-    }
-    else if(flag == situations::notEnoughMemory){
-        return situations::notEnoughMemory;
-    }
-    std::cout << std::endl;
-    return situations::lastElement;
+bool elementOfStringList::notEnoughMemory(situations situation) {
+    return situation == situations::notEnoughMemory;
 }
+bool elementOfStringList::emptyFile(situations situation) {
+    return situation == situations::emptyFile;
+}
+
+bool elementOfStringList::listNotEmpty() {
+    return headToListOfPatrsString != nullptr;
+}
+
 
 situations elementOfStringList::addFirstPartOfString(std::fstream &f_in) {
     listOfPartsString *partString = new (std::nothrow) listOfPartsString;
@@ -91,7 +59,6 @@ situations elementOfStringList::addFirstPartOfString(std::fstream &f_in) {
     }
 
     situations flag = partString->setInf(f_in);
-    partString->getInfInConsole();
     if(listNotEnd(flag)){
         setHead(partString);
         setPrevious(partString);
@@ -99,6 +66,7 @@ situations elementOfStringList::addFirstPartOfString(std::fstream &f_in) {
     }
     else if(endOfFile(flag)){
         setHead(partString);
+        std::cout << "End of File." << std::endl;
         return situations::endOfFile;
     }
     else{
@@ -106,7 +74,6 @@ situations elementOfStringList::addFirstPartOfString(std::fstream &f_in) {
         return situations::lastElement;
     }
 }
-
 situations elementOfStringList::addNewPartOfString(std::fstream &f_in) {
     listOfPartsString *partString = new (std::nothrow) listOfPartsString;
     if(!partString){
@@ -115,7 +82,6 @@ situations elementOfStringList::addNewPartOfString(std::fstream &f_in) {
     }
     previousPartString->setNextElement(partString);
     situations flag = partString->setInf(f_in);
-    partString->getInfInConsole();
     if(listNotEnd(flag)){
         setPrevious(partString);
         return situations::notLastElement;
@@ -128,4 +94,60 @@ situations elementOfStringList::addNewPartOfString(std::fstream &f_in) {
         partString->setNextElement(nullptr);
         return situations::lastElement;
     }
+}
+
+situations elementOfStringList::inputString(std::fstream &f_in) {
+    situations flag = addFirstPartOfString(f_in);
+    if(notEnoughMemory(flag)){
+        return situations::notEnoughMemory;
+    }
+    else if(emptyFile(flag)){
+        return situations::emptyFile;
+    }
+    else if(endOfFile(flag)){
+        return situations::endOfFile;
+    }
+    else if(lastElement(flag)){
+        return situations::lastElement;
+    }
+    else{
+        do{
+            flag = addNewPartOfString(f_in);
+        }
+        while (flag == situations::notLastElement);
+        if (notEnoughMemory(flag)){
+            return situations::notEnoughMemory;
+        }
+        else if(endOfFile(flag)){
+            return situations::endOfFile;
+        }
+        else if(lastElement(flag)){
+            return situations::lastElement;
+        }
+        else return situations::notLastElement;
+    }
+}
+void elementOfStringList::outputStringInConsole() {
+    listOfPartsString *partString = getHead();
+
+    while(true){
+        partString->getInfInConsole();
+        partString = partString->getNextElement();
+        if(partString == nullptr){
+            break;
+        }
+    }
+    std::cout << "X" << std::endl;
+}
+void elementOfStringList::outputStringInFile(std::fstream &f_out) {
+    listOfPartsString *partString = getHead();
+
+    while(true){
+        partString->getInfInFile(f_out);
+        partString = partString->getNextElement();
+        if(partString == nullptr){
+            break;
+        }
+    }
+    f_out << "X" << std::endl;
 }

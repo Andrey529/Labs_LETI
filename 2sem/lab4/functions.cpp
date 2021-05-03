@@ -24,7 +24,7 @@ bool checkFilesIsOpen(std::fstream &f_in1, std::fstream &f_in2, std::fstream &f_
     std::cout << "Enter the name of the data file with second text (full file location):\n";
     //std::cin >> name_input_secondText;        // /home/andrey/Projects/Labs_LETI/2sem/lab4/text-files/text2.txt
                                                 // C:\Users\andre\CLionProjects\leti_progs\2sem\lab4\text-files\text2.txt
-    f_in2.open(/*name_input_secondText*/"C:\\Users\\andre\\CLionProjects\\leti_progs\\2sem\\lab4\\text-files\\text2.txt", std::ios::out);
+    f_in2.open(/*name_input_secondText*/"C:\\Users\\andre\\CLionProjects\\leti_progs\\2sem\\lab4\\text-files\\text2.txt", std::ios::in);
     if (f_in2.bad()) {
         std::cout << "Unable to open data file with second text.";
         f_in1.close();
@@ -34,7 +34,7 @@ bool checkFilesIsOpen(std::fstream &f_in1, std::fstream &f_in2, std::fstream &f_
     std::cout<< "Enter the name of the file where the result of the program will be displayed (full file location)."<< std::endl;
     //std::cin >> name_output;     // C:\Users\andre\CLionProjects\leti_progs\2sem\lab4\text-files\output.txt
                                    // /home/andrey/Projects/Labs_LETI/2sem/lab4/text-files/output.txt
-    f_out.open(/*name_output*/"C:\\Users\\andre\\CLionProjects\\leti_progs\\2sem\\lab4\\text-files\\output.txt", std::ios::in);
+    f_out.open(/*name_output*/"C:\\Users\\andre\\CLionProjects\\leti_progs\\2sem\\lab4\\text-files\\result.txt", std::ios::out);
     if (f_out.bad()) {
         std::cout << "Unable to open file where the result of the program will be displayed." << std::endl;
         f_in1.close();
@@ -46,8 +46,3 @@ bool checkFilesIsOpen(std::fstream &f_in1, std::fstream &f_in2, std::fstream &f_
     return true;
 
 }
-
-//bool inputList(std::fstream &f_in, ListOfStrings *list){
-//
-//    return true;
-//}

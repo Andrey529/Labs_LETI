@@ -5,36 +5,31 @@ int main() {
     std::fstream f_in1, f_in2, f_out;
     representation();
     if(checkFilesIsOpen(f_in1, f_in2, f_out)){
-        ListOfStrings list1, list2;
-        list1.inputList(f_in1);
-//        if(text1Entered && text2Entered){ // if all 2 text entered
-//
-//        }
-//        else if(text1Entered){ // if first text entered, but second did not
-//
-//        }
-//        else if(text2Entered){ // if second text entered, but first did not
-//
-//        }
-//        else{ // if noone text entered
-
+        ListOfStrings list1(f_in1);
+        ListOfStrings list2(f_in2);
+        if(list1.listNotEmpty() && list2.listNotEmpty()){ // if all 2 text entered
+            list1.outputListInConsole();
+            list1.outputListInFile(f_out);
+            std::cout << "---------------------------------" << std::endl;
+            f_out << "---------------------------------" << std::endl;
+            list2.outputListInConsole();
+            list2.outputListInFile(f_out);
         }
-//        while(true){
-//            listOfPartsString test;
-//            situations flag = test.setInf(&f_in1);
-//            test.getInfInConsole();
-//            if(flag == situations::lastElement){
-//                std::cout << 'X' << std::endl;
-//            }
-//            else if(flag == situations::endOfFile){
-//                std::cout << "END_OF_FILE";
-//                break;
-//            }
-//        }
+        else if(list1.listNotEmpty()){ // if first text entered, but second did not
+            list1.outputListInConsole();
+            list1.outputListInFile(f_out);
+        }
+        else if(list2.listNotEmpty()){ // if second text entered, but first did not
+            list2.outputListInConsole();
+            list2.outputListInFile(f_out);
+        }
+        else{ // if noone text entered
+            std::cout << "Not" << std::endl;
+        }
 
         f_in1.close();
         f_in2.close();
         f_out.close();
-
+    }
     return 0;
 }
