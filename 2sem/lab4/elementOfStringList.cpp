@@ -55,6 +55,7 @@ situations elementOfStringList::addFirstPartOfString(std::fstream &f_in) {
     char s = f_in.peek();
     if(s == -1){ // if file with text is empty
         std::cout << "File with text is empty." << std::endl;
+        delete partString;
         return situations::emptyFile;
     }
 

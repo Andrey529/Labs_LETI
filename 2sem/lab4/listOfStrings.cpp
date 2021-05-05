@@ -42,6 +42,7 @@ ListOfStrings::ListOfStrings(std::fstream &f_in) {
         return;
     }
     else if(emptyFile(flag)){
+
         return;
     }
     else if(endOfFile(flag)){
@@ -65,6 +66,7 @@ situations ListOfStrings::addFirstElement(std::fstream &f_in) {
         return situations::notEnoughMemory;
     }
     else if(emptyFile(flag)){
+        delete elem;
         return situations::emptyFile;
     }
     else if(endOfFile(flag)){
@@ -215,7 +217,7 @@ ListOfStrings ListOfStrings::differenceList1AndList2(ListOfStrings& list1, ListO
                     break;
                 }
                 else if( (partOfElemList3->getSymbolInfOfPartString(i) != partOfElemList3->getMarkInfofPartString()) &&
-                         (partOfElemList2->getSymbolInfOfPartString(i) != partOfElemList2->getMarkInfofPartString()) ){
+                         (partOfElemList2->getSymbolInfOfPartString(i) == partOfElemList2->getMarkInfofPartString()) ){
                     flag[j] = situations::notEqual;
                     break;
                 }

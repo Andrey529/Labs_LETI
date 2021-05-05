@@ -45,6 +45,7 @@ situations listOfPartsString::setInf(std::fstream &f_in){
 
 void listOfPartsString::getInfInConsole(){   // output element in console
     for(int i=0; ;i++){
+
         if(inf.getSymbol(i) == inf.getMark()){
             break;
         }
@@ -70,10 +71,6 @@ listOfPartsString *listOfPartsString::getNextElement(){ // get pointer to the ne
 void listOfPartsString::setNextElement(listOfPartsString *next){ // set pointer to the next element
     nextElementOfString = next;
 }
-
-//void listOfPartsString::clearMemory(){
-//    inf.clearMemory();
-//}
 
 void listOfPartsString::setMaxLenOfPart(int i) {
     inf.setMaxLen(i);

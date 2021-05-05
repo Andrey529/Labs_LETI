@@ -26,9 +26,6 @@ public:
     char getMark() const{
         return mark;
     }
-//    void clearMemory(){
-//        delete[] pointerArray;
-//    }
     void setMaxLen(int i){
         if(i<=0){
             std::cout << "Сannot be set maxLen because the entered value is less than or equal to 0" << std::endl;
