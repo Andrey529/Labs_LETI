@@ -10,6 +10,7 @@ private:
     elementOfStringList *nextString;
 public:
     elementOfStringList();
+    elementOfStringList(elementOfStringList &string);
     void setHead(listOfPartsString *head);
     listOfPartsString *getHead();
     void setNextElement(elementOfStringList *next);

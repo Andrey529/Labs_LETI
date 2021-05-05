@@ -162,3 +162,34 @@ elementOfStringList::~elementOfStringList() {
         delete tmp;
     }
 }
+
+elementOfStringList::elementOfStringList(elementOfStringList &string) {
+    listOfPartsString *elementOfBaseString = string.getHead();
+    int i = 0;
+    while (true){
+        listOfPartsString *elemOfNewString = new (std::nothrow) listOfPartsString(*elementOfBaseString);
+        if(!elemOfNewString){
+            std::cout << "Does not enough memory for new element of CopyString." << std::endl;
+            return;
+        }
+        elementOfBaseString = elementOfBaseString->getNextElement();
+        if(i == 0){
+            setHead(elemOfNewString);
+            if(elementOfBaseString == nullptr){
+                elemOfNewString->setNextElement(nullptr);
+                break;
+            }
+            setPrevious(elemOfNewString);
+        }
+        else if(elementOfBaseString == nullptr){
+            previousPartString->setNextElement(elemOfNewString);
+            elemOfNewString->setNextElement(nullptr);
+            break;
+        }
+        else{
+            previousPartString->setNextElement(elemOfNewString);
+            setPrevious(elemOfNewString);
+        }
+        i++;
+    }
+}

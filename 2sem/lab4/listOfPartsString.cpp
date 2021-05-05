@@ -84,7 +84,26 @@ int listOfPartsString::getMaxLenOfPart() {
 }
 
 listOfPartsString::~listOfPartsString() {
-//    informationOfPartString *tmp = &inf;
-//    delete tmp;
-//    inf.clearMemory();
+    // auto delete inf
+}
+
+listOfPartsString::listOfPartsString(listOfPartsString &partString) {
+    int i = 0;
+    inf.setMark(partString.inf.getMark());
+    do{
+        inf.setSymbol(i,partString.inf.getSymbol(i));
+        if(partString.inf.getSymbol(i) == partString.inf.getMark()){
+            break;
+        }
+        i++;
+    }
+    while(true);
+}
+
+char listOfPartsString::getSymbolInfOfPartString(int i) {
+    return inf.getSymbol(i);
+}
+
+char listOfPartsString::getMarkInfofPartString() {
+    return inf.getMark();
 }

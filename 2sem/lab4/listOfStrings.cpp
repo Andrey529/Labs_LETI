@@ -1,5 +1,11 @@
 #include "LIstOfStrings.h"
 
+
+ListOfStrings::ListOfStrings() {
+    this->head = nullptr;
+    this->previous = nullptr;
+}
+
 void ListOfStrings::setHead(elementOfStringList *head) {
     this->head = head;
 }
@@ -136,3 +142,228 @@ ListOfStrings::~ListOfStrings() {
         delete tmp;
     }
 }
+
+ListOfStrings::ListOfStrings(ListOfStrings &list) {
+    elementOfStringList *elemOfBaseList = list.getHead();
+    int i = 0;
+    while (true){
+        elementOfStringList *elemOfNewList = new (std::nothrow) elementOfStringList(*elemOfBaseList);
+        if(!elemOfNewList){
+            std::cout << "Does not enough memory for new element of CopyList." << std::endl;
+            return;
+        }
+        elemOfBaseList = elemOfBaseList->getNextElement();
+        if(i == 0){
+            setHead(elemOfNewList);
+            if(elemOfBaseList == nullptr){
+                elemOfNewList->setNextElement(nullptr);
+                break;
+            }
+            setPrevious(elemOfNewList);
+        }
+        else if(elemOfBaseList == nullptr){
+            previous->setNextElement(elemOfNewList);
+            elemOfNewList->setNextElement(nullptr);
+            break;
+        }
+        else{
+            previous->setNextElement(elemOfNewList);
+            setPrevious(elemOfNewList);
+        }
+        i++;
+    }
+}
+
+ListOfStrings ListOfStrings::differenceList1AndList2(ListOfStrings& list1, ListOfStrings& list2) {
+    ListOfStrings list3(list1);  // copy of list1
+    elementOfStringList *elemOf3List = list3.getHead();
+
+    while(elemOf3List != nullptr){
+        elementOfStringList *elemOf2List = list2.getHead();
+
+        elementOfStringList *tmp = elemOf2List;
+        int countElements = 0;
+        while(true){
+            countElements++;
+            if(tmp->getNextElement() == nullptr){
+                break;
+            }
+            tmp = tmp->getNextElement();
+        }
+
+        situations flag[countElements];
+        for(int i=0; i<countElements; i++){
+            flag[i] = situations::equal;
+        }
+        int j = 0;
+        while( elemOf2List != nullptr){
+            listOfPartsString *partOfElemList3 = elemOf3List->getHead();
+            listOfPartsString *partOfElemList2 = elemOf2List->getHead();
+            while( (partOfElemList3 != nullptr) && (partOfElemList2 != nullptr) ){
+                int i = 0;
+                while( (partOfElemList3->getSymbolInfOfPartString(i) != partOfElemList3->getMarkInfofPartString()) &&
+                    (partOfElemList2->getSymbolInfOfPartString(i) != partOfElemList2->getMarkInfofPartString()) ){
+                    if(partOfElemList3->getSymbolInfOfPartString(i) != partOfElemList2->getSymbolInfOfPartString(i)){
+                        flag[j] = situations::notEqual;
+                        break;
+                    }
+                    i++;
+                }
+                if( (partOfElemList3->getSymbolInfOfPartString(i) == partOfElemList3->getMarkInfofPartString()) &&
+                    (partOfElemList2->getSymbolInfOfPartString(i) != partOfElemList2->getMarkInfofPartString()) ){
+                    flag[j] = situations::notEqual;
+                    break;
+                }
+                else if( (partOfElemList3->getSymbolInfOfPartString(i) != partOfElemList3->getMarkInfofPartString()) &&
+                         (partOfElemList2->getSymbolInfOfPartString(i) != partOfElemList2->getMarkInfofPartString()) ){
+                    flag[j] = situations::notEqual;
+                    break;
+                }
+                else{
+                    partOfElemList3 = partOfElemList3->getNextElement();
+                    partOfElemList2 = partOfElemList2->getNextElement();
+                }
+            }
+            j++;
+            elemOf2List = elemOf2List->getNextElement();
+        }
+
+        bool del = false;
+        for(int i=0; i<countElements; i++){
+            if(flag[i] == situations::equal){
+                del = true;
+                break;
+            }
+        }
+        if(del){
+            if(elemOf3List == list3.getHead()){
+                if(elemOf3List->getNextElement() == nullptr){
+                    list3.setHead(nullptr);
+                    delete elemOf3List;
+                    break;
+                }
+                else{
+                    list3.setHead(elemOf3List->getNextElement());
+                    elementOfStringList *tmp = elemOf3List;
+                    elemOf3List = elemOf3List->getNextElement();
+                    delete tmp;
+                }
+            }
+            else if(elemOf3List->getNextElement() == nullptr){
+                list3.getPrevious()->setNextElement(nullptr);
+                delete elemOf3List;
+                break;
+            }
+            else{
+                list3.getPrevious()->setNextElement(elemOf3List->getNextElement());
+                elementOfStringList *tmp = elemOf3List;
+                elemOf3List = elemOf3List->getNextElement();
+                delete tmp;
+            }
+        }
+        else{
+            list3.setPrevious(elemOf3List);
+            elemOf3List = elemOf3List->getNextElement();
+        }
+    }
+
+    return list3;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//ListOfStrings ListOfStrings::defferenceList1AndList2(ListOfStrings& list1, ListOfStrings& list2) {
+//    ListOfStrings list3(list1);  // copy of list1
+//    elementOfStringList *elemOf3List = list3.getHead();
+//
+//    while(elemOf3List != nullptr){
+//        elementOfStringList *elemOf2List = list2.getHead();
+//        situations flag = situations::equal;
+//
+//        while( (elemOf2List != nullptr) && (flag == situations::equal) ){
+//            listOfPartsString *partOfElemList3 = elemOf3List->getHead();
+//            listOfPartsString *partOfElemList2 = elemOf2List->getHead();
+//            while( (partOfElemList3 != nullptr) && (partOfElemList2 != nullptr) && (flag == situations::equal)){
+//                int i = 0;
+//                while( (partOfElemList3->getSymbolInfOfPartString(i) != partOfElemList3->getMarkInfofPartString()) &&
+//                       (partOfElemList2->getSymbolInfOfPartString(i) != partOfElemList2->getMarkInfofPartString()) ){
+//                    if(partOfElemList3->getSymbolInfOfPartString(i) != partOfElemList2->getSymbolInfOfPartString(i)){
+//                        flag = situations::notEqual;
+//                        break;
+//                    }
+//                    i++;
+//                }
+//                if( (partOfElemList3->getSymbolInfOfPartString(i) == partOfElemList3->getMarkInfofPartString()) &&
+//                    (partOfElemList2->getSymbolInfOfPartString(i) != partOfElemList2->getMarkInfofPartString()) ){
+//                    flag = situations::notEqual;
+//                    break;
+//                }
+//                else if( (partOfElemList3->getSymbolInfOfPartString(i) != partOfElemList3->getMarkInfofPartString()) &&
+//                         (partOfElemList2->getSymbolInfOfPartString(i) == partOfElemList2->getMarkInfofPartString()) ){
+//                    flag = situations::notEqual;
+//                    break;
+//                }
+//                partOfElemList3 = partOfElemList3->getNextElement();
+//                partOfElemList2 = partOfElemList2->getNextElement();
+//            }
+//            if( (partOfElemList3 == nullptr) && (partOfElemList2 != nullptr) ){
+//                flag = situations::notEqual;
+//                break;
+//            }
+//            else if( (partOfElemList3 != nullptr) && (partOfElemList2 == nullptr) ){
+//                flag = situations::notEqual;
+//                break;
+//            }
+//            else if( (partOfElemList3 == nullptr) && (partOfElemList2 == nullptr) && (flag == situations::equal) ){
+//                break;
+//            }
+//        }
+//
+//        if(flag == situations::equal){
+//            if(elemOf3List == list3.getHead()){
+//                if(elemOf3List->getNextElement() == nullptr){
+//                    list3.setHead(nullptr);
+//                    delete elemOf3List;
+//                    break;
+//                }
+//                else{
+//                    list3.setHead(elemOf3List->getNextElement());
+//                    elementOfStringList *tmp = elemOf3List;
+//                    elemOf3List = elemOf3List->getNextElement();
+//                    delete tmp;
+//                }
+//            }
+//            else if(elemOf3List->getNextElement() == nullptr){
+//                list3.getPrevious()->setNextElement(nullptr);
+//                delete elemOf3List;
+//                break;
+//            }
+//            else{
+//                list3.getPrevious()->setNextElement(elemOf3List->getNextElement());
+//                elementOfStringList *tmp = elemOf3List;
+//                elemOf3List = elemOf3List->getNextElement();
+//                delete tmp;
+//            }
+//        }
+//        else{
+//            list3.setPrevious(elemOf3List);
+//            elemOf3List = elemOf3List->getNextElement();
+//        }
+//    }
+//
+//    return list3;
+//}

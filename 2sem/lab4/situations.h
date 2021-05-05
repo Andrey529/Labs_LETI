@@ -8,6 +8,8 @@ enum class situations{
     notEnoughMemory,
     emptyFile,
     good,
+    equal,
+    notEqual,
 };
 
 #endif //LAB3_SITUATIONS_H

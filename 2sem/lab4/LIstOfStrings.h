@@ -8,7 +8,9 @@ private:
     elementOfStringList *head = nullptr;
     elementOfStringList *previous = nullptr;
 public:
+    ListOfStrings();
     explicit ListOfStrings(std::fstream &f_in);
+    ListOfStrings(ListOfStrings &list);
     void setHead(elementOfStringList *head);
     elementOfStringList *getHead();
     void setPrevious(elementOfStringList *previous);
@@ -24,6 +26,8 @@ public:
     void outputListInConsole();
     void outputListInFile(std::fstream &f_out);
     void outputListInConsoleAndInFile(std::fstream &f_out);
+
+    static ListOfStrings differenceList1AndList2(ListOfStrings& list1, ListOfStrings& list2);
 
     ~ListOfStrings();
 };

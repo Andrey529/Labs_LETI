@@ -10,6 +10,7 @@ private:
     listOfPartsString *nextElementOfString;
 public:
     listOfPartsString();
+    listOfPartsString(listOfPartsString &partString);
     situations setInf(std::fstream &f_in);   // input information part
     void getInfInConsole();   // output element in console
     void getInfInFile(std::fstream &f_out); // output element in file
@@ -18,8 +19,10 @@ public:
 //    void clearMemory();  // clear memory of information part
     void setMaxLenOfPart(int i);
     int getMaxLenOfPart();
-
     ~listOfPartsString();
+    char getSymbolInfOfPartString(int i);
+    char getMarkInfofPartString();
+
 };
 
 
