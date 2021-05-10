@@ -35,6 +35,8 @@ situations List::addFirstElement(std::fstream *f_in) {
 
         char s = f_in->peek();
         if(s == -1){ // if file with text is empty
+            elem->clearMemory();
+            delete elem;
             return situations::emptyFile;
         }
         else{
