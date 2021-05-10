@@ -5,6 +5,7 @@ enum class situations{
     emptyFile,
     endOfFile,
     notLastElement,
+    lastElement,
     bad,
     good,
 };

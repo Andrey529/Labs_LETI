@@ -3,7 +3,7 @@
 #include <fstream>
 #include <iostream>
 #include "elemListOfCountStamps.h"
-#include "situations.h"
+#include "../situations.h"
 
 class countOfStamps{
 private:
@@ -16,11 +16,14 @@ public:
     void setPrevious(elemListCountOfStamps *prev);
     elemListCountOfStamps *getPrevious();
 
-    countOfStamps(std::fstream &f_in);  // input all data of count stamps in list
-    situations addFirstElement(std::fstream &f_in);
-    situations addNewElement(std::fstream &f_in);
+    countOfStamps(std::fstream &f_in, std::fstream &f_log);  // input all data of count stamps in list
+    situations addFirstElement(std::fstream &f_in, std::fstream &f_log);
+    situations addNewElement(std::fstream &f_in, std::fstream &log);
 
-    void outputCountOfStamps();   // output all data in list
+    void outputCountOfStampsInFileAndInConsole(std::fstream &f_result, std::fstream &f_log);   // output all data in list
+    void outputCountOfStampsInFile(std::fstream &f_result, std::fstream &f_log);
+    void outputCountOfStampsInConsole(std::fstream &f_log);
+    ~countOfStamps();
 };
 
 #endif //KURS_LISTOFCOUNTSTAMPS_H
