@@ -226,6 +226,11 @@ ListOfStrings ListOfStrings::differenceList1AndList2(ListOfStrings& list1, ListO
                     partOfElemList2 = partOfElemList2->getNextElement();
                 }
             }
+            // here
+            if( ((partOfElemList3 == nullptr) && (partOfElemList2 != nullptr)) ||
+                    ((partOfElemList3 != nullptr) && (partOfElemList2 == nullptr))  ){
+                flag[j] = situations::notEqual;
+            }
             j++;
             elemOf2List = elemOf2List->getNextElement();
         }
