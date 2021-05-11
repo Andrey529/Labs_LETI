@@ -9,9 +9,9 @@ private:
     partOfString *nextPartOfString;
 public:
     partOfString();
-    situations setInf(std::fstream &f_in, std::fstream &f_log);   // input information part
-//    void getInfInConsole();   // output element in console
-//    void getInfInFile(std::fstream &f_out); // output element in file
+    situations setInf(std::wfstream &f_in, std::wfstream &f_log);   // input information part
+    void getInfInConsole();   // output element in console
+//    void getInfInFile(std::wfstream &f_out); // output element in file
     partOfString *getNextElement(); // get pointer to the next element
     void setNextElement(partOfString *next); // set pointer to the next element
     ~partOfString();

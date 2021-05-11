@@ -25,6 +25,10 @@ listOfLetters::listOfLetters() {
     this->previous = nullptr;
 }
 
-listOfLetters::listOfLetters(std::fstream &f_in, std::fstream &f_log) {
+listOfLetters::listOfLetters(std::wfstream &f_in, std::wfstream &f_log) {
 
+}
+
+bool listOfLetters::listNotEmpty() {
+    return getHead() != nullptr;
 }

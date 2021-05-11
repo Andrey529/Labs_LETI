@@ -14,8 +14,10 @@ public:
     void setPrevious(elementOfListLetters *elem);
     elementOfListLetters *getPrevious();
 
+    bool listNotEmpty();
+
     listOfLetters();
-    listOfLetters(std::fstream &f_in, std::fstream &f_log);
+    listOfLetters(std::wfstream &f_in, std::wfstream &f_log);
 
 
 };

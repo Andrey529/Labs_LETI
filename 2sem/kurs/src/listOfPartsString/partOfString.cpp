@@ -5,8 +5,8 @@ partOfString::partOfString() {
     this->nextPartOfString = nullptr;
 }
 
-situations partOfString::setInf(std::fstream &f_in, std::fstream &f_log) {
-    char s;
+situations partOfString::setInf(std::wfstream &f_in, std::wfstream &f_log) {
+    wchar_t s;
     int i=0;
     this->inf = new dataOfPartString;
     while (true){
@@ -53,4 +53,15 @@ partOfString *partOfString::getNextElement() {
 
 void partOfString::setNextElement(partOfString *next) {
     this->nextPartOfString = next;
+}
+
+void partOfString::getInfInConsole() {
+    for(int i=0; ;i++){
+
+        if(inf->getSymbol(i) == inf->getMark()){
+            break;
+        }
+        std::wcout << inf->getSymbol(i);
+    }
+    std::wcout << "->";
 }

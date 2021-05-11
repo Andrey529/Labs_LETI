@@ -16,13 +16,13 @@ public:
     void setPrevious(elemListCountOfStamps *prev);
     elemListCountOfStamps *getPrevious();
 
-    countOfStamps(std::fstream &f_in, std::fstream &f_log);  // input all data of count stamps in list
-    situations addFirstElement(std::fstream &f_in, std::fstream &f_log);
-    situations addNewElement(std::fstream &f_in, std::fstream &log);
+    countOfStamps(std::wfstream &f_in, std::wfstream &f_log);  // input all data of count stamps in list
+    situations addFirstElement(std::wfstream &f_in, std::wfstream &f_log);
+    situations addNewElement(std::wfstream &f_in, std::wfstream &log);
 
-    void outputCountOfStampsInFileAndInConsole(std::fstream &f_result, std::fstream &f_log);   // output all data in list
-    void outputCountOfStampsInFile(std::fstream &f_result, std::fstream &f_log);
-    void outputCountOfStampsInConsole(std::fstream &f_log);
+    void outputCountOfStampsInFileAndInConsole(std::wfstream &f_result, std::wfstream &f_log);   // output all data in list
+    void outputCountOfStampsInFile(std::wfstream &f_result, std::wfstream &f_log);
+    void outputCountOfStampsInConsole(std::wfstream &f_log);
     ~countOfStamps();
 };
 
