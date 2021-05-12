@@ -120,6 +120,12 @@ Situations perevod_bloc(const Situations *status, int* coordinates, All_Strings 
         return Situations::END_OF_FILE;
     }
 
+    if((*status == Situations::END_OF_FILE_IN_STRING) && (*(status+1) == Situations::END_OF_FILE_IN_STRING) &&
+    (*(status+2) == Situations::END_OF_FILE_IN_STRING) && (*(status+3)==Situations::END_OF_FILE_IN_STRING) &&
+    (*(status+4) == Situations::END_OF_FILE_IN_STRING)){
+        return Situations::END_OF_FILE;
+    }
+
     coordinates[1]++;
     return Situations::GOOG;
 }
