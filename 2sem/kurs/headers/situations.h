@@ -6,6 +6,7 @@ enum class situations{
     endOfFile,
     notLastElement,
     lastElement,
+    notEnoughMemory,
     bad,
     good,
 };

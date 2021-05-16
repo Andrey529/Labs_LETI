@@ -5,21 +5,28 @@
 
 class listOfLetters{
 private:
-    elementOfListLetters *head;
-    elementOfListLetters *previous;
+    elementOfListLetters *head = nullptr;
+    elementOfListLetters *previous = nullptr;
 public:
-    bool listIsEmpty();
+    bool listNotEmpty();
     void setHead(elementOfListLetters *elem);
     elementOfListLetters *getHead();
     void setPrevious(elementOfListLetters *elem);
     elementOfListLetters *getPrevious();
 
-    bool listNotEmpty();
-
-    listOfLetters();
     listOfLetters(std::wfstream &f_in, std::wfstream &f_log);
 
+    static bool notEnoughMemory(situations situation) ;
+    static bool emptyFile(situations situation);
+    static bool endOfFile(situations situation);
+    static bool lastLetter(situations situation);
+    static bool notLastLetter(situations situation);
 
+    void outputListOfLettersInConsoleAndInFile(std::wfstream &f_out, std::wfstream &f_log);
+    void outputInConsole(std::wfstream &f_log);
+    void outputInFile(std::wfstream &f_out, std::wfstream &f_log);
+
+    ~listOfLetters();
 };
 
 #endif //KURS_LISTOFLETTERS_H

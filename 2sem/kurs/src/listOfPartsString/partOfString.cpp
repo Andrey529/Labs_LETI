@@ -5,13 +5,18 @@ partOfString::partOfString() {
     this->nextPartOfString = nullptr;
 }
 
-situations partOfString::setInf(std::wfstream &f_in, std::wfstream &f_log) {
+situations partOfString::setInf(std::wfstream &f_in, std::wfstream &f_log, wchar_t ogranichitel) {
     wchar_t s;
     int i=0;
     this->inf = new dataOfPartString;
     while (true){
         s = f_in.peek();
-        if(i == (this->inf->getMaxLen())){
+        if(s == ogranichitel){
+            this->inf->setMarkInTheEnd(i);
+            s = f_in.get();
+            return situations::lastElement;
+        }
+        else if(i == (this->inf->getMaxLen())){
             if(s == '\n'){
                 this->inf->setMarkInTheEnd(i);
                 s = f_in.get();
@@ -58,10 +63,29 @@ void partOfString::setNextElement(partOfString *next) {
 void partOfString::getInfInConsole() {
     for(int i=0; ;i++){
 
-        if(inf->getSymbol(i) == inf->getMark()){
+        if(this->inf->getSymbol(i) == this->inf->getMark()){
             break;
         }
-        std::wcout << inf->getSymbol(i);
+        std::wcout << this->inf->getSymbol(i);
     }
-    std::wcout << "->";
+//    std::wcout << "->";
+}
+
+void partOfString::getInfInFile(std::wfstream &f_out) {
+    for(int i=0; ;i++){
+
+        if(this->inf->getSymbol(i) == this->inf->getMark()){
+            break;
+        }
+        f_out << this->inf->getSymbol(i);
+    }
+//    std::wcout << "->";
+}
+
+void partOfString::setMaxLenOfPart(int i) {
+    this->inf->setMaxLen(i);
+}
+
+int partOfString::getMaxLenOfPart() {
+    return this->inf->getMaxLen();
 }

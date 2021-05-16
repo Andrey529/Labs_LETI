@@ -37,13 +37,13 @@ countOfStamps::countOfStamps(std::wfstream &f_in, std::wfstream &f_log) {
         }
         while (flag == situations::notLastElement);
         f_log << "File with the count of stamps was read!" << std::endl;
-        std::wcout << "File with the count of stamps was read!" << std::endl;
     }
 }
 
 situations countOfStamps::addFirstElement(std::wfstream &f_in, std::wfstream &f_log) {
     elemListCountOfStamps *elem = new elemListCountOfStamps;
     wchar_t s = f_in.peek();
+    f_log << "Checking if the input file with count of stamps is empty." << std::endl;
     if(s == -1){
         delete elem;
         return situations::emptyFile;
@@ -167,11 +167,11 @@ void countOfStamps::outputCountOfStampsInFileAndInConsole(std::wfstream &f_resul
 }
 
 void countOfStamps::outputCountOfStampsInFile(std::wfstream &f_result, std::wfstream &f_log) {
-    f_log << "Output count of stamps in file." << std::endl;
-    f_result << "Output count of stamps in file." << std::endl;
+    f_log << "-------Output count of stamps in file-------" << std::endl;
+    f_result << "-------Output count of stamps in file-------" << std::endl;
     if(listIsEmpty()){
-        f_result << "In file of count of stamps No data." << std::endl;
-        f_log << "In file of count of stamps No data." << std::endl;
+        f_result << "In file of count of stamps No data." << std::endl << std::endl << std::endl;
+        f_log << "In file of count of stamps No data." << std::endl << std::endl << std::endl;
         return;
     }
     elemListCountOfStamps *elem = getHead();
@@ -182,26 +182,21 @@ void countOfStamps::outputCountOfStampsInFile(std::wfstream &f_result, std::wfst
               << elem->getDenomination() << " units." << std::endl;
         elem = elem->getNextElement();
     }
-    f_log << "All count of stamps was outputed in file." << std::endl;
-    f_result << "All count of stamps was outputed in file." << std::endl;
+    f_log << "-------All count of stamps was outputed in file-------" << std::endl << std::endl << std::endl;
+    f_result << "-------All count of stamps was outputed in file-------" << std::endl << std::endl << std::endl;
 }
 
 void countOfStamps::outputCountOfStampsInConsole(std::wfstream &f_log) {
-    f_log << "Output count of stamps in console." << std::endl;
-    std::wcout << "Output count of stamps in console." << std::endl;
+    std::wcout << "-------Output count of stamps in console-------" << std::endl;
     if(listIsEmpty()){
-        std::wcout << "In file of count of stamps No data." << std::endl;
-        f_log << "In file of count of stamps No data." << std::endl;
+        std::wcout << "In file of count of stamps No data" << std::endl << std::endl << std::endl;
         return;
     }
     elemListCountOfStamps *elem = getHead();
     while(elem != nullptr){
         std::wcout << elem->getCountStamps() << " stamps denomination of "
                   << elem->getDenomination() << " units." << std::endl;
-        f_log << elem->getCountStamps() << " stamps denomination of "
-                  << elem->getDenomination() << " units." << std::endl;
         elem = elem->getNextElement();
     }
-    f_log << "All count of stamps was outputed in console." << std::endl;
-    std::wcout << "All count of stamps was outputed in console." << std::endl;
+    std::wcout << "-------All count of stamps was outputed in console-------" << std::endl << std::endl << std::endl;
 }

@@ -9,17 +9,14 @@ private:
     partOfString *nextPartOfString;
 public:
     partOfString();
-    situations setInf(std::wfstream &f_in, std::wfstream &f_log);   // input information part
+    situations setInf(std::wfstream &f_in, std::wfstream &f_log, wchar_t ogranichitel);   // input information part
     void getInfInConsole();   // output element in console
-//    void getInfInFile(std::wfstream &f_out); // output element in file
+    void getInfInFile(std::wfstream &f_out); // output element in file
     partOfString *getNextElement(); // get pointer to the next element
     void setNextElement(partOfString *next); // set pointer to the next element
     ~partOfString();
-//    void setMaxLenOfPart(int i);
-//    int getMaxLenOfPart();
-//    partOfString(partOfString &partString);   // конструктор копирования
-//    char getSymbolInfOfPartString(int i);    // для сравнения массивов
-//    char getMarkInfofPartString();           // для сравнения массивов
+    void setMaxLenOfPart(int i);
+    int getMaxLenOfPart();
 
 };
 
