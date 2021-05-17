@@ -119,10 +119,10 @@ void listOfLetters::outputInConsole(std::wfstream &f_log) {
             elem = elem->getNextLetter();
             i++;
         }
-        std::wcout << "-------All data about letters was outputed-------" << std::endl;
+        std::wcout << "-------All data about letters was outputed-------" << std::endl << std::endl << std::endl;
     }
     else{
-        std::wcout << "File with information about letters is empty." << std::endl;
+        std::wcout << "File with information about letters is empty." << std::endl << std::endl << std::endl;
     }
 }
 
@@ -139,12 +139,12 @@ void listOfLetters::outputInFile(std::wfstream &f_out, std::wfstream &f_log) {
             elem = elem->getNextLetter();
             i++;
         }
-        f_log << "-------All data about letters was outputed-------" << std::endl;
-        f_out << "-------All data about letters was outputed-------" << std::endl;
+        f_log << "-------All data about letters was outputed-------" << std::endl << std::endl << std::endl;
+        f_out << "-------All data about letters was outputed-------" << std::endl << std::endl << std::endl;
     }
     else{
-        f_out << "File with information about letters is empty." << std::endl;
-        f_log << "File with information about letters is empty." << std::endl;
+        f_out << "File with information about letters is empty." << std::endl << std::endl << std::endl;
+        f_log << "File with information about letters is empty." << std::endl << std::endl << std::endl;
     }
 }
 

@@ -14,4 +14,4 @@ add_executable(kurs main.cpp
         headers/oldAndNewRatesForLetters/listOfOldAndNewRates.h
         src/oldAndNewRatesForLetters/listOfOldAndNewRates.cpp
         headers/oldAndNewRatesForLetters/elementOfOldAndNewRates.h
-        src/oldAndNewRatesForLetters/elementOfOldAndNewRates.cpp)
+        src/oldAndNewRatesForLetters/elementOfOldAndNewRates.cpp headers/oldAndNewRatesForLetters/rateValues.h src/oldAndNewRatesForLetters/rateValues.cpp)

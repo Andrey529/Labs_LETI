@@ -1,14 +1,71 @@
 #include "../../headers/functions/functions.h"
 
-//void inputAllData(std::fstream &f_countStamps,std::fstream &f_infLetter,
-//                  std::fstream &f_oldAndNewRates, std::fstream &f_log, std::fstream &f_result){
-//    countOfStamps countOfStamps(f_countStamps,f_log);
-//    countOfStamps.outputCountOfStampsInFileAndInConsole(f_result,f_log);
-//
-//}
+void calculationValues(listOfLetters *infLetters, listOfOldAndNewRatesForLetters *rates, std::wfstream &f_log){
+    bool flag = true;
+    elementOfListLetters *letter = infLetters->getHead();
+    while(letter != nullptr){
+        elementOfOldAndNewRates *elemRates = rates->getHead();
+        while((elemRates != nullptr) && flag) {
+            if ((letter->getTypeOfLetter() == elemRates->getTypeOfLetter()) &&
+                (letter->getTypeOfAddress() == elemRates->getTypeOfAddress())) {
+                rateValues *val = elemRates->getHeadValues();
+                while(val != nullptr){
+                    if( (letter->getWeight() >= val->getLowerBound()) &&
+                        (letter->getWeight() <= val->getUpperBound()) ){
+                        letter->setOldPrice(val->getOldPrice());
+                        letter->setNewPrice(val->getNewPrice());
+                        letter->setNeedUnits(letter->getNewPrice()-letter->getOldPrice());
+                        flag = false;
+                        break;
+                    }
+                    val = val->getNext();
+                }
+            }
+            elemRates = elemRates->getNextElement();
+        }
+        flag = true;
+        letter = letter->getNextLetter();
+    }
+    letter = infLetters->getHead();
+    int i=1;
+    while (letter != nullptr){
+        f_log << "-----Letter by number " << i << " -----" << std::endl;
+        if(letter->getNeedUnits() == -1){
+            letter->setNeedToSort(false);
+            f_log << "Do not need to be sort." << std::endl;
+        }
+        else{
+            f_log << "Old price = " << letter->getOldPrice() << std::endl;
+            f_log << "New price = " << letter->getNewPrice() << std::endl;
+            f_log << "Need units = " << letter->getNeedUnits() << std::endl;
+        }
+        i++;
+        letter = letter->getNextLetter();
+    }
+}
 
-//void outputAllData(std::fstream &f_log, std::fstream &f_result){
-//}
+
+
+bool allDataWasInputed(countOfStamps *countOfStamps,listOfLetters *infLetters, listOfOldAndNewRatesForLetters *rates){
+    if(countOfStamps->listIsEmpty()){
+        return false;
+    }
+    else if(!(infLetters->listNotEmpty())){
+        return false;
+    }
+    else if(!(rates->listNotEmpty())){
+        return false;
+    }
+    return true;
+}
+
+
+void outputAllData(std::wfstream &f_log, std::wfstream &f_result, countOfStamps *countOfStamps,
+                   listOfLetters *infLetters, listOfOldAndNewRatesForLetters *rates){
+    countOfStamps->outputCountOfStampsInFileAndInConsole(f_result,f_log);
+    infLetters->outputListOfLettersInConsoleAndInFile(f_result,f_log);
+    rates->outputListOfRatesInConsoleAndInFile(f_result,f_log);
+}
 
 bool openFiles(std::wfstream &f_countStamps,std::wfstream &f_infLetter,std::wfstream &f_oldAndNewRates,
                std::wfstream &f_log, std::wfstream &f_result){

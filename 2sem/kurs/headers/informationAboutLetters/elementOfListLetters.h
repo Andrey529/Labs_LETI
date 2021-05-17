@@ -12,6 +12,12 @@ private:
     int countOfStampsInLetter;
     int weightOfLetter;
 
+    int oldPrice = -1;
+    int newPrice = -1;
+    int needUnits = -1;
+
+    bool needToSort = true;
+
     elementOfListLetters *nextLetter;
 public:
     void setTypeOfLetter(bool i);             //
@@ -30,6 +36,16 @@ public:
     int getCountOfStamps() const;             //
     void setWeight(int i);                    //
     int getWeight() const;                    //
+
+    void setOldPrice(int i);
+    int getOldPrice() const;
+    void setNewPrice(int i);
+    int getNewPrice() const;
+    void setNeedUnits(int i);
+    int getNeedUnits() const;
+
+    void setNeedToSort(bool i);
+    bool  getNeedToSort() const;
 
     void setNextLetter(elementOfListLetters *elem);  //
     elementOfListLetters *getNextLetter();           //

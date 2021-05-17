@@ -1,10 +1,10 @@
 #include "../../headers/informationAboutLetters/elementOfListLetters.h"
 
 elementOfListLetters::elementOfListLetters() {
-    this->typeOfLetter = -1;
+    this->typeOfLetter = false;
     this->headFIO = nullptr;
     this->previousFIO = nullptr;
-    this->typeOfAddress = -1;
+    this->typeOfAddress = false;
     this->headAddress = nullptr;
     this->previousAddress = nullptr;
     this->countOfStampsInLetter = -1;
@@ -313,4 +313,36 @@ elementOfListLetters::~elementOfListLetters() {
         elem = elem->getNextElement();
         delete tmp;
     }
+}
+
+void elementOfListLetters::setOldPrice(int i) {
+    this->oldPrice = i;
+}
+
+int elementOfListLetters::getOldPrice() const {
+    return this->oldPrice;
+}
+
+void elementOfListLetters::setNewPrice(int i) {
+    this->newPrice = i;
+}
+
+int elementOfListLetters::getNewPrice() const {
+    return this->newPrice;
+}
+
+void elementOfListLetters::setNeedUnits(int i) {
+    this->needUnits = i;
+}
+
+int elementOfListLetters::getNeedUnits() const {
+    return this->needUnits;
+}
+
+void elementOfListLetters::setNeedToSort(bool i) {
+    this->needToSort = i;
+}
+
+bool elementOfListLetters::getNeedToSort() const{
+    return this->needToSort;
 }
