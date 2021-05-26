@@ -9,6 +9,8 @@ enum class situations{
     notEnoughMemory,
     bad,
     good,
+    endOfSort,
+    notEndOfSort,
 };
 
 #endif //KURS_SITUATIONS_H

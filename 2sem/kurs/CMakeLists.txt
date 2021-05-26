@@ -14,4 +14,4 @@ add_executable(kurs main.cpp
         headers/oldAndNewRatesForLetters/listOfOldAndNewRates.h
         src/oldAndNewRatesForLetters/listOfOldAndNewRates.cpp
         headers/oldAndNewRatesForLetters/elementOfOldAndNewRates.h
-        src/oldAndNewRatesForLetters/elementOfOldAndNewRates.cpp headers/oldAndNewRatesForLetters/rateValues.h src/oldAndNewRatesForLetters/rateValues.cpp)
+        src/oldAndNewRatesForLetters/elementOfOldAndNewRates.cpp headers/oldAndNewRatesForLetters/rateValues.h src/oldAndNewRatesForLetters/rateValues.cpp headers/stickeredStamps/stickeredStamps.h headers/stickeredStamps/elementOfStikeredStamps.h src/stickeredStamps/elementOfStikeredStamps.cpp src/stickeredStamps/stickeredStamps.cpp)

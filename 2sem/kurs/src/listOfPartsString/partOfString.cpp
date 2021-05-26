@@ -89,3 +89,14 @@ void partOfString::setMaxLenOfPart(int i) {
 int partOfString::getMaxLenOfPart() {
     return this->inf->getMaxLen();
 }
+
+partOfString::partOfString(partOfString *elem) {
+    this->inf = new dataOfPartString;
+    dataOfPartString *dataBase = elem->inf;
+    for(int i=0; ; i++){
+        this->inf->setSymbol(i,dataBase->getSymbol(i));
+        if(dataBase->getSymbol(i) == dataBase->getMark()){
+            break;
+        }
+    }
+}

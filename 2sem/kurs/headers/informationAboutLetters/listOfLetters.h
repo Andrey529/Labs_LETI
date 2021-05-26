@@ -15,6 +15,7 @@ public:
     elementOfListLetters *getPrevious();
 
     listOfLetters(std::wfstream &f_in, std::wfstream &f_log);
+    listOfLetters(listOfLetters *list);
 
     static bool notEnoughMemory(situations situation) ;
     static bool emptyFile(situations situation);
@@ -27,6 +28,20 @@ public:
     void outputInFile(std::wfstream &f_out, std::wfstream &f_log);
 
     ~listOfLetters();
+
+    int getCountOfLetters();
+    elementOfListLetters *getLetterByNumber(int i);
+    elementOfListLetters *getPreviousLetterByNumber(int i);
+    void swapLettersByNumbers(int i, int j);
+
+    void setIndexes();
+    void outputIndexesInConsole();
+
+    bool lettersDoNotNeedStamps();
+
+//    static bool newStateOfStickeredStampsIsBetter(listOfLetters *listOfLettersOld, listOfLetters *listOfLettersNew);
+    void sortLettersByCountStamps();
+    int getMaxNeedUnits();
 };
 
 #endif //KURS_LISTOFLETTERS_H

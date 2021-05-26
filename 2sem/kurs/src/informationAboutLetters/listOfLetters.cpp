@@ -152,3 +152,241 @@ void listOfLetters::outputListOfLettersInConsoleAndInFile(std::wfstream &f_out, 
     outputInConsole(f_log);
     outputInFile(f_out,f_log);
 }
+
+int listOfLetters::getCountOfLetters() {
+    int i = 0;
+    elementOfListLetters *elem = getHead();
+    while(elem != nullptr){
+        i++;
+        elem = elem->getNextLetter();
+    }
+    return i;
+}
+
+elementOfListLetters *listOfLetters::getLetterByNumber(int i) {
+    int j = 0;
+    elementOfListLetters *elem = getHead();
+    while(elem != nullptr){
+        if(j == i){
+            break;
+        }
+        j++;
+        elem = elem->getNextLetter();
+    }
+    return elem;
+}
+
+elementOfListLetters *listOfLetters::getPreviousLetterByNumber(int i) {
+    int j = 0;
+    if(i == 0){
+        return nullptr;
+    }
+    elementOfListLetters *elem = getHead();
+    while(elem != nullptr){
+        if(j == (i-1)){
+            break;
+        }
+        j++;
+        elem = elem->getNextLetter();
+    }
+    return elem;
+}
+
+void listOfLetters::swapLettersByNumbers(int i, int j) {
+    if(i == j){
+        return;
+    }
+    elementOfListLetters *elem1;
+    elementOfListLetters *previousElem1;
+    elementOfListLetters *elem2;
+    elementOfListLetters *previousElem2;
+    elementOfListLetters *tmp1;
+    elementOfListLetters *tmp2;
+
+    if( ((i-j) == 1) || ((j-i) == 1) ){
+        if(i == 0){
+            elem1 = getLetterByNumber(i);
+            elem2 = getLetterByNumber(j);
+
+            tmp1 = elem1;
+            tmp2 = elem2->getNextLetter();
+            setHead(elem2);
+            elem2->setNextLetter(tmp1);
+            tmp1->setNextLetter(tmp2);
+        }
+        else if(j == 0){
+            elem1 = getLetterByNumber(j);
+            elem2 = getLetterByNumber(i);
+
+            tmp1 = elem1;
+            tmp2 = elem2->getNextLetter();
+            setHead(elem2);
+            elem2->setNextLetter(tmp1);
+            tmp1->setNextLetter(tmp2);
+        }
+        else{
+            if(i < j){
+                elem1 = getLetterByNumber(i);
+                elem2 = getLetterByNumber(j);
+                previousElem1 = getPreviousLetterByNumber(i);
+                previousElem2 = getPreviousLetterByNumber(j);
+
+                tmp1 = elem1;
+                tmp2 = elem2->getNextLetter();
+
+                previousElem1->setNextLetter(elem2);
+                elem2->setNextLetter(tmp1);
+
+                tmp1->setNextLetter(tmp2);
+            }
+            else{
+                elem1 = getLetterByNumber(j);
+                elem2 = getLetterByNumber(i);
+                previousElem1 = getPreviousLetterByNumber(j);
+                previousElem2 = getPreviousLetterByNumber(i);
+
+                tmp1 = elem1;
+                tmp2 = elem2->getNextLetter();
+
+                previousElem1->setNextLetter(elem2);
+                elem2->setNextLetter(tmp1);
+
+                tmp1->setNextLetter(tmp2);
+            }
+
+        }
+    }
+    else{
+        if(i == 0){
+            elem1 = getLetterByNumber(i);
+            elem2 = getLetterByNumber(j);
+            previousElem2 = getPreviousLetterByNumber(j);
+
+            tmp1 = elem1;
+            tmp2 = elem2->getNextLetter();
+
+            setHead(elem2);
+            elem2->setNextLetter(elem1->getNextLetter());
+
+            previousElem2->setNextLetter(tmp1);
+            tmp1->setNextLetter(tmp2);
+        }
+        else if(j == 0){
+            elem1 = getLetterByNumber(j);
+            elem2 = getLetterByNumber(i);
+            previousElem2 = getPreviousLetterByNumber(i);
+
+            tmp1 = elem1;
+            tmp2 = elem2->getNextLetter();
+
+            setHead(elem2);
+            elem2->setNextLetter(elem1->getNextLetter());
+
+            previousElem2->setNextLetter(tmp1);
+            tmp1->setNextLetter(tmp2);
+        }
+        else{
+            if(i < j){
+                elem1 = getLetterByNumber(i);
+                elem2 = getLetterByNumber(j);
+                previousElem1 = getPreviousLetterByNumber(i);
+                previousElem2 = getPreviousLetterByNumber(j);
+
+                tmp1 = elem1;
+                tmp2 = elem2->getNextLetter();
+
+                previousElem1->setNextLetter(elem2);
+                elem2->setNextLetter(tmp1->getNextLetter());
+
+                previousElem2->setNextLetter(tmp1);
+                tmp1->setNextLetter(tmp2);
+            }
+            else{
+                elem1 = getLetterByNumber(j);
+                elem2 = getLetterByNumber(i);
+                previousElem1 = getPreviousLetterByNumber(j);
+                previousElem2 = getPreviousLetterByNumber(i);
+
+                tmp1 = elem1;
+                tmp2 = elem2->getNextLetter();
+
+                previousElem1->setNextLetter(elem2);
+                elem2->setNextLetter(tmp1->getNextLetter());
+
+                previousElem2->setNextLetter(tmp1);
+                tmp1->setNextLetter(tmp2);
+            }
+        }
+    }
+}
+
+void listOfLetters::setIndexes() {
+    elementOfListLetters *elem = getHead();
+    int i=0;
+    while(elem != nullptr){
+        elem->setIndex(i);
+        elem = elem->getNextLetter();
+        i++;
+    }
+}
+
+void listOfLetters::outputIndexesInConsole() {
+    elementOfListLetters *elem = getHead();
+    while(elem != nullptr){
+        std::wcout << elem->getIndex() << ' ';
+        elem = elem->getNextLetter();
+    }
+    std::wcout << std::endl;
+}
+
+listOfLetters::listOfLetters(listOfLetters *list) {
+    elementOfListLetters *elemBase = list->getHead();
+    while(elemBase != nullptr){
+        auto *elemNew = new elementOfListLetters(elemBase);
+        if(elemBase == list->getHead()){
+            setHead(elemNew);
+            setPrevious(elemNew);
+        }
+        else{
+            getPrevious()->setNextLetter(elemNew);
+            setPrevious(elemNew);
+        }
+        elemBase = elemBase->getNextLetter();
+    }
+}
+
+bool listOfLetters::lettersDoNotNeedStamps() {
+    elementOfListLetters *elem = getHead();
+    while(elem != nullptr){
+        if(elem->getNeedToSort()){
+            return false;
+        }
+        elem = elem->getNextLetter();
+    }
+    return true;
+}
+
+void listOfLetters::sortLettersByCountStamps() {
+//    setIndexes();
+    for(int i=0; i < getCountOfLetters()-1; i++){
+        for(int j=0; j < getCountOfLetters()-1; j++){
+            if(getLetterByNumber(j)->getCountOfStamps() < getLetterByNumber(j+1)->getCountOfStamps() ){
+                swapLettersByNumbers(j,j+1);
+            }
+        }
+    }
+}
+
+int listOfLetters::getMaxNeedUnits() {
+    int need = -1;
+    elementOfListLetters *elem = getHead();
+    while(elem != nullptr){
+        if(elem->getNeedUnits() > need){
+            need = elem->getNeedUnits();
+        }
+        elem = elem->getNextLetter();
+    }
+    return need;
+}
+
+

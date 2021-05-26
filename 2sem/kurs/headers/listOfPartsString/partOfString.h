@@ -5,10 +5,11 @@
 #include "../situations.h"
 class partOfString{
 private:
-    dataOfPartString *inf;
-    partOfString *nextPartOfString;
+    dataOfPartString *inf = nullptr;
+    partOfString *nextPartOfString = nullptr;
 public:
     partOfString();
+    partOfString(partOfString *elem);
     situations setInf(std::wfstream &f_in, std::wfstream &f_log, wchar_t ogranichitel);   // input information part
     void getInfInConsole();   // output element in console
     void getInfInFile(std::wfstream &f_out); // output element in file

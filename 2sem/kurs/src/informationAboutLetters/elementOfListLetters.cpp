@@ -346,3 +346,54 @@ void elementOfListLetters::setNeedToSort(bool i) {
 bool elementOfListLetters::getNeedToSort() const{
     return this->needToSort;
 }
+
+void elementOfListLetters::setIndex(int i) {
+    this->index = i;
+}
+
+int elementOfListLetters::getIndex() const {
+    return this->index;
+}
+
+elementOfListLetters::elementOfListLetters(elementOfListLetters *elem) {
+    setTypeOfLetter(elem->getTypeOfLetter());
+    setTypeOfAddress(elem->getTypeOfAddress());
+    setCountOfStamps(elem->getCountOfStamps());
+    setWeight(elem->getWeight());
+    setOldPrice(elem->getOldPrice());
+    setNewPrice(elem->getNewPrice());
+    setNeedUnits(elem->getNeedUnits());
+    setNeedToSort(elem->getNeedToSort());
+    setIndex(elem->getIndex());
+
+    setPreviousFIO(nullptr);
+    setPreviousAddress(nullptr);
+
+    partOfString *partBase = elem->getHeadFIO();
+    while(partBase != nullptr){
+        auto *partNew = new partOfString(partBase);
+        if(partBase == elem->getHeadFIO()){
+            setHeadFIO(partNew);
+            setPreviousFIO(partNew);
+        }
+        else{
+            getPreviousFIO()->setNextElement(partNew);
+            setPreviousFIO(partNew);
+        }
+        partBase = partBase->getNextElement();
+    }
+
+    partBase = elem->getHeadAddress();
+    while(partBase != nullptr){
+        auto *partNew = new partOfString(partBase);
+        if(partBase == elem->getHeadAddress()){
+            setHeadAddress(partNew);
+            setPreviousAddress(partNew);
+        }
+        else{
+            getPreviousAddress()->setNextElement(partNew);
+            setPreviousAddress(partNew);
+        }
+        partBase = partBase->getNextElement();
+    }
+}

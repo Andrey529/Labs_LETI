@@ -17,6 +17,7 @@ public:
     elemListCountOfStamps *getPrevious();
 
     countOfStamps(std::wfstream &f_in, std::wfstream &f_log);  // input all data of count stamps in list
+    countOfStamps(countOfStamps *list);
     situations addFirstElement(std::wfstream &f_in, std::wfstream &f_log);
     situations addNewElement(std::wfstream &f_in, std::wfstream &log);
 
@@ -24,6 +25,9 @@ public:
     void outputCountOfStampsInFile(std::wfstream &f_result, std::wfstream &f_log);
     void outputCountOfStampsInConsole(std::wfstream &f_log);
     ~countOfStamps();
+
+    bool haveStamps();
+    int getStampOfMaxDenomination(int ogranichitel);
 };
 
 #endif //KURS_LISTOFCOUNTSTAMPS_H

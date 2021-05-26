@@ -1,0 +1,118 @@
+Checking if the input file with count of stamps is empty.
+In file with count of stamps was read: 2 stamps denomination of 100 units.
+In file with count of stamps was read: 4 stamps denomination of 50 units.
+In file with count of stamps was read: 3 stamps denomination of 25 units.
+In file with count of stamps was read: 5 stamps denomination of 10 units.
+In file with count of stamps was read: 3 stamps denomination of 6 units.
+In file with count of stamps was read: 7 stamps denomination of 5 units.
+In file with count of stamps was read: 4 stamps denomination of 4 units.
+In file with count of stamps was read: 5 stamps denomination of 3 units.
+In file with count of stamps was read: 7 stamps denomination of 2 units.
+In file with count of stamps was read: 9 stamps denomination of 1 units.
+End of file with count of stamps.
+File with the count of stamps was read!
+Checking if the input file with information about letters is empty.
+Input data of 1 letter.
+Input data of 2 letter.
+Input data of 3 letter.
+File with the information about letters was read!
+Checking if the input file with the old and new rates is empty.
+Input rates of 1 type of letter.
+Input rates of 2 type of letter.
+Input rates of 3 type of letter.
+Input rates of 4 type of letter.
+File with the information about letters was read!
+-------Output count of stamps in file-------
+2 stamps denomination of 100 units.
+4 stamps denomination of 50 units.
+3 stamps denomination of 25 units.
+5 stamps denomination of 10 units.
+3 stamps denomination of 6 units.
+7 stamps denomination of 5 units.
+4 stamps denomination of 4 units.
+5 stamps denomination of 3 units.
+7 stamps denomination of 2 units.
+9 stamps denomination of 1 units.
+-------All count of stamps was outputed in file-------
+
+
+-------Output data of letters in file-------
+-------Data of 1 letter-------
+Type of letter: 1
+FIO: Блюдин Андрей Игоревич
+Type of address: 1
+Address: Российская Федерация, город Москва, улица Пушкина, дом 12, корпус 3, квартира 87
+Count of stamps in letter = 3
+Weight of letter = 60
+-------Data of 2 letter-------
+Type of letter: 1
+FIO: Ваняв Ваня Ванькович
+Type of address: 1
+Address: Российская Федерация, город Москва, улица Пушкина, дом 13, корпус 8, квартира 32
+Count of stamps in letter = 5
+Weight of letter = 12
+-------Data of 3 letter-------
+Type of letter: 1
+FIO: Петяв Петя Петявич
+Type of address: 1
+Address: Российская Федерация, город Москва, улица Пушкина, дом 14, корпус 2, квартира 54
+Count of stamps in letter = 7
+Weight of letter = 34
+-------All data about letters was outputed-------
+
+
+---------Output All old and new rates of letters price---------
+-------Output rates of 1 type of letters-------
+Type of adress: 0
+Type of letter: 0
+Output all rates of this type letter.
+Lower bound = 0, upper bound = 20, old price = 24, new price = 29.
+Lower bound = 21, upper bound = 40, old price = 27, new price = 32.
+Lower bound = 41, upper bound = 60, old price = 30, new price = 35.
+Lower bound = 61, upper bound = 80, old price = 33, new price = 38.
+Lower bound = 81, upper bound = 100, old price = 36, new price = 41.
+-------Output rates of 2 type of letters-------
+Type of adress: 0
+Type of letter: 1
+Output all rates of this type letter.
+Lower bound = 0, upper bound = 20, old price = 56, new price = 61.
+Lower bound = 21, upper bound = 40, old price = 59, new price = 64.
+Lower bound = 41, upper bound = 60, old price = 62, new price = 67.
+Lower bound = 61, upper bound = 80, old price = 65, new price = 70.
+Lower bound = 81, upper bound = 100, old price = 68, new price = 73.
+-------Output rates of 3 type of letters-------
+Type of adress: 1
+Type of letter: 0
+Output all rates of this type letter.
+Lower bound = 0, upper bound = 20, old price = 52, new price = 57.
+Lower bound = 21, upper bound = 40, old price = 60, new price = 65.
+Lower bound = 41, upper bound = 60, old price = 70, new price = 75.
+Lower bound = 61, upper bound = 80, old price = 80, new price = 85.
+Lower bound = 81, upper bound = 100, old price = 90, new price = 95.
+-------Output rates of 4 type of letters-------
+Type of adress: 1
+Type of letter: 1
+Output all rates of this type letter.
+Lower bound = 0, upper bound = 20, old price = 232, new price = 237.
+Lower bound = 21, upper bound = 40, old price = 250, new price = 255.
+Lower bound = 41, upper bound = 60, old price = 270, new price = 275.
+Lower bound = 61, upper bound = 80, old price = 290, new price = 295.
+Lower bound = 81, upper bound = 100, old price = 310, new price = 315.
+-------All new and old rates of letters were otputed-------
+
+
+Check if all data has been entered.
+All data has been entered.
+-----Letter by number 1 -----
+Old price = 270
+New price = 275
+Need units = 5
+-----Letter by number 2 -----
+Old price = 232
+New price = 237
+Need units = 5
+-----Letter by number 3 -----
+Old price = 250
+New price = 255
+Need units = 5
+new best condition has been found

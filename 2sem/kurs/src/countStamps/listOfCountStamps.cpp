@@ -200,3 +200,59 @@ void countOfStamps::outputCountOfStampsInConsole(std::wfstream &f_log) {
     }
     std::wcout << "-------All count of stamps was outputed in console-------" << std::endl << std::endl << std::endl;
 }
+
+countOfStamps::countOfStamps(countOfStamps *list) {
+    elemListCountOfStamps *listElem = list->getHead();
+    while(listElem != nullptr){
+        auto *elem = new elemListCountOfStamps;
+        if(listElem == list->getHead()){
+            elem->setDenomination(listElem->getDenomination());
+            elem->setCountStamps(listElem->getCountStamps());
+            setHead(elem);
+            setPrevious(elem);
+        }
+        else{
+            elem->setDenomination(listElem->getDenomination());
+            elem->setCountStamps(listElem->getCountStamps());
+            getPrevious()->setNextElement(elem);
+            setPrevious(elem);
+        }
+        listElem = listElem->getNextElement();
+    }
+}
+
+bool countOfStamps::haveStamps() {
+    elemListCountOfStamps *elem = getHead();
+    while(elem != nullptr){
+        if(elem->getCountStamps() > 0){
+            return true;
+        }
+        elem = elem->getNextElement();
+    }
+    return false;
+}
+
+int countOfStamps::getStampOfMaxDenomination(int ogranichitel) {
+    elemListCountOfStamps *elem = getHead();
+    int max = -1;
+    while(elem != nullptr){
+        if( (elem->getCountStamps() > 0) && (elem->getDenomination() <= ogranichitel) && (elem->getDenomination() > max) ){
+            max = elem->getDenomination();
+        }
+        elem = elem->getNextElement();
+    }
+    if(max != -1){
+        return max;
+    }
+    else{
+        int min = 100000;
+        elem = getHead();
+        while (elem != nullptr){
+            if( (elem->getCountStamps() > 0) && (((elem->getDenomination())-ogranichitel) <= min) ){
+                min = elem->getDenomination();
+            }
+            elem = elem->getNextElement();
+        }
+        return min;
+    }
+}

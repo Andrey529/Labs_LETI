@@ -3,14 +3,14 @@
 #include "../listOfPartsString/partOfString.h"
 class elementOfListLetters{
 private:
-    bool typeOfLetter; // 0 - простое, 1 - заказное
-    partOfString *headFIO;
-    partOfString *previousFIO;
-    bool typeOfAddress; // 0 - по России, 1 - за границу
-    partOfString *headAddress;
-    partOfString *previousAddress;
-    int countOfStampsInLetter;
-    int weightOfLetter;
+    bool typeOfLetter = false; // 0 - простое, 1 - заказное
+    partOfString *headFIO = nullptr;
+    partOfString *previousFIO = nullptr;
+    bool typeOfAddress = false; // 0 - по России, 1 - за границу
+    partOfString *headAddress = nullptr;
+    partOfString *previousAddress = nullptr;
+    int countOfStampsInLetter = -1;
+    int weightOfLetter = -1;
 
     int oldPrice = -1;
     int newPrice = -1;
@@ -18,7 +18,9 @@ private:
 
     bool needToSort = true;
 
-    elementOfListLetters *nextLetter;
+    int index = -1;
+
+    elementOfListLetters *nextLetter = nullptr;
 public:
     void setTypeOfLetter(bool i);             //
     bool getTypeOfLetter() const;             //
@@ -47,6 +49,9 @@ public:
     void setNeedToSort(bool i);
     bool  getNeedToSort() const;
 
+    void setIndex(int i);
+    int getIndex() const;
+
     void setNextLetter(elementOfListLetters *elem);  //
     elementOfListLetters *getNextLetter();           //
 
@@ -58,6 +63,7 @@ public:
     static bool listNotEmpty(partOfString *head);    //
 
     elementOfListLetters();                          //
+    elementOfListLetters(elementOfListLetters *elem);
     situations inputDataOfElementOfListLetters(std::wfstream &f_in, std::wfstream &f_log);
 
     situations inputFIO(std::wfstream &f_in, std::wfstream &f_log, wchar_t ogranichitel);
