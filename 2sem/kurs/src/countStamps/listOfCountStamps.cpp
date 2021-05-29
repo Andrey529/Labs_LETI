@@ -241,18 +241,5 @@ int countOfStamps::getStampOfMaxDenomination(int ogranichitel) {
         }
         elem = elem->getNextElement();
     }
-    if(max != -1){
-        return max;
-    }
-    else{
-        int min = 100000;
-        elem = getHead();
-        while (elem != nullptr){
-            if( (elem->getCountStamps() > 0) && (((elem->getDenomination())-ogranichitel) <= min) ){
-                min = elem->getDenomination();
-            }
-            elem = elem->getNextElement();
-        }
-        return min;
-    }
+    return max;
 }

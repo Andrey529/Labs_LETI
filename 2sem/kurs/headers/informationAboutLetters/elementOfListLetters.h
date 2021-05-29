@@ -20,6 +20,8 @@ private:
 
     int index = -1;
 
+    int needStamps = 0;
+
     elementOfListLetters *nextLetter = nullptr;
 public:
     void setTypeOfLetter(bool i);             //
@@ -51,6 +53,9 @@ public:
 
     void setIndex(int i);
     int getIndex() const;
+
+    void setNeedStamps(int i);
+    int getNeedStamps() const;
 
     void setNextLetter(elementOfListLetters *elem);  //
     elementOfListLetters *getNextLetter();           //

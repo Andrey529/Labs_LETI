@@ -39,7 +39,6 @@ public:
 
     bool lettersDoNotNeedStamps();
 
-//    static bool newStateOfStickeredStampsIsBetter(listOfLetters *listOfLettersOld, listOfLetters *listOfLettersNew);
     void sortLettersByCountStamps();
     int getMaxNeedUnits();
 };

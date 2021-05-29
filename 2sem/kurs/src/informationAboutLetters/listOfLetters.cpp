@@ -388,5 +388,3 @@ int listOfLetters::getMaxNeedUnits() {
     }
     return need;
 }
-
-

@@ -1,140 +1,110 @@
 #include "../../headers/functions/functions.h"
 
-listOfLetters *sortLetters(std::wfstream &f_log, bool firstState, countOfStamps *countOfStamp, listOfLetters *listLetters,
-    listOfLetters *bestListLetters, stickekeredStamps *stickerStamps, stickekeredStamps *bestStickerStamps){
-    if(listLetters->lettersDoNotNeedStamps()){
-        if( (newStateOfStickeredStampsIsBetter(bestListLetters, listLetters)) || firstState){
-            f_log << "new best condition has been found" << std::endl;
-            delete bestListLetters;
-            bestListLetters = listLetters;
-            delete bestStickerStamps;
-            bestStickerStamps = stickerStamps;
-            firstState = false;
-        }
-        return bestListLetters;
-    }
-    if(!(countOfStamp->haveStamps())){
-        f_log << "all stamps are out." << std::endl;
-        return bestListLetters;
-    }
-    listLetters->sortLettersByCountStamps();
+void sortLetters(std::wfstream &f_log, countOfStamps *countOfStamp, listOfLetters *listLetters){
+    elementOfListLetters *letter;
     listLetters->setIndexes();
+    while(true){
+        letter = letterWithLessNeedStamps(countOfStamp,listLetters);
+        if(letter == nullptr){
+            f_log << "All letters were sorted." << std::endl << std::endl;
+            break;
+        }
+        int stamp;
+        while(true){
+            if(!letter->getNeedToSort()){
+                break;
+            }
+            stamp = countOfStamp->getStampOfMaxDenomination(letter->getNeedUnits());
+
+            letter->setCountOfStamps(letter->getCountOfStamps()+1);
+            letter->setNeedUnits(letter->getNeedUnits()-stamp);
+
+            elemListCountOfStamps *elem = countOfStamp->getHead();
+            while(elem != nullptr){
+                if(elem->getDenomination() == stamp){
+                    elem->reduceCountStamps(1);
+                    break;
+                }
+                elem = elem->getNextElement();
+            }
+            f_log << "A stamp with denomination = " << stamp << " was stickered on the letter by number = "
+                  << letter->getIndex()+1 << ". Now on this letter stickered " << letter->getCountOfStamps()
+                  << " stamps and need to stick stamps on " << letter->getNeedUnits() << " units." << std::endl;
+            if(letter->getNeedUnits() <= 0){
+                letter->setNeedToSort(false);
+            }
+        }
+    }
+}
+
+elementOfListLetters *letterWithLessNeedStamps(countOfStamps *countOfStamp, listOfLetters *listLetters){
+    elementOfListLetters *letter = listLetters->getHead();
+    while(letter != nullptr){
+        if(!letter->getNeedToSort()){
+            letter = letter->getNextLetter();
+            continue;
+        }
+        letter->setNeedStamps(0);
+        letter->setNeedToSort(true);
+        int needUnits = letter->getNeedUnits();
+        while(needUnits > 0){
+            int maxStamp = countOfStamp->getStampOfMaxDenomination(needUnits);
+            if(maxStamp == -1){
+                letter->setNeedToSort(false);
+                break;
+            }
+
+            needUnits = needUnits - maxStamp;
+            letter->setNeedStamps(letter->getNeedStamps()+1);
+        }
+
+        letter = letter->getNextLetter();
+    }
+    int min = 10000;
+    elementOfListLetters *needLetter;
+    letter = listLetters->getHead();
+    while(letter != nullptr){
+        if( (letter->getNeedStamps() < min) && (letter->getNeedToSort())){
+            min = letter->getNeedStamps();
+            needLetter = letter;
+        }
+        letter = letter->getNextLetter();
+    }
+    if(min != 10000){
+        return needLetter;
+    }
+    else{
+        return nullptr;
+    }
+}
+
+void printResults(std::wfstream &f_log, std::wfstream &f_out, listOfLetters *listLetters){
     elementOfListLetters *elem = listLetters->getHead();
-    int stamp;
-    while (elem != nullptr){
-        if(!(elem->getNeedToSort())){
-            elem = elem->getNextLetter();
-            continue;
+    f_log << "-----------Results-----------" << std::endl;
+    f_out << "-----------Results-----------" << std::endl;
+    std::wcout << "-----------Results-----------" << std::endl;
+    listLetters->setIndexes();
+    while(elem != nullptr){
+        f_log << "On the Letter by number " << elem->getIndex()+1 << " stickered "
+        << elem->getCountOfStamps() << " stamps. ";
+        f_out << "On the Letter by number " << elem->getIndex()+1 << " stickered "
+              << elem->getCountOfStamps() << " stamps. ";
+        std::wcout << "On the Letter by number " << elem->getIndex()+1 << " stickered "
+                   << elem->getCountOfStamps() << " stamps. ";
+        if(elem->getNeedUnits() > 0){
+            f_log << "This letter is ready to be sent because there are not enough stamps for it." << std::endl;
+            f_out << "This letter is ready to be sent because there are not enough stamps for it." << std::endl;
+            std::wcout << "This letter is ready to be sent because there are not enough stamps for it." << std::endl;
         }
-        stamp = countOfStamp->getStampOfMaxDenomination(listLetters->getMaxNeedUnits());
-
-        //
-        auto *newStickerStamps = new stickekeredStamps(stickerStamps);
-        newStickerStamps->setElement(stamp,elem->getNeedUnits(),elem->getCountOfStamps());
-
-        //
-        auto *newListLetters = new listOfLetters(listLetters);
-        elementOfListLetters *newElem = newListLetters->getHead();
-        while(newElem != nullptr){
-            if(elem->getIndex() == newElem->getIndex()){
-                break;
-            }
-            newElem = newElem->getNextLetter();
-        }
-        newElem->setCountOfStamps(newElem->getCountOfStamps()+1);
-        newElem->setNeedUnits(newElem->getNeedUnits() - stamp);
-        if(newElem->getNeedUnits() <= 0){
-            newElem->setNeedToSort(false);
-        }
-
-        //
-        auto *newListOfCountStamps = new countOfStamps(countOfStamp);
-        elemListCountOfStamps *elemListCountOfStamps = newListOfCountStamps->getHead();
-        while(elemListCountOfStamps != nullptr){
-            if(elemListCountOfStamps->getDenomination() == stamp){
-                elemListCountOfStamps->setCountStamps(elemListCountOfStamps->getCountStamps()-1);
-                break;
-            }
-            elemListCountOfStamps = elemListCountOfStamps->getNextElement();
-        }
-
-        if( (!(newStateOfStickeredStampsIsBetter(bestListLetters, newListLetters))) && (!firstState) ){
-            f_log << "there is no point in going further" << std::endl;
-            delete newListOfCountStamps;
-            delete newListLetters;
-            delete newStickerStamps;
-            elem = elem->getNextLetter();
-            continue;
-        }
-
-        sortLetters(f_log,firstState,newListOfCountStamps,newListLetters,bestListLetters,newStickerStamps,bestStickerStamps);
-        if(!(newListLetters->lettersDoNotNeedStamps())){
-            delete newStickerStamps;
-            delete newListLetters;
-            delete newListOfCountStamps;
+        else{
+            f_log << "This letter is ready to be sent." << std::endl;
+            f_out << "This letter is ready to be sent." << std::endl;
+            std::wcout << "This letter is ready to be sent." << std::endl;
         }
         elem = elem->getNextLetter();
     }
-    return nullptr;
 }
 
-bool newStateOfStickeredStampsIsBetter(listOfLetters *listOfLettersOld, listOfLetters *listOfLettersNew) {
-    elementOfListLetters *elem1 = listOfLettersOld->getHead();
-    elementOfListLetters *elem2 = listOfLettersNew->getHead();
-    int countLetters = listOfLettersOld->getCountOfLetters();
-
-    int array1[countLetters];
-    int array2[countLetters];
-
-    for(int i=0; ;i++){
-        array1[i] = elem1->getCountOfStamps();
-        elem1 = elem1->getNextLetter();
-        if(elem1 == nullptr){
-            break;
-        }
-    }
-
-    for(int i=0; ; i++){
-        array2[i] = elem2->getCountOfStamps();
-        elem2 = elem2->getNextLetter();
-        if(elem2 == nullptr){
-            break;
-        }
-    }
-    int tmp;
-    for(int i=0; i < countLetters-1; i++){    // sorting first array
-        for(int j=0; j < countLetters-1; j++){
-            if(array1[j] < array1[j+1]){
-                tmp = array1[j];
-                array1[j] = array1[j+1];
-                array1[j+1] = tmp;
-            }
-        }
-    }
-    // sorting second array
-    for(int i=0; i < countLetters-1; i++){
-        for(int j=0; j < countLetters-1; j++){
-            if(array2[j] < array2[j+1]){
-                tmp = array2[j];
-                array2[j] = array2[j+1];
-                array2[j+1] = tmp;
-            }
-        }
-    }
-
-    for(int i = 0; i < countLetters; i++){
-        if(array1[i] < array2[i]){
-            return false;
-        }
-        else if(array2[i] < array1[i]){
-            return true;
-        }
-        else{
-            continue;
-        }
-    }
-    return true;
-}
 
 void calculationValues(listOfLetters *infLetters, listOfOldAndNewRatesForLetters *rates, std::wfstream &f_log){
     bool flag = true;
@@ -178,6 +148,7 @@ void calculationValues(listOfLetters *infLetters, listOfOldAndNewRatesForLetters
         i++;
         letter = letter->getNextLetter();
     }
+    f_log << std::endl;
 }
 
 
@@ -269,70 +240,3 @@ bool openFiles(std::wfstream &f_countStamps,std::wfstream &f_infLetter,std::wfst
 
     return true;
 }
-
-
-//void stikerMarks(std::wfstream &f_log, countOfStamps *countOfStamp, elementOfListLetters *letter, stickekeredStamps *base){
-//    if(letter->getNextLetter() == nullptr){
-//        std::wcout << "End of sort." << std::endl;
-//        f_log << "End of sort." << std::endl;
-//        return;
-//    }
-//    while (letter->getNeedToSort()){
-//        elemListCountOfStamps *count = countOfStamp->getHead();
-//        int maxNominalOfStamp = -1;
-//        while(count != nullptr){
-//            if( (count->getDenomination() >= maxNominalOfStamp) && (count->getDenomination() <= letter->getNeedUnits())
-//                && (count->getCountStamps() > 0) ){
-//                maxNominalOfStamp = count->getDenomination();
-//            }
-//            count = count->getNextElement();
-//        }
-//        letter->setCountOfStamps(letter->getCountOfStamps()+1);
-//        letter->setNeedUnits(letter->getNeedUnits()-maxNominalOfStamp);
-//
-//        count = countOfStamp->getHead();
-//        while(true){
-//            if(count->getDenomination() == maxNominalOfStamp){
-//                count->setCountStamps(count->getCountStamps()-1);
-//                break;
-//            }
-//            count = count->getNextElement();
-//        }
-//
-//        if(letter->getNeedUnits() <= 0){
-//            letter->setNeedToSort(false);
-//        }
-//
-//        auto *elemStickeredStamp = new elementOfStikeredStamps;
-//        if(base->getHead() == nullptr){
-//            base->setHead(elemStickeredStamp);
-//            base->setPrevious(elemStickeredStamp);
-//            elemStickeredStamp->setDenomination(maxNominalOfStamp);
-//        }
-//        else{
-//            base->getPrevious()->setNextStamp(elemStickeredStamp);
-//            base->setPrevious(elemStickeredStamp);
-//            elemStickeredStamp->setDenomination(maxNominalOfStamp);
-//        }
-//        stikerMarks(f_log,countOfStamp,letter, base);
-//    }
-//
-//}
-//
-//void printPermutations(int index,countOfStamps countOfStamp, listOfLetters *infLetter, std::wfstream &f_log, stickekeredStamps *best) {
-//    int length = infLetter->getCountOfLetters();
-//    if (index == length) {
-////        infLetter->outputInConsole(f_log);
-//        infLetter->outputIndexesInConsole();
-//        elementOfListLetters *elem = infLetter->getHead();
-//        auto *base = new stickekeredStamps;
-////        stikerMarks(f_log,countOfStamp,)        ну и хуетааааааааааааа
-//
-//        return;
-//    }
-//    for (int i=index; i < length; i++) {
-//        infLetter->swapLettersByNumbers(i,index);
-//        printPermutations(index + 1,countOfStamp, infLetter,f_log, best);
-//        infLetter->swapLettersByNumbers(i,index);
-//    }
-//}

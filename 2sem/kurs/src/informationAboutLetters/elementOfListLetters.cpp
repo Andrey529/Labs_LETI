@@ -397,3 +397,11 @@ elementOfListLetters::elementOfListLetters(elementOfListLetters *elem) {
         partBase = partBase->getNextElement();
     }
 }
+
+void elementOfListLetters::setNeedStamps(int i) {
+    this->needStamps = i;
+}
+
+int elementOfListLetters::getNeedStamps() const {
+    return this->needStamps;
+}
