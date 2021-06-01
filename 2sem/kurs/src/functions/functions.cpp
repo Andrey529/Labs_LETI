@@ -1,14 +1,178 @@
 #include "../../headers/functions/functions.h"
 
-//void inputAllData(std::fstream &f_countStamps,std::fstream &f_infLetter,
-//                  std::fstream &f_oldAndNewRates, std::fstream &f_log, std::fstream &f_result){
-//    countOfStamps countOfStamps(f_countStamps,f_log);
-//    countOfStamps.outputCountOfStampsInFileAndInConsole(f_result,f_log);
-//
-//}
+void sortLetters(std::wfstream &f_log, countOfStamps *countOfStamp, listOfLetters *listLetters){
+    elementOfListLetters *letter;
+    listLetters->setIndexes();
+    while(true){
+        letter = letterWithLessNeedStamps(countOfStamp,listLetters);
+        if(letter == nullptr){
+            f_log << "All letters were sorted." << std::endl << std::endl;
+            break;
+        }
+        int stamp;
+        while(true){
+            if(!letter->getNeedToSort()){
+                break;
+            }
+            stamp = countOfStamp->getStampOfMaxDenomination(letter->getNeedUnits());
 
-//void outputAllData(std::fstream &f_log, std::fstream &f_result){
-//}
+            letter->setCountOfStamps(letter->getCountOfStamps()+1);
+            letter->setNeedUnits(letter->getNeedUnits()-stamp);
+
+            elemListCountOfStamps *elem = countOfStamp->getHead();
+            while(elem != nullptr){
+                if(elem->getDenomination() == stamp){
+                    elem->reduceCountStamps(1);
+                    break;
+                }
+                elem = elem->getNextElement();
+            }
+            f_log << "A stamp with denomination = " << stamp << " was stickered on the letter by number = "
+                  << letter->getIndex()+1 << ". Now on this letter stickered " << letter->getCountOfStamps()
+                  << " stamps and need to stick stamps on " << letter->getNeedUnits() << " units." << std::endl;
+            if(letter->getNeedUnits() <= 0){
+                letter->setNeedToSort(false);
+            }
+        }
+    }
+}
+
+elementOfListLetters *letterWithLessNeedStamps(countOfStamps *countOfStamp, listOfLetters *listLetters){
+    elementOfListLetters *letter = listLetters->getHead();
+    while(letter != nullptr){
+        if(!letter->getNeedToSort()){
+            letter = letter->getNextLetter();
+            continue;
+        }
+        letter->setNeedStamps(0);
+        letter->setNeedToSort(true);
+        int needUnits = letter->getNeedUnits();
+        while(needUnits > 0){
+            int maxStamp = countOfStamp->getStampOfMaxDenomination(needUnits);
+            if(maxStamp == -1){
+                letter->setNeedToSort(false);
+                break;
+            }
+
+            needUnits = needUnits - maxStamp;
+            letter->setNeedStamps(letter->getNeedStamps()+1);
+        }
+
+        letter = letter->getNextLetter();
+    }
+    int min = 10000;
+    elementOfListLetters *needLetter;
+    letter = listLetters->getHead();
+    while(letter != nullptr){
+        if( (letter->getNeedStamps() < min) && (letter->getNeedToSort())){
+            min = letter->getNeedStamps();
+            needLetter = letter;
+        }
+        letter = letter->getNextLetter();
+    }
+    if(min != 10000){
+        return needLetter;
+    }
+    else{
+        return nullptr;
+    }
+}
+
+void printResults(std::wfstream &f_log, std::wfstream &f_out, listOfLetters *listLetters){
+    elementOfListLetters *elem = listLetters->getHead();
+    f_log << "-----------Results-----------" << std::endl;
+    f_out << "-----------Results-----------" << std::endl;
+    std::wcout << "-----------Results-----------" << std::endl;
+    listLetters->setIndexes();
+    while(elem != nullptr){
+        f_log << "On the Letter by number " << elem->getIndex()+1 << " stickered "
+        << elem->getCountOfStamps() << " stamps. ";
+        f_out << "On the Letter by number " << elem->getIndex()+1 << " stickered "
+              << elem->getCountOfStamps() << " stamps. ";
+        std::wcout << "On the Letter by number " << elem->getIndex()+1 << " stickered "
+                   << elem->getCountOfStamps() << " stamps. ";
+        if(elem->getNeedUnits() > 0){
+            f_log << "This letter is ready to be sent because there are not enough stamps for it." << std::endl;
+            f_out << "This letter is ready to be sent because there are not enough stamps for it." << std::endl;
+            std::wcout << "This letter is ready to be sent because there are not enough stamps for it." << std::endl;
+        }
+        else{
+            f_log << "This letter is ready to be sent." << std::endl;
+            f_out << "This letter is ready to be sent." << std::endl;
+            std::wcout << "This letter is ready to be sent." << std::endl;
+        }
+        elem = elem->getNextLetter();
+    }
+}
+
+
+void calculationValues(listOfLetters *infLetters, listOfOldAndNewRatesForLetters *rates, std::wfstream &f_log){
+    bool flag = true;
+    elementOfListLetters *letter = infLetters->getHead();
+    while(letter != nullptr){
+        elementOfOldAndNewRates *elemRates = rates->getHead();
+        while((elemRates != nullptr) && flag) {
+            if ((letter->getTypeOfLetter() == elemRates->getTypeOfLetter()) &&
+                (letter->getTypeOfAddress() == elemRates->getTypeOfAddress())) {
+                rateValues *val = elemRates->getHeadValues();
+                while(val != nullptr){
+                    if( (letter->getWeight() >= val->getLowerBound()) &&
+                        (letter->getWeight() <= val->getUpperBound()) ){
+                        letter->setOldPrice(val->getOldPrice());
+                        letter->setNewPrice(val->getNewPrice());
+                        letter->setNeedUnits(letter->getNewPrice()-letter->getOldPrice());
+                        flag = false;
+                        break;
+                    }
+                    val = val->getNext();
+                }
+            }
+            elemRates = elemRates->getNextElement();
+        }
+        flag = true;
+        letter = letter->getNextLetter();
+    }
+    letter = infLetters->getHead();
+    int i=1;
+    while (letter != nullptr){
+        f_log << "-----Letter by number " << i << " -----" << std::endl;
+        if(letter->getNeedUnits() == -1){
+            letter->setNeedToSort(false);
+            f_log << "Do not need to be sort." << std::endl;
+        }
+        else{
+            f_log << "Old price = " << letter->getOldPrice() << std::endl;
+            f_log << "New price = " << letter->getNewPrice() << std::endl;
+            f_log << "Need units = " << letter->getNeedUnits() << std::endl;
+        }
+        i++;
+        letter = letter->getNextLetter();
+    }
+    f_log << std::endl;
+}
+
+
+
+bool allDataWasInputed(countOfStamps *countOfStamps,listOfLetters *infLetters, listOfOldAndNewRatesForLetters *rates){
+    if(countOfStamps->listIsEmpty()){
+        return false;
+    }
+    else if(!(infLetters->listNotEmpty())){
+        return false;
+    }
+    else if(!(rates->listNotEmpty())){
+        return false;
+    }
+    return true;
+}
+
+
+void outputAllData(std::wfstream &f_log, std::wfstream &f_result, countOfStamps *countOfStamps,
+                   listOfLetters *infLetters, listOfOldAndNewRatesForLetters *rates){
+    countOfStamps->outputCountOfStampsInFileAndInConsole(f_result,f_log);
+    infLetters->outputListOfLettersInConsoleAndInFile(f_result,f_log);
+    rates->outputListOfRatesInConsoleAndInFile(f_result,f_log);
+}
 
 bool openFiles(std::wfstream &f_countStamps,std::wfstream &f_infLetter,std::wfstream &f_oldAndNewRates,
                std::wfstream &f_log, std::wfstream &f_result){
