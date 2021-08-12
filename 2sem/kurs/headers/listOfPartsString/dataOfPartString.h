@@ -4,16 +4,16 @@
 
 class dataOfPartString{
 private:
-    char *pointerArray = nullptr;
-    char mark = '@';
+    wchar_t *pointerArray = nullptr;
+    wchar_t mark = '@';
     int maxLen = 6;
 public:
     dataOfPartString();
-    void setSymbol(int i, char s);
-    char getSymbol(int i);
+    void setSymbol(int i, wchar_t s);
+    wchar_t getSymbol(int i);
     void setMarkInTheEnd(int i);
-    void setMark(char s);
-    char getMark() const;
+    void setMark(wchar_t s);
+    wchar_t getMark() const;
     void setMaxLen(int i);
     int getMaxLen() const;
     ~dataOfPartString();

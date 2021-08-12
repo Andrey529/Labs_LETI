@@ -21,15 +21,15 @@ elemListCountOfStamps *countOfStamps::getPrevious() {
 }
 
 
-countOfStamps::countOfStamps(std::fstream &f_in, std::fstream &f_log) {
+countOfStamps::countOfStamps(std::wfstream &f_in, std::wfstream &f_log) {
     situations flag = addFirstElement(f_in,f_log);
     if(flag == situations::emptyFile){
         f_log << "File with count stamps is empty." << std::endl;
-        std::cout << "File with count stamps is empty." << std::endl;
+        std::wcout << "File with count stamps is empty." << std::endl;
     }
     else if(flag == situations::endOfFile){
         f_log << "File with the count of stamps was read." << std::endl;
-        std::cout << "File with the count of stamps was read." << std::endl;
+        std::wcout << "File with the count of stamps was read." << std::endl;
     }
     else{
         do{
@@ -37,15 +37,15 @@ countOfStamps::countOfStamps(std::fstream &f_in, std::fstream &f_log) {
         }
         while (flag == situations::notLastElement);
         f_log << "File with the count of stamps was read!" << std::endl;
-        std::cout << "File with the count of stamps was read!" << std::endl;
     }
 }
 
-situations countOfStamps::addFirstElement(std::fstream &f_in, std::fstream &f_log) {
+situations countOfStamps::addFirstElement(std::wfstream &f_in, std::wfstream &f_log) {
     elemListCountOfStamps *elem = new elemListCountOfStamps;
-    char s = f_in.peek();
+    wchar_t s = f_in.peek();
+    f_log << "Checking if the input file with count of stamps is empty." << std::endl;
     if(s == -1){
-//        delete elem;
+        delete elem;
         return situations::emptyFile;
     }
     if(s == '\n'){
@@ -55,7 +55,7 @@ situations countOfStamps::addFirstElement(std::fstream &f_in, std::fstream &f_lo
         }
         while (s == '\n');
         if(s == -1){
-//            delete elem;
+            delete elem;
             return situations::emptyFile;
         }
     }
@@ -92,9 +92,9 @@ situations countOfStamps::addFirstElement(std::fstream &f_in, std::fstream &f_lo
     }
 }
 
-situations countOfStamps::addNewElement(std::fstream &f_in, std::fstream &f_log) {
+situations countOfStamps::addNewElement(std::wfstream &f_in, std::wfstream &f_log) {
     elemListCountOfStamps *elem = new elemListCountOfStamps;
-    char s = f_in.peek();
+    wchar_t s = f_in.peek();
     if(s == '\n'){
         do{
             s = f_in.get();
@@ -161,17 +161,17 @@ countOfStamps::~countOfStamps() {
     }
 }
 
-void countOfStamps::outputCountOfStampsInFileAndInConsole(std::fstream &f_result, std::fstream &f_log) {
+void countOfStamps::outputCountOfStampsInFileAndInConsole(std::wfstream &f_result, std::wfstream &f_log) {
     outputCountOfStampsInConsole(f_log);
     outputCountOfStampsInFile(f_result,f_log);
 }
 
-void countOfStamps::outputCountOfStampsInFile(std::fstream &f_result, std::fstream &f_log) {
-    f_log << "Output count of stamps in file." << std::endl;
-    f_result << "Output count of stamps in file." << std::endl;
+void countOfStamps::outputCountOfStampsInFile(std::wfstream &f_result, std::wfstream &f_log) {
+    f_log << "-------Output count of stamps in file-------" << std::endl;
+    f_result << "-------Output count of stamps in file-------" << std::endl;
     if(listIsEmpty()){
-        f_result << "In file of count of stamps No data." << std::endl;
-        f_log << "In file of count of stamps No data." << std::endl;
+        f_result << "In file of count of stamps No data." << std::endl << std::endl << std::endl;
+        f_log << "In file of count of stamps No data." << std::endl << std::endl << std::endl;
         return;
     }
     elemListCountOfStamps *elem = getHead();
@@ -182,26 +182,64 @@ void countOfStamps::outputCountOfStampsInFile(std::fstream &f_result, std::fstre
               << elem->getDenomination() << " units." << std::endl;
         elem = elem->getNextElement();
     }
-    f_log << "All count of stamps was outputed in file." << std::endl;
-    f_result << "All count of stamps was outputed in file." << std::endl;
+    f_log << "-------All count of stamps was outputed in file-------" << std::endl << std::endl << std::endl;
+    f_result << "-------All count of stamps was outputed in file-------" << std::endl << std::endl << std::endl;
 }
 
-void countOfStamps::outputCountOfStampsInConsole(std::fstream &f_log) {
-    f_log << "Output count of stamps in console." << std::endl;
-    std::cout << "Output count of stamps in console." << std::endl;
+void countOfStamps::outputCountOfStampsInConsole(std::wfstream &f_log) {
+    std::wcout << "-------Output count of stamps in console-------" << std::endl;
     if(listIsEmpty()){
-        std::cout << "In file of count of stamps No data." << std::endl;
-        f_log << "In file of count of stamps No data." << std::endl;
+        std::wcout << "In file of count of stamps No data" << std::endl << std::endl << std::endl;
         return;
     }
     elemListCountOfStamps *elem = getHead();
     while(elem != nullptr){
-        std::cout << elem->getCountStamps() << " stamps denomination of "
-                  << elem->getDenomination() << " units." << std::endl;
-        f_log << elem->getCountStamps() << " stamps denomination of "
+        std::wcout << elem->getCountStamps() << " stamps denomination of "
                   << elem->getDenomination() << " units." << std::endl;
         elem = elem->getNextElement();
     }
-    f_log << "All count of stamps was outputed in console." << std::endl;
-    std::cout << "All count of stamps was outputed in console." << std::endl;
+    std::wcout << "-------All count of stamps was outputed in console-------" << std::endl << std::endl << std::endl;
+}
+
+countOfStamps::countOfStamps(countOfStamps *list) {
+    elemListCountOfStamps *listElem = list->getHead();
+    while(listElem != nullptr){
+        auto *elem = new elemListCountOfStamps;
+        if(listElem == list->getHead()){
+            elem->setDenomination(listElem->getDenomination());
+            elem->setCountStamps(listElem->getCountStamps());
+            setHead(elem);
+            setPrevious(elem);
+        }
+        else{
+            elem->setDenomination(listElem->getDenomination());
+            elem->setCountStamps(listElem->getCountStamps());
+            getPrevious()->setNextElement(elem);
+            setPrevious(elem);
+        }
+        listElem = listElem->getNextElement();
+    }
+}
+
+bool countOfStamps::haveStamps() {
+    elemListCountOfStamps *elem = getHead();
+    while(elem != nullptr){
+        if(elem->getCountStamps() > 0){
+            return true;
+        }
+        elem = elem->getNextElement();
+    }
+    return false;
+}
+
+int countOfStamps::getStampOfMaxDenomination(int ogranichitel) {
+    elemListCountOfStamps *elem = getHead();
+    int max = -1;
+    while(elem != nullptr){
+        if( (elem->getCountStamps() > 0) && (elem->getDenomination() <= ogranichitel) && (elem->getDenomination() > max) ){
+            max = elem->getDenomination();
+        }
+        elem = elem->getNextElement();
+    }
+    return max;
 }

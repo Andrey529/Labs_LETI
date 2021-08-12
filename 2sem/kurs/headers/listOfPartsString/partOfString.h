@@ -5,21 +5,19 @@
 #include "../situations.h"
 class partOfString{
 private:
-    dataOfPartString *inf;
-    partOfString *nextPartOfString;
+    dataOfPartString *inf = nullptr;
+    partOfString *nextPartOfString = nullptr;
 public:
     partOfString();
-    situations setInf(std::fstream &f_in, std::fstream &f_log);   // input information part
-//    void getInfInConsole();   // output element in console
-//    void getInfInFile(std::fstream &f_out); // output element in file
+    partOfString(partOfString *elem);
+    situations setInf(std::wfstream &f_in, std::wfstream &f_log, wchar_t ogranichitel);   // input information part
+    void getInfInConsole();   // output element in console
+    void getInfInFile(std::wfstream &f_out); // output element in file
     partOfString *getNextElement(); // get pointer to the next element
     void setNextElement(partOfString *next); // set pointer to the next element
     ~partOfString();
-//    void setMaxLenOfPart(int i);
-//    int getMaxLenOfPart();
-//    partOfString(partOfString &partString);   // конструктор копирования
-//    char getSymbolInfOfPartString(int i);    // для сравнения массивов
-//    char getMarkInfofPartString();           // для сравнения массивов
+    void setMaxLenOfPart(int i);
+    int getMaxLenOfPart();
 
 };
 

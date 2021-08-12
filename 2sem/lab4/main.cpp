@@ -23,6 +23,7 @@ int main() {
             }
             else{
                 std::cout << "Аfter running the program, an empty list was formed" << std::endl;
+                f_out << "Аfter running the program, an empty list was formed" << std::endl;
             }
 
         }
@@ -46,6 +47,7 @@ int main() {
         }
         else{ // if noone text entered
             std::cout << "It is impossible to form a new list." << std::endl;
+            f_out  << "It is impossible to form a new list." << std::endl;
         }
         f_in1.close();
         f_in2.close();

@@ -6,8 +6,11 @@ enum class situations{
     endOfFile,
     notLastElement,
     lastElement,
+    notEnoughMemory,
     bad,
     good,
+    endOfSort,
+    notEndOfSort,
 };
 
 #endif //KURS_SITUATIONS_H

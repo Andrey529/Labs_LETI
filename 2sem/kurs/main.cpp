@@ -1,33 +1,49 @@
-//#include "./headers/functions/functions.h"
-//#include "./headers/listOfPartsString/partOfString.h"
-#include <iostream>
-#include <fstream>
-//#include <wchar.h>
+#include "./headers/functions/functions.h"
 int main() {
-//    std::wfstream f_countStamps, f_infLetter, f_oldAndNewRates, f_log, f_result;
-//    openFiles(f_countStamps, f_infLetter, f_oldAndNewRates,f_log,f_result);
+    setlocale(LC_ALL,"ru_RU.UTF-8");
+    std::wfstream f_countStamps, f_oldAndNewRates, f_log, f_infLetter, f_result;
 
-//    inputAllData(f_countStamps,f_infLetter,f_oldAndNewRates,f_log,f_result);
+    openFiles(f_countStamps, f_infLetter, f_oldAndNewRates,f_log,f_result);
 
-    std::wfstream f_infLetter;
-    f_infLetter.open("/home/andrey/Projects/Labs_LETI/2sem/kurs/text-files/informationAboutLetters.txt",std::ios::in);
-    wchar_t s;
+    auto *countOfStamp = new (std::nothrow) countOfStamps(f_countStamps,f_log);
+    auto *infLetters = new (std::nothrow) listOfLetters(f_infLetter,f_log);
+    auto *ratesOfLetters = new (std::nothrow) listOfOldAndNewRatesForLetters(f_oldAndNewRates,f_log);
 
-    int i=0;
-    while(true){
-        s = f_infLetter.get();
-        std::wcout << int(s) << ' ';
-        if(s == '\n'){
-            i++;
-        }
-        if(i==2){
-            break;
-        }
+    if( (!countOfStamp) || (!infLetters) || (!ratesOfLetters) ){
+        std::wcout << "Does not enough memory for data." << std::endl;
+        f_log << "Does not enough memory for data." << std::endl;
+        f_result << "Does not enough memory for data." << std::endl;
+        delete countOfStamp;
+        delete infLetters;
+        delete ratesOfLetters;
+        return -1;
     }
-    s = f_infLetter.get();
-    std::wcout << s;
-//    partOfString partOfString;
-//    partOfString.setInf(f_infLetter,f_log);
+    outputAllData(f_log,f_result,countOfStamp,infLetters,ratesOfLetters);
 
+    f_log << "Check if all data has been entered." << std::endl;
+    if(allDataWasInputed(countOfStamp,infLetters,ratesOfLetters)){
+        f_log << "All data has been entered." << std::endl;
+        calculationValues(infLetters,ratesOfLetters,f_log);
+
+        sortLetters(f_log,countOfStamp,infLetters);
+        printResults(f_log,f_result,infLetters);
+
+        delete countOfStamp;
+        delete infLetters;
+        delete ratesOfLetters;
+    }
+    else{
+        std::wcout << "Not all data has been entered." << std::endl;
+        f_log << "Not all data has been entered." << std::endl;
+        f_result << "Not all data has been entered." << std::endl;
+        delete countOfStamp;
+        delete infLetters;
+        delete ratesOfLetters;
+    }
+    f_log.close();
+    f_result.close();
+    f_oldAndNewRates.close();
+    f_infLetter.close();
+    f_countStamps.close();
     return 0;
 }
