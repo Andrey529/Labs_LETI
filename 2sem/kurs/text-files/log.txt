@@ -69,7 +69,7 @@ Count of stamps in letter = 12
 Weight of letter = 54
 -------Data of 5 letter-------
 Type of letter: 1
-FIO: Абобов Абоба Абобович
+FIO: Атомов Атом Атомович
 Type of address: 1
 Address: Российская Федерация, город Москва, улица Пушкина, дом 4, корпус 8, квартира 54
 Count of stamps in letter = 2
