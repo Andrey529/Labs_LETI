@@ -25,8 +25,7 @@ public:
     void insert(int number, size_t index); // adding an element at index
                             // (insertion before an item that was previously accessible at that index)
 
-    int at(size_t index); // getting an element at the index
-                        // тут какаято мутка с возвращаемым значением, спросил про это у препода
+    int at(size_t index); // getting an element data at the index
 
     void remove(size_t index); // deleting an element by index
     size_t get_size() const; // getting list size
@@ -70,16 +69,6 @@ void listOfInts::setHead(data *elem) {
 
 bool listOfInts::isEmpty() {
     return head == nullptr;
-}
-
-size_t listOfInts::get_size() const{
-    data *elem = this->head;
-    int sizeList = 0;
-    while(elem != nullptr){
-        sizeList++;
-        elem = elem->getNextElem();
-    }
-    return sizeList;
 }
 
 void listOfInts::push_back(int number) {
@@ -136,6 +125,7 @@ void listOfInts::pop_front() {
 }
 
 void listOfInts::insert(int number, size_t index) {
+
     data *newElem = new data(number);
 
     if(this->head == nullptr){
@@ -143,16 +133,23 @@ void listOfInts::insert(int number, size_t index) {
         return;
     }
 
+    try {
+        if (index + 1 > get_size()) {
+            throw std::invalid_argument("Index greater than size of array in function insert()");
+        }
+    }
+    catch(std::invalid_argument& e) {
+        std::cerr << e.what() << std::endl;
+        return;
+    }
+
+
     if(index == 0){
         newElem->setNextElem(this->head);
         this->head = newElem;
         return;
     }
 
-    if(index+1 > get_size()){
-        std::cout << "In function insert index > size list " << std::endl;
-        return;
-    }
 
     data *elem = this->head;
     for(int i = 0; i < index-1; i++){
@@ -164,17 +161,42 @@ void listOfInts::insert(int number, size_t index) {
 
 }
 
+int listOfInts::at(size_t index) {
+    data *elem = this->head;
+
+    try {
+        if (index + 1 > get_size()) {
+            throw std::invalid_argument("Index greater than size of array in function at()");
+        }
+    }
+    catch(std::invalid_argument& e) {
+        std::cerr << e.what() << std::endl;
+        return -1;
+    }
+
+    int i = 0;
+    while(i != index){
+        elem = elem->getNextElem();
+        i++;
+    }
+    return elem->getNumber();
+}
+
 
 void listOfInts::remove(size_t index) {
     if(this->head == nullptr){
         return;
     }
 
-    if(index+1 > get_size()){
-        std::cout << "In function remove index > size list " << std::endl;
+    try {
+        if (index + 1 > get_size()) {
+            throw std::invalid_argument("Index greater than size of array in function remove()");
+        }
+    }
+    catch(std::invalid_argument& e) {
+        std::cerr << e.what() << std::endl;
         return;
     }
-
 
     data *elem = this->head;
 
@@ -191,6 +213,16 @@ void listOfInts::remove(size_t index) {
     data *delElem = elem->getNextElem();
     elem->setNextElem(delElem->getNextElem());
     delete delElem;
+}
+
+size_t listOfInts::get_size() const{
+    data *elem = this->head;
+    int sizeList = 0;
+    while(elem != nullptr){
+        sizeList++;
+        elem = elem->getNextElem();
+    }
+    return sizeList;
 }
 
 void listOfInts::clear() {
@@ -217,9 +249,13 @@ std::ostream &operator<<(std::ostream &out, const listOfInts &list) {
     return out;
 }
 
+
+
 void listOfInts::reverse() {
 
 }
+
+
 
 
 #endif //LAB1_LISTOFINTS_H
