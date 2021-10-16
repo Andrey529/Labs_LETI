@@ -3,7 +3,6 @@
 
 #include "data.h"
 #include <cstddef>
-#include "situations.h"
 #include "iostream"
 
 class listOfInts {
@@ -13,11 +12,7 @@ public:
     listOfInts(data *elem = nullptr);
     ~listOfInts();
 
-    data *getHead() const;
-    void setHead(data *elem);
-
     bool isEmpty(); // checking if the list is empty
-
     void push_back(int number); //adding new element in the end of the list
     void push_front(int number); //adding new element in the begin of the list
     void pop_back(); // deleting last element in the list
@@ -25,20 +20,21 @@ public:
     void insert(int number, size_t index); // adding an element at index
                             // (insertion before an item that was previously accessible at that index)
 
-    int at(size_t index); // getting an element data at the index
+
+    int at(size_t index) const; // getting an element data at the index
+    size_t get_size() const; // getting list size
+    void set(size_t index, int number); // замена элемента по индексу на передаваемый элемент
+    // replacing the element by index with the passed element
+
 
     void remove(size_t index); // deleting an element by index
-    size_t get_size() const; // getting list size
     void clear(); // removing all list elements
-    void set(size_t index, int number); // замена элемента по индексу на передаваемый элемент
-                            // replacing the element by index with the passed element
 
 
     friend std::ostream& operator<< (std::ostream &out, const listOfInts &list); // Перегрузка оператора вывода <<
 
     void reverse(); // reverses the order of the elements in the list
 };
-
 
 listOfInts::listOfInts(data *elem) {
     if(elem == nullptr){
@@ -57,14 +53,6 @@ listOfInts::~listOfInts() {
         elem = elem->getNextElem();
         delete tempElem;
     }
-}
-
-data *listOfInts::getHead() const{
-    return this->head;
-}
-
-void listOfInts::setHead(data *elem) {
-    this->head = elem;
 }
 
 bool listOfInts::isEmpty() {
@@ -161,11 +149,11 @@ void listOfInts::insert(int number, size_t index) {
 
 }
 
-int listOfInts::at(size_t index) {
+int listOfInts::at(size_t index) const{
     data *elem = this->head;
 
     try {
-        if (index + 1 > get_size()) {
+        if ((index + 1) > get_size()) {
             throw std::invalid_argument("Index greater than size of array in function at()");
         }
     }
@@ -182,11 +170,7 @@ int listOfInts::at(size_t index) {
     return elem->getNumber();
 }
 
-
 void listOfInts::remove(size_t index) {
-    if(this->head == nullptr){
-        return;
-    }
 
     try {
         if (index + 1 > get_size()) {
@@ -198,6 +182,10 @@ void listOfInts::remove(size_t index) {
         return;
     }
 
+    if(this->head == nullptr){
+        return;
+    }
+
     data *elem = this->head;
 
     if(index == 0){
@@ -205,6 +193,8 @@ void listOfInts::remove(size_t index) {
         delete elem;
         return;
     }
+
+
 
     for(int i = 0; i < index-1; i++){
         elem = elem->getNextElem();
@@ -244,12 +234,6 @@ void listOfInts::set(size_t index, int number) {
     }
     catch(std::invalid_argument& e) {
         std::cerr << e.what() << std::endl;
-//        data *elem = this->head;
-//        while(elem != nullptr){
-//            std::cerr << elem->getNumber() << ' ';
-//            elem = elem->getNextElem();
-//        }
-//        std::cerr << std::endl;
         return;
     }
 
@@ -270,24 +254,23 @@ void listOfInts::set(size_t index, int number) {
 std::ostream &operator<<(std::ostream &out, const listOfInts &list) {
 
     out << "List of integers:" << std::endl;
-    data *elem = list.getHead();
     int i = 1;
-    while(elem != nullptr){
-        out << i << " element: number = " << elem->getNumber() << std::endl;
+    for (size_t index = 0; index < list.get_size(); index++){
+        out << i << " element: number = " << list.at(index) << std::endl;
         i++;
-        elem = elem->getNextElem();
     }
-
     return out;
 }
 
-
-
 void listOfInts::reverse() {
+    if(get_size() <= 1)    return;
 
+    int tmpElem;
+    for(size_t i = 0; i < get_size()/2; i++){
+        tmpElem = at(i);
+        set(i,at(get_size()-1-i));
+        set(get_size()-1-i,tmpElem);
+    }
 }
-
-
-
 
 #endif //LAB1_LISTOFINTS_H

@@ -1,46 +1,9 @@
 #include "gtest/gtest.h"
 #include "../headers/listOfInts.h"
 
-TEST(getHead,headNULL){
-    listOfInts list;
-    ASSERT_EQ(list.getHead(), nullptr);
-}
-
-TEST(getHead,headNotNULL){
-    listOfInts list;
-    for (int i = 0; i < 3; i++){
-        list.push_back(i);
-    }
-    ASSERT_NE(list.getHead(), nullptr);
-}
-
-TEST(setHead,headNULL){
-    listOfInts list;
-    list.push_back(0);
-    data *elem = list.getHead();
-    list.setHead(nullptr);
-    delete elem;
-    ASSERT_EQ(list.getHead(), nullptr);
-}
-
-TEST(setHead,headNotNULL) {
-    listOfInts list;
-    for(int i = 0; i < 3; i++){
-        list.push_back(i);
-    }
-
-    auto *newHead = new data(10);
-
-    newHead->setNextElem(list.getHead());
-
-    list.setHead(newHead);
-
-    ASSERT_EQ(list.getHead(),newHead);
-}
-
 TEST(isEmpty, listIsEmpty){
     listOfInts list;
-    ASSERT_EQ(list.getHead(), nullptr);
+    ASSERT_EQ(list.isEmpty(), true);
 }
 
 TEST(isEmpty, listNotEmpty){
@@ -48,150 +11,137 @@ TEST(isEmpty, listNotEmpty){
     for(int i = 0; i < 3; i++){
         list.push_back(i);
     }
-    ASSERT_NE(list.getHead(), nullptr);
+    ASSERT_EQ(list.isEmpty(), false);
 }
 
 TEST(push_back,listEmpty){
     listOfInts list;
-    list.push_back(5);
-
-    ASSERT_NE(list.getHead(), nullptr);
-    ASSERT_EQ(list.getHead()->getNumber(),5);
+    list.push_back(100);
+    ASSERT_EQ(list.at(0),100);
+    ASSERT_EQ(list.get_size(),1); // checks that the list has only 1 element
 }
 
 TEST(push_back,listNotEmpty){
     listOfInts list;
 
-    auto *elem0 = new data(0);
-    auto *elem1 = new data(1);
-    auto *elem2 = new data(2);
-
-    list.setHead(elem0);
-    elem0->setNextElem(elem1);
-    elem1->setNextElem(elem2);
-    elem2->setNextElem(nullptr);
-
-    list.push_back(5);
-
-    data *lastElem = list.getHead();
-    while (lastElem->getNextElem() != nullptr){
-        lastElem = lastElem->getNextElem();
+    for (int i = 0; i < 5; i++){
+        list.push_back(i);
     }
 
-    ASSERT_NE(list.getHead(), nullptr);
-    ASSERT_EQ(lastElem->getNumber(),5);
+    for (int i = 0; i < 5; i++){
+        ASSERT_EQ(list.at(i),i);
+    }
+    ASSERT_EQ(list.get_size(),5); // checks that the list has 5 elements
 }
 
 TEST(push_front,listEmpty){
     listOfInts list;
-    list.push_front(5);
+    list.push_front(100);
 
-    ASSERT_NE(list.getHead(), nullptr);
-    ASSERT_EQ(list.getHead()->getNumber(),5);
+    ASSERT_EQ(list.at(0),100);
+    ASSERT_EQ(list.get_size(),1); // checks that the list has only 1 element
 }
 
 TEST(push_front,listNotEmpty){
     listOfInts list;
-    for(int i = 0; i < 3; i++){
+    for(int i = 0; i < 5; i++){
         list.push_back(i);
     }
 
-    data *previousHead = list.getHead();
-    list.push_front(5);
+    list.push_front(100);
 
-    ASSERT_EQ(list.getHead()->getNumber(),5);
-    ASSERT_EQ(list.getHead()->getNextElem(),previousHead);
+    ASSERT_EQ(list.at(0),100);
+    for (int i = 0; i < 5; i++){
+        ASSERT_EQ(list.at(i+1),i);
+    }
+    ASSERT_EQ(list.get_size(),6); // checks that the list has 6 elements
 }
 
 TEST(pop_back, listEmpty){
     listOfInts list;
     list.pop_back();
-    ASSERT_EQ(list.getHead(),nullptr);
+    ASSERT_EQ(list.isEmpty(),true);
 }
 
 TEST(pop_back,listNotEmpty){
     listOfInts list;
-    for( int i = 0; i < 3; i++){
+    for( int i = 0; i < 5; i++){
         list.push_back(i);
     }
 
     list.pop_back();
 
-    data *elem = list.getHead();
-    while(elem->getNextElem() != nullptr){
-        elem = elem->getNextElem();
+    for(int i = 0; i < 4; i++){
+        ASSERT_EQ(list.at(i),i);
     }
-
-    ASSERT_EQ(elem->getNumber(),1);
+    ASSERT_EQ(list.get_size(),4);
 }
 
 TEST(pop_front, listEmpty){
     listOfInts list;
     list.pop_front();
-    ASSERT_EQ(list.getHead(),nullptr);
+    ASSERT_EQ(list.isEmpty(), true);
 }
 
 TEST(pop_front,listNotEmpty){
     listOfInts list;
-    for( int i = 0; i < 3; i++){
+    for( int i = 0; i < 5; i++){
         list.push_back(i);
     }
 
     list.pop_front();
 
-    ASSERT_EQ(list.getHead()->getNumber(),1);
+    for (int i = 0; i < 4; i++){
+        ASSERT_EQ(list.at(i),i+1);
+    }
+    ASSERT_EQ(list.get_size(),4);
 }
 
 TEST(insert,listEmptyIndex0){
     listOfInts list;
 
-    ASSERT_NO_THROW(list.insert(5,0));
-
-    ASSERT_EQ(list.getHead()->getNumber(),5);
+    list.insert(100,0);
+    ASSERT_EQ(list.at(0),100);
+    ASSERT_EQ(list.get_size(),1);
 }
 
 TEST(insert,listEmptyIndex5){
     listOfInts list;
 
-    ASSERT_NO_THROW(list.insert(5,5));
-    ASSERT_EQ(list.getHead()->getNumber(),5);
+    ASSERT_EQ(list.get_size(),0);
 }
 
 TEST(insert,listNotEmptyIndex0){
     listOfInts list;
 
-    for (int i = 0; i < 3; i++){
+    for (int i = 0; i < 5; i++){
         list.push_back(i);
     }
 
-    list.insert(5,0);
+    list.insert(100,0);
 
-    ASSERT_EQ(list.getHead()->getNumber(),5);
-
-    data *nextElement = list.getHead()->getNextElem();
-    ASSERT_EQ(nextElement->getNumber(),0);
+    ASSERT_EQ(list.at(0),100);
+    for (int i = 0; i < 5; i++){
+        ASSERT_EQ(list.at(i+1),i);
+    }
+    ASSERT_EQ(list.get_size(),6);
 }
 
 TEST(insert,listNotEmptyIndexLastElement){
     listOfInts list;
 
-    for (int i = 0; i < 3; i++){
+    for (int i = 0; i < 5; i++){
         list.push_back(i);
     }
 
-    list.insert(5,2);
+    list.insert(100,4);
 
-    data *insertedElem = list.getHead();
-
-    for(int i = 0; i < 2; i++){
-        insertedElem = insertedElem->getNextElem();
+    for (int i = 0; i < 4; i++){
+        ASSERT_EQ(list.at(i),i);
     }
-    ASSERT_EQ(insertedElem->getNumber(),5);  // inserted element has index = 2
-
-    data *nextAfterInsertedElem = insertedElem->getNextElem();
-
-    ASSERT_EQ(nextAfterInsertedElem->getNextElem(), nullptr); // next element after last element = nullptr
-    ASSERT_EQ(insertedElem->getNextElem()->getNumber(),2);  // last element number = 2
+    ASSERT_EQ(list.at(4),100);
+    ASSERT_EQ(list.at(5),4);
+    ASSERT_EQ(list.get_size(),6);
 }
 
 TEST(insert,listNotEmptyIndexNotLastAndNotBeginElement){
@@ -203,23 +153,13 @@ TEST(insert,listNotEmptyIndexNotLastAndNotBeginElement){
 
     list.insert(100,2);
 
-    data *previousElem;
-    data *nextElem;
-    data *insertedElem = list.getHead();
-
-    for(int i = 0; i < 4; i++){
-        if(i == 1) previousElem = insertedElem;
-        if(i == 2) break;
-        insertedElem = insertedElem->getNextElem();
-
-    }
-
-    nextElem = insertedElem->getNextElem();
-
-    ASSERT_EQ(previousElem->getNextElem(),insertedElem);
-    ASSERT_EQ(previousElem->getNumber(),1);
-    ASSERT_EQ(insertedElem->getNumber(),100);
-    ASSERT_EQ(nextElem->getNumber(),2);
+    ASSERT_EQ(list.at(0),0);
+    ASSERT_EQ(list.at(1),1);
+    ASSERT_EQ(list.at(2),100);
+    ASSERT_EQ(list.at(3),2);
+    ASSERT_EQ(list.at(4),3);
+    ASSERT_EQ(list.at(5),4);
+    ASSERT_EQ(list.get_size(),6);
 }
 
 TEST(insert,listNotEmptyIndexMoreThanSizeList){
@@ -230,14 +170,11 @@ TEST(insert,listNotEmptyIndexMoreThanSizeList){
     }
 
     ASSERT_NO_THROW(list.insert(100,10));
-    int i = 0;
 
-    data *elem = list.getHead();
-    while(elem != nullptr){
-        i++;
-        elem = elem->getNextElem();
+    for (int i = 0; i < 5; i++){
+        ASSERT_EQ(list.at(i),i);
     }
-    ASSERT_EQ(i,5);
+    ASSERT_EQ(list.get_size(),5);
 }
 
 TEST(at,listEmpty){
@@ -245,22 +182,136 @@ TEST(at,listEmpty){
     ASSERT_NO_THROW(list.at(0));
 }
 
-TEST(at,listNotEmpty){
+TEST(at,listNotEmptyIndexGood){
     listOfInts list;
 
     for (int i = 0; i < 5; i++) {
         list.push_back(i);
     }
+
     int number = list.at(2);
-
-//    ASSERT_NO_THROW(list.at(2));   cacaito dich
     ASSERT_EQ(number,2);
-}
+//    ASSERT_NO_THROW(list.at(2));
+}  // какаято шляпа с искключениями
 
-TEST(set, listEmpty){
+TEST(at,listNotEmptyIndexBad){
     listOfInts list;
 
-    ASSERT_NO_THROW(list.set(3,100));
+    for (int i = 0; i < 5; i++) {
+        list.push_back(i);
+    }
+    ASSERT_NO_THROW(list.at(10));
+}
+
+
+//TEST(remove, listEmptyIndex0){
+//    listOfInts list;
+//    ASSERT_NO_THROW(list.remove(0));
+//}
+
+//TEST(remove,listEmptyIndex10){
+//    listOfInts list;
+//    ASSERT_NO_THROW(list.set(10,100));
+//}
+
+//TEST(remove, listNotEmptyIndex0){
+//    listOfInts list;
+//
+//    for (int i = 0; i < 5; i++){
+//        list.push_back(i);
+//    }
+//    list.set(0,100);
+//    ASSERT_EQ(list.at(0),100);
+//    for(int i = 1; i < 5; i++){
+//        ASSERT_EQ(list.at(i),i);
+//    }
+//    ASSERT_EQ(list.get_size(),5);
+//}
+
+//TEST(remove, listNotEmptyIndexLastElement){
+//    listOfInts list;
+//
+//    for (int i = 0; i < 5; i++){
+//        list.push_back(i);
+//    }
+//    list.set(4,100);
+//    ASSERT_EQ(list.at(4),100);
+//    for(int i = 0; i < 4; i++){
+//        ASSERT_EQ(list.at(i),i);
+//    }
+//    ASSERT_EQ(list.get_size(),5);
+//}
+
+//TEST(remove, listNotEmptyIndexGreater0AndLessSizeOfList){
+//    listOfInts list;
+//
+//    for (int i = 0; i < 5; i++){
+//        list.push_back(i);
+//    }
+//    list.set(2,100);
+//
+//    ASSERT_EQ(list.at(0),0);
+//    ASSERT_EQ(list.at(1),1);
+//    ASSERT_EQ(list.at(2),100);
+//    ASSERT_EQ(list.at(3),3);
+//    ASSERT_EQ(list.at(4),4);
+//
+//    ASSERT_EQ(list.get_size(),5);
+//}
+
+//TEST(remove,listNotEmptyIndexMoreThanSizeList){
+//    listOfInts list;
+//
+//    for(int i = 0; i < 5; i++){
+//        list.push_back(i);
+//    }
+//
+//    ASSERT_NO_THROW(list.set(100,10));
+//
+//    for (int i = 0; i < 5; i++){
+//        ASSERT_EQ(list.at(i),i);
+//    }
+//    ASSERT_EQ(list.get_size(),5);
+//}
+
+//
+
+TEST(get_size, listEmpty){
+    listOfInts list;
+    ASSERT_EQ(list.get_size(),0);
+}
+
+TEST(get_size, listNotEmpty){
+    listOfInts list;
+    for (int i = 0; i < 5; i++){
+        list.push_back(i);
+    }
+    ASSERT_EQ(list.get_size(),5);
+}
+
+//TEST(clear, listEmpty){
+//    listOfInts list;
+//    list.clear();
+//    ASSERT_EQ(list.isEmpty(), true);
+//}
+//
+//TEST(clear, listNotEmpty){
+//    listOfInts list;
+//    for (int i = 0; i < 5; i++){
+//        list.push_back(i);
+//    }
+//    list.clear();
+//    ASSERT_EQ(list.isEmpty(), true);
+//}
+
+TEST(set, listEmptyIndex0){
+    listOfInts list;
+    ASSERT_NO_THROW(list.set(0,100));
+}
+
+TEST(set,listEmptyIndex10){
+    listOfInts list;
+    ASSERT_NO_THROW(list.set(10,100));
 }
 
 TEST(set, listNotEmptyIndex0){
@@ -269,12 +320,91 @@ TEST(set, listNotEmptyIndex0){
     for (int i = 0; i < 5; i++){
         list.push_back(i);
     }
+    list.set(0,100);
+    ASSERT_EQ(list.at(0),100);
+    for(int i = 1; i < 5; i++){
+        ASSERT_EQ(list.at(i),i);
+    }
+    ASSERT_EQ(list.get_size(),5);
+}
 
-    data *nextPreviousHead = list.getHead()->getNextElem();
-//    ASSERT_ANY_THROW(list.set(0,100));
-//    list.set(0,100);
-    ASSERT_EQ(list.getHead()->getNumber(),100);
-    ASSERT_EQ(list.getHead()->getNextElem(),nextPreviousHead);
+TEST(set, listNotEmptyIndexLastElement){
+    listOfInts list;
+
+    for (int i = 0; i < 5; i++){
+        list.push_back(i);
+    }
+    list.set(4,100);
+    ASSERT_EQ(list.at(4),100);
+    for(int i = 0; i < 4; i++){
+        ASSERT_EQ(list.at(i),i);
+    }
+    ASSERT_EQ(list.get_size(),5);
+}
+
+TEST(set, listNotEmptyIndexGreater0AndLessSizeOfList){
+    listOfInts list;
+
+    for (int i = 0; i < 5; i++){
+        list.push_back(i);
+    }
+    list.set(2,100);
+
+    ASSERT_EQ(list.at(0),0);
+    ASSERT_EQ(list.at(1),1);
+    ASSERT_EQ(list.at(2),100);
+    ASSERT_EQ(list.at(3),3);
+    ASSERT_EQ(list.at(4),4);
+
+    ASSERT_EQ(list.get_size(),5);
+}
+
+TEST(set,listNotEmptyIndexMoreThanSizeList){
+    listOfInts list;
+
+    for(int i = 0; i < 5; i++){
+        list.push_back(i);
+    }
+
+    ASSERT_NO_THROW(list.set(100,10));
+
+    for (int i = 0; i < 5; i++){
+        ASSERT_EQ(list.at(i),i);
+    }
+    ASSERT_EQ(list.get_size(),5);
+}
+
+TEST(reverse,listEmpty){
+    listOfInts list;
+    list.reverse();
+    ASSERT_EQ(list.get_size(),0);
+}
+
+TEST(reverse,listNotEmpty2NElements){
+    listOfInts list;
+    for (int i = 0; i < 6; i++){
+        list.push_back(i);
+    }
+    list.reverse();
+    ASSERT_EQ(list.at(0),5);
+    ASSERT_EQ(list.at(1),4);
+    ASSERT_EQ(list.at(2),3);
+    ASSERT_EQ(list.at(3),2);
+    ASSERT_EQ(list.at(4),1);
+    ASSERT_EQ(list.at(5),0);
+}
+
+TEST(reverse,listNotEmpty2NPlus1Elements){
+    listOfInts list;
+    for (int i = 0; i < 5; i++){
+        list.push_back(i);
+    }
+    list.reverse();
+    ASSERT_EQ(list.at(0),4);
+    ASSERT_EQ(list.at(1),3);
+    ASSERT_EQ(list.at(2),2);
+    ASSERT_EQ(list.at(3),1);
+    ASSERT_EQ(list.at(4),0);
 }
 
 int main(int argc, char **argv) {
