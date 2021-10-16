@@ -257,6 +257,26 @@ TEST(at,listNotEmpty){
     ASSERT_EQ(number,2);
 }
 
+TEST(set, listEmpty){
+    listOfInts list;
+
+    ASSERT_NO_THROW(list.set(3,100));
+}
+
+TEST(set, listNotEmptyIndex0){
+    listOfInts list;
+
+    for (int i = 0; i < 5; i++){
+        list.push_back(i);
+    }
+
+    data *nextPreviousHead = list.getHead()->getNextElem();
+//    ASSERT_ANY_THROW(list.set(0,100));
+//    list.set(0,100);
+    ASSERT_EQ(list.getHead()->getNumber(),100);
+    ASSERT_EQ(list.getHead()->getNextElem(),nextPreviousHead);
+}
+
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

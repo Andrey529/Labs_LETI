@@ -235,6 +235,38 @@ void listOfInts::clear() {
     }
 }
 
+void listOfInts::set(size_t index, int number) {
+
+    try {
+        if (index + 1 > get_size()) {
+            throw std::invalid_argument("Index greater than size of array in function set()");
+        }
+    }
+    catch(std::invalid_argument& e) {
+        std::cerr << e.what() << std::endl;
+//        data *elem = this->head;
+//        while(elem != nullptr){
+//            std::cerr << elem->getNumber() << ' ';
+//            elem = elem->getNextElem();
+//        }
+//        std::cerr << std::endl;
+        return;
+    }
+
+    if(index == 0){
+        this->head->setNumber(number);
+        return;
+    }
+
+    data *elem = this->head;
+
+    for(int i = 0; i < index; i++){
+        elem = elem->getNextElem();
+    }
+
+    elem->setNumber(number);
+}
+
 std::ostream &operator<<(std::ostream &out, const listOfInts &list) {
 
     out << "List of integers:" << std::endl;
