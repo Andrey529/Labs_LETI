@@ -20,18 +20,14 @@ public:
     void insert(int number, size_t index); // adding an element at index
                             // (insertion before an item that was previously accessible at that index)
 
-
     int at(size_t index) const; // getting an element data at the index
     size_t get_size() const; // getting list size
-    void set(size_t index, int number); // замена элемента по индексу на передаваемый элемент
-    // replacing the element by index with the passed element
-
+    void set(size_t index, int number); // replacing the element by index with the passed element
 
     void remove(size_t index); // deleting an element by index
     void clear(); // removing all list elements
 
-
-    friend std::ostream& operator<< (std::ostream &out, const listOfInts &list); // Перегрузка оператора вывода <<
+    friend std::ostream& operator<< (std::ostream &out, const listOfInts &list); // overloading operator <<
 
     void reverse(); // reverses the order of the elements in the list
 };
@@ -217,6 +213,7 @@ size_t listOfInts::get_size() const{
 
 void listOfInts::clear() {
     data *elem = this->head;
+    this->head = nullptr;
     data *tempElem;
     while(elem != nullptr){
         tempElem = elem;

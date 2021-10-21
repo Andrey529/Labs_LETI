@@ -191,8 +191,7 @@ TEST(at,listNotEmptyIndexGood){
 
     int number = list.at(2);
     ASSERT_EQ(number,2);
-//    ASSERT_NO_THROW(list.at(2));
-}  // какаято шляпа с искключениями
+}
 
 TEST(at,listNotEmptyIndexBad){
     listOfInts list;
@@ -202,79 +201,6 @@ TEST(at,listNotEmptyIndexBad){
     }
     ASSERT_NO_THROW(list.at(10));
 }
-
-
-//TEST(remove, listEmptyIndex0){
-//    listOfInts list;
-//    ASSERT_NO_THROW(list.remove(0));
-//}
-
-//TEST(remove,listEmptyIndex10){
-//    listOfInts list;
-//    ASSERT_NO_THROW(list.set(10,100));
-//}
-
-//TEST(remove, listNotEmptyIndex0){
-//    listOfInts list;
-//
-//    for (int i = 0; i < 5; i++){
-//        list.push_back(i);
-//    }
-//    list.set(0,100);
-//    ASSERT_EQ(list.at(0),100);
-//    for(int i = 1; i < 5; i++){
-//        ASSERT_EQ(list.at(i),i);
-//    }
-//    ASSERT_EQ(list.get_size(),5);
-//}
-
-//TEST(remove, listNotEmptyIndexLastElement){
-//    listOfInts list;
-//
-//    for (int i = 0; i < 5; i++){
-//        list.push_back(i);
-//    }
-//    list.set(4,100);
-//    ASSERT_EQ(list.at(4),100);
-//    for(int i = 0; i < 4; i++){
-//        ASSERT_EQ(list.at(i),i);
-//    }
-//    ASSERT_EQ(list.get_size(),5);
-//}
-
-//TEST(remove, listNotEmptyIndexGreater0AndLessSizeOfList){
-//    listOfInts list;
-//
-//    for (int i = 0; i < 5; i++){
-//        list.push_back(i);
-//    }
-//    list.set(2,100);
-//
-//    ASSERT_EQ(list.at(0),0);
-//    ASSERT_EQ(list.at(1),1);
-//    ASSERT_EQ(list.at(2),100);
-//    ASSERT_EQ(list.at(3),3);
-//    ASSERT_EQ(list.at(4),4);
-//
-//    ASSERT_EQ(list.get_size(),5);
-//}
-
-//TEST(remove,listNotEmptyIndexMoreThanSizeList){
-//    listOfInts list;
-//
-//    for(int i = 0; i < 5; i++){
-//        list.push_back(i);
-//    }
-//
-//    ASSERT_NO_THROW(list.set(100,10));
-//
-//    for (int i = 0; i < 5; i++){
-//        ASSERT_EQ(list.at(i),i);
-//    }
-//    ASSERT_EQ(list.get_size(),5);
-//}
-
-//
 
 TEST(get_size, listEmpty){
     listOfInts list;
@@ -288,21 +214,6 @@ TEST(get_size, listNotEmpty){
     }
     ASSERT_EQ(list.get_size(),5);
 }
-
-//TEST(clear, listEmpty){
-//    listOfInts list;
-//    list.clear();
-//    ASSERT_EQ(list.isEmpty(), true);
-//}
-//
-//TEST(clear, listNotEmpty){
-//    listOfInts list;
-//    for (int i = 0; i < 5; i++){
-//        list.push_back(i);
-//    }
-//    list.clear();
-//    ASSERT_EQ(list.isEmpty(), true);
-//}
 
 TEST(set, listEmptyIndex0){
     listOfInts list;
@@ -372,6 +283,91 @@ TEST(set,listNotEmptyIndexMoreThanSizeList){
         ASSERT_EQ(list.at(i),i);
     }
     ASSERT_EQ(list.get_size(),5);
+}
+
+TEST(remove, listEmptyIndex0){
+    listOfInts list;
+    ASSERT_NO_THROW(list.remove(0));
+}
+
+TEST(remove,listEmptyIndex10){
+    listOfInts list;
+    ASSERT_NO_THROW(list.remove(10));
+}
+
+TEST(remove, listNotEmptyIndex0){
+    listOfInts list;
+
+    for (int i = 0; i < 5; i++){
+        list.push_back(i);
+    }
+
+    list.remove(0);
+
+    for(int i = 0; i < 4; i++){
+        ASSERT_EQ(list.at(i),i+1);
+    }
+    ASSERT_EQ(list.get_size(),4);
+}
+
+TEST(remove, listNotEmptyIndexLastElement){
+    listOfInts list;
+
+    for (int i = 0; i < 5; i++){
+        list.push_back(i);
+    }
+    list.remove(4);
+
+    for(int i = 0; i < 4; i++){
+        ASSERT_EQ(list.at(i),i);
+    }
+    ASSERT_EQ(list.get_size(),4);
+}
+
+TEST(remove, listNotEmptyIndexGreater0AndLessSizeOfList){
+    listOfInts list;
+
+    for (int i = 0; i < 5; i++){
+        list.push_back(i);
+    }
+    list.remove(2);
+
+    ASSERT_EQ(list.at(0),0);
+    ASSERT_EQ(list.at(1),1);
+    ASSERT_EQ(list.at(2),3);
+    ASSERT_EQ(list.at(3),4);
+
+    ASSERT_EQ(list.get_size(),4);
+}
+
+TEST(remove,listNotEmptyIndexMoreThanSizeList){
+    listOfInts list;
+
+    for(int i = 0; i < 5; i++){
+        list.push_back(i);
+    }
+
+    ASSERT_NO_THROW(list.remove(10));
+
+    for (int i = 0; i < 5; i++){
+        ASSERT_EQ(list.at(i),i);
+    }
+    ASSERT_EQ(list.get_size(),5);
+}
+
+TEST(clear, listEmpty){
+    listOfInts list;
+    list.clear();
+    ASSERT_EQ(list.isEmpty(), true);
+}
+
+TEST(clear, listNotEmpty){
+    listOfInts list;
+    for (int i = 0; i < 5; i++){
+        list.push_back(i);
+    }
+    list.clear();
+    ASSERT_EQ(list.isEmpty(), true);
 }
 
 TEST(reverse,listEmpty){
