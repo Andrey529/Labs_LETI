@@ -39,6 +39,7 @@ listOfInts::listOfInts(data *elem) {
     }
 
     auto *newElem = new data(elem->getNumber(), elem->getNextElem());
+    this->head = newElem;
 }
 
 listOfInts::~listOfInts() {
