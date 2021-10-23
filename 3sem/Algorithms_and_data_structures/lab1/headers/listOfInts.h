@@ -88,7 +88,7 @@ void listOfInts::push_front(int number) {
 
 void listOfInts::pop_back() {
     if(this->head == nullptr){
-        return;
+        throw std::runtime_error("List is empty in function pop_back()");
     }
     data *elem = this->head;
     data *tempElem;
@@ -102,7 +102,7 @@ void listOfInts::pop_back() {
 
 void listOfInts::pop_front() {
     if(this->head == nullptr){
-        return;
+        throw std::runtime_error("List is empty in function pop_front()");
     }
     data *elem = this->head;
     this->head = this->head->getNextElem();
@@ -118,16 +118,9 @@ void listOfInts::insert(int number, size_t index) {
         return;
     }
 
-    try {
-        if (index + 1 > get_size()) {
-            throw std::invalid_argument("Index greater than size of array in function insert()");
-        }
+    if (index + 1 > get_size()) {
+        throw std::invalid_argument("Index greater than size of array in function insert()");
     }
-    catch(std::invalid_argument& e) {
-        std::cerr << e.what() << std::endl;
-        return;
-    }
-
 
     if(index == 0){
         newElem->setNextElem(this->head);
@@ -149,14 +142,8 @@ void listOfInts::insert(int number, size_t index) {
 int listOfInts::at(size_t index) const{
     data *elem = this->head;
 
-    try {
-        if ((index + 1) > get_size()) {
-            throw std::invalid_argument("Index greater than size of array in function at()");
-        }
-    }
-    catch(std::invalid_argument& e) {
-        std::cerr << e.what() << std::endl;
-        return -1;
+    if ((index + 1) > get_size()) {
+        throw std::invalid_argument("Index greater than size of array in function at()");
     }
 
     int i = 0;
@@ -169,14 +156,8 @@ int listOfInts::at(size_t index) const{
 
 void listOfInts::remove(size_t index) {
 
-    try {
-        if (index + 1 > get_size()) {
-            throw std::invalid_argument("Index greater than size of array in function remove()");
-        }
-    }
-    catch(std::invalid_argument& e) {
-        std::cerr << e.what() << std::endl;
-        return;
+    if (index + 1 > get_size()) {
+        throw std::invalid_argument("Index greater than size of array in function remove()");
     }
 
     if(this->head == nullptr){
@@ -225,14 +206,8 @@ void listOfInts::clear() {
 
 void listOfInts::set(size_t index, int number) {
 
-    try {
-        if (index + 1 > get_size()) {
-            throw std::invalid_argument("Index greater than size of array in function set()");
-        }
-    }
-    catch(std::invalid_argument& e) {
-        std::cerr << e.what() << std::endl;
-        return;
+    if (index + 1 > get_size()) {
+        throw std::invalid_argument("Index greater than size of array in function set()");
     }
 
     if(index == 0){
