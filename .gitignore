@@ -209,4 +209,5 @@ $RECYCLE.BIN/
 *.idea
 *data*.txt
 *result.txt
-*/test/*
+**/test**
+**/Google_tests/lib**
