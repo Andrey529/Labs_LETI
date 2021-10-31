@@ -1,4 +1,4 @@
-#define UP 0x07
+#define UP 0x06
 
 #include <conio.h>
 #include <dos.h>
@@ -6,21 +6,21 @@
 void printText(numberOfFontColor){
     switch (numberOfFontColor) {
         case 0: cprintf("BLACK font"); break;
-        case 1: cprintf("BLUE font\r\n"); break;
-        case 2: cprintf("GREEN font\r\n"); break;
-        case 3: cprintf("CYAN font\r\n"); break;
-        case 4: cprintf("RED font\r\n"); break;
-        case 5: cprintf("MAGENTA font\r\n"); break;
-        case 6: cprintf("BROWN font\r\n"); break;
-        case 7: cprintf("LIGHTGRAY font\r\n"); break;
-        case 8: cprintf("DARKGRAY font\r\n"); break;
-        case 9: cprintf("LIGHTBLUE font\r\n"); break;
-        case 10: cprintf("LIGHTGREEN font\r\n"); break;
-        case 11: cprintf("LIGHTCYAN font\r\n"); break;
-        case 12: cprintf("LIGHTRED font\r\n"); break;
-        case 13: cprintf("LIGHTMAGENTA font\r\n"); break;
-        case 14: cprintf("YELLOW font\r\n"); break;
-        case 15: cprintf("WHITE font\r\n"); break;
+        case 1: cprintf("BLUE font"); break;
+        case 2: cprintf("GREEN font"); break;
+        case 3: cprintf("CYAN font"); break;
+        case 4: cprintf("RED font"); break;
+        case 5: cprintf("MAGENTA font"); break;
+        case 6: cprintf("BROWN font"); break;
+        case 7: cprintf("LIGHTGRAY font"); break;
+        case 8: cprintf("DARKGRAY font"); break;
+        case 9: cprintf("LIGHTBLUE font"); break;
+        case 10: cprintf("LIGHTGREEN font"); break;
+        case 11: cprintf("LIGHTCYAN font"); break;
+        case 12: cprintf("LIGHTRED font"); break;
+        case 13: cprintf("LIGHTMAGENTA font"); break;
+        case 14: cprintf("YELLOW font"); break;
+        case 15: cprintf("WHITE font"); break;
     }
 }
 
@@ -44,19 +44,22 @@ int main(){
     clrscr();
     window(x1, y1, x2, y2);
 
+    for (i = 0; i < 15-5+1; i++) cprintf("\n");
+
     for (numberOfFontColor = 0; numberOfFontColor < 16; numberOfFontColor++){
-        for (numberOfBackground = 0; numberOfBackground < 5 ; numberOfBackground++){
+        textcolor(numberOfFontColor);
+
+        for (numberOfBackground = 0; numberOfBackground < 8; numberOfBackground++){
             if(numberOfFontColor == numberOfBackground) continue;
             textbackground(numberOfBackground);
-            textcolor(numberOfFontColor);
 
-            cprintf("Background color: %d and ",numberOfBackground);
+            if(!(numberOfFontColor == 0 && numberOfBackground == 0))
+                cprintf("\r\n");
 
             printText(numberOfFontColor);
-
-            clreol(); cprintf("\r\n");
+            cprintf(" and Background color = %d",numberOfBackground);
+            clreol();
             scroll(lines,numberOfBackground*17);
-
             delay(300);
         }
     }
