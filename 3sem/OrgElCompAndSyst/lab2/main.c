@@ -1,4 +1,4 @@
-#define UP 0x06
+#define UP 0x07
 
 #include <conio.h>
 #include <dos.h>
@@ -44,7 +44,6 @@ int main(){
     clrscr();
     window(x1, y1, x2, y2);
 
-    for (i = 0; i < 15-5+1; i++) cprintf("\n");
 
     for (numberOfFontColor = 0; numberOfFontColor < 16; numberOfFontColor++){
         textcolor(numberOfFontColor);
@@ -56,10 +55,13 @@ int main(){
             if(!(numberOfFontColor == 0 && numberOfBackground == 0))
                 cprintf("\r\n");
 
+            scroll(lines+1,numberOfBackground*17);
+
             printText(numberOfFontColor);
             cprintf(" and Background color = %d",numberOfBackground);
             clreol();
-            scroll(lines,numberOfBackground*17);
+            gotoxy(1, 1);
+
             delay(300);
         }
     }
