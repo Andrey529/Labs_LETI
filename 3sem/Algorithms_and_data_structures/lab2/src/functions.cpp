@@ -88,60 +88,48 @@ void BogoSort(int* array, int arraySize) {
 }
 
 
+
 void comprasionQuickSortAndInsertionSort(){
     int dataSize = 10;
-    while (dataSize != 10000) { // datasize = 10 -> 100 -> 1 000 -> 10 000 -> 100 000
-        double meanValueForQuickSort = 0;
+    while (dataSize != 1000000) { // datasize = 10 -> 100 -> 1 000 -> 10 000 -> 100 000
+        double meanValueForQuickSort = 0; // mean values of the sorting algorithms for 10 runs for different dataSize
         double meanValueForInsertionSort = 0;
         for (int runNumber = 0; runNumber < 10; runNumber++) { // 10 differnt runs for one dataSize
-            std::random_device rd;
-            std::mt19937 mersenne(rd());
+            std::mt19937 generator(std::chrono::steady_clock::now().time_since_epoch().count()); //generator random values
+            std::uniform_int_distribution<> range(-dataSize, dataSize);
 
-            auto *arrayForQuickSort = new int[dataSize];
-            auto *arrayForInsertionSort = new int[dataSize];
+            auto *arrayForQuickSort = new int[100000]; // 2 int arrays for random elements, arrays lenght = 100 000
+            auto *arrayForInsertionSort = new int[100000];
+
             for (int i = 0; i < dataSize; i++){ // generate 2 array of random values
-                arrayForQuickSort[i] = mersenne() % dataSize;
+                arrayForQuickSort[i] = range(generator);
                 arrayForInsertionSort[i] = arrayForQuickSort[i];
-//                std::cout << arrayForQuickSort[i] << ' ';
             }
-//            std::cout << std::endl;
 
-//            for (int i = 0; i < dataSize; i++){
-//                std::cout << arrayForInsertionSort[i] << ' ';
-//            }
-//            std::cout << std::endl;
+            auto start = std::chrono::high_resolution_clock::now();  // start point for QuickSort
 
-
-            auto start = std::chrono::high_resolution_clock::now();
             QuickSort(arrayForQuickSort,0,dataSize-1);
-//            for (int i = 0; i < dataSize; i++) {
-//                std::cout << arrayForQuickSort[i] << ' ';
-//            }
-//            std::cout << std::endl;
+
+            // finish point for QuickSort
             auto finish = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - start);
             meanValueForQuickSort += finish.count();
-//            std::cout << "QuickSort: " << finish.count() << "ns." << std::endl;
 
 
-            start = std::chrono::high_resolution_clock::now();
+            start = std::chrono::high_resolution_clock::now();  // start point for InsertionSort
+
             InsertionSort(arrayForInsertionSort,dataSize);
-//            for (int i = 0; i < dataSize; i++) {
-//                std::cout << arrayForQuickSort[i] << ' ';
-//            }
-//            std::cout << std::endl;
+
+            // finish point for InsertionSort
             finish = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - start);
             meanValueForInsertionSort += finish.count();
-//            std::cout << "InsertionSort: " << finish.count() << "ns." << std::endl;
-
 
             delete[] arrayForQuickSort;
             delete[] arrayForInsertionSort;
         }
 
-
         std::cout << "dataSize = " << dataSize << std::endl;
-        std::cout << "\tmeanValueForQuickSort = " << meanValueForQuickSort/10 << std::endl;
-        std::cout << "\tmeanValueForInsertionSort = " << meanValueForInsertionSort/10 << std::endl;
+        std::cout << "\tmeanValueForQuickSort = " << meanValueForQuickSort/10 << " ns = " << meanValueForQuickSort/10000000000 << " sec." << std::endl;
+        std::cout << "\tmeanValueForInsertionSort = " << meanValueForInsertionSort/10 << " ns = " << meanValueForInsertionSort/10000000000 << " sec." << std::endl;
         dataSize *= 10;
     }
 }
