@@ -88,6 +88,31 @@ void BogoSort(int* array, int arraySize) {
 }
 
 
+void CountingSort(std::string arr){
+    std::string output;
+
+    int count[256], i;
+    for (int i = 0; i < 256; i++)
+        count[i] = 0;
+
+    for (i = 0; arr[i]; ++i)
+        ++count[arr[i]];
+
+    for (i = 1; i <= 256; ++i)
+        count[i] += count[i - 1];
+
+    for (i = 0; arr[i]; ++i){
+        output[count[arr[i]] - 1] = arr[i];
+        --count[arr[i]];
+    }
+
+    for (i = 0; arr[i]; ++i)
+        arr[i] = output[i];
+
+    std::cout << "Sorted character array is " << arr << std::endl;
+    std::cout << "1+1" << std::endl;
+
+}
 
 void comprasionQuickSortAndInsertionSort(){
     int dataSize = 10;
