@@ -76,10 +76,10 @@ bool isArraySorted(const int* array, int arraySize) {
 void BogoSort(int* array, int arraySize) {
     int temp = arraySize;
     while (!isArraySorted(array, arraySize)) {
-        std::random_device rd;
-        std::mt19937 mersenne(rd());
+        std::mt19937 generator(std::chrono::steady_clock::now().time_since_epoch().count()); //generator random values
+        std::uniform_int_distribution<> range(0, arraySize-1);
         while (arraySize > 1) {
-            int randomIndex = mersenne();
+            int randomIndex = range(generator);
             arraySize -= 1;
             swapElements(&array[randomIndex], &array[arraySize]);
         }
@@ -88,7 +88,7 @@ void BogoSort(int* array, int arraySize) {
 }
 
 
-void CountingSort(std::string arr){
+void CountingSort(std::string &arr){
     std::string output;
 
     int count[256], i;
@@ -108,10 +108,6 @@ void CountingSort(std::string arr){
 
     for (i = 0; arr[i]; ++i)
         arr[i] = output[i];
-
-    std::cout << "Sorted character array is " << arr << std::endl;
-    std::cout << "1+1" << std::endl;
-
 }
 
 void comprasionQuickSortAndInsertionSort(){

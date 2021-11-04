@@ -11,6 +11,6 @@ void QuickSort(int* array, int low, int high);
 void InsertionSort(int* array, int arraySize);
 void BogoSort(int* array, int arraySize);
 void comprasionQuickSortAndInsertionSort();
-void CountingSort(std::string arr);
+void CountingSort(std::string &arr);
 
 #endif //LAB2_FUNCTIONS_H
