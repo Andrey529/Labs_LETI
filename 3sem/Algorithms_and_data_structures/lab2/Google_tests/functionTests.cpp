@@ -1,25 +1,24 @@
 #include "gtest/gtest.h"
 #include "../src/functions.h"
 
-class TestSortingFunctionsOfArrayInts : public ::testing::Test {
+class TestSortingFunctions : public ::testing::Test {
 protected:
     int *randomArrayOfInts;
     int *notRandomArrayOfInts;
     int dataSize;
     int arraySize;
-    std::string string;
 public:
-    TestSortingFunctionsOfArrayInts() {
+    TestSortingFunctions() {
         this->randomArrayOfInts = nullptr;
         this->notRandomArrayOfInts = nullptr;
         this->arraySize = 0;
         this->dataSize = 0;
     }
-    ~TestSortingFunctionsOfArrayInts() {
+    ~TestSortingFunctions() {
         delete[] this->randomArrayOfInts;
         delete[] this->notRandomArrayOfInts;
     }
-    int *SetUpRandomArrayOfInts() {
+    int *SetUpRandomArrayOfInts() const {
         auto *array = new int[this->arraySize];
         std::mt19937 generator(std::chrono::steady_clock::now().time_since_epoch().count()); //generator random values
         std::uniform_int_distribution<> range(-this->dataSize, this->dataSize);
@@ -28,62 +27,51 @@ public:
         }
         return array;
     }
-    int *SetUpNotRandomArrayOfInts() {
+    int *SetUpNotRandomArrayOfInts() const {
         auto *array = new int[this->arraySize];
         for(int i = this->dataSize-1; i >= 0; i--){
             array[i] = i;
         }
         return array;
     }
-    std::string SetUpArrayOfChars() {
-        std::string str;
-        std::mt19937 generator(std::chrono::steady_clock::now().time_since_epoch().count()); //generator random values
-        std::uniform_int_distribution<> range(0, 255);
-        for(int i = 0; i < this->arraySize; i++){
-            str[i] = range(generator);
-        }
-        str[arraySize] = '\0';
-        return str;
-    }
 };
 
-TEST_F(TestSortingFunctionsOfArrayInts, InsertionSort){
+TEST_F(TestSortingFunctions, InsertionSort){
     this->arraySize = 1000;
     this->dataSize = 1000;
     this->randomArrayOfInts = SetUpRandomArrayOfInts();
     InsertionSort(this->randomArrayOfInts,this->arraySize);
-    for (int i = 1; i < this->arraySize; i++)  ASSERT_GE(this->randomArrayOfInts[i],this->randomArrayOfInts[i-1]);
+    for (int i = 1; i < this->arraySize; i++)  GTEST_ASSERT_GE(this->randomArrayOfInts[i],this->randomArrayOfInts[i-1]);
 }
 
-TEST_F(TestSortingFunctionsOfArrayInts, QuickSort){
+TEST_F(TestSortingFunctions, QuickSort){
     this->arraySize = 1000;
     this->dataSize = 1000;
     this->randomArrayOfInts = SetUpRandomArrayOfInts();
     QuickSort(this->randomArrayOfInts,0,this->arraySize-1);
-    for (int i = 1; i < this->arraySize; i++)  ASSERT_GE(this->randomArrayOfInts[i],this->randomArrayOfInts[i-1]);
+    for (int i = 1; i < this->arraySize; i++)  GTEST_ASSERT_GE(this->randomArrayOfInts[i],this->randomArrayOfInts[i-1]);
 }
 
-TEST_F(TestSortingFunctionsOfArrayInts, BogoSort){
+TEST_F(TestSortingFunctions, BogoSort){
     this->arraySize = 10;
     this->dataSize = 5;
     this->randomArrayOfInts = SetUpRandomArrayOfInts();
     BogoSort(this->randomArrayOfInts,this->arraySize);
-    for (int i = 1; i < this->arraySize; i++)  ASSERT_GE(this->randomArrayOfInts[i],this->randomArrayOfInts[i-1]);
+    for (int i = 1; i < this->arraySize; i++)  GTEST_ASSERT_GE(this->randomArrayOfInts[i],this->randomArrayOfInts[i-1]);
 }
 
-TEST_F(TestSortingFunctionsOfArrayInts, BinarySearch){
+TEST_F(TestSortingFunctions, BinarySearch){
     this->dataSize = 100;
     this->arraySize = 100;
     this->notRandomArrayOfInts = SetUpNotRandomArrayOfInts();
     int index = BinarySearch(this->notRandomArrayOfInts, this->arraySize,50);
-    ASSERT_EQ(notRandomArrayOfInts[index],notRandomArrayOfInts[50]);
+    GTEST_ASSERT_EQ(this->notRandomArrayOfInts[index],this->notRandomArrayOfInts[50]);
 }
 
-TEST_F(TestSortingFunctionsOfArrayInts, CountingSort){
-    this->arraySize = 100;
-    this->string = SetUpArrayOfChars();
-    CountingSort(this->string);
-    for (int i = 1; i < this->arraySize; i++)  ASSERT_GE(this->string[i],this->string[i-1]);
+TEST(CountingSort, CountingSort){
+    std::string str = "hgfedcba";
+    CountingSort(str);
+    for (int i = 1; i < str.size(); i++)  GTEST_ASSERT_GE(str[i],str[i-1]);
 }
 
 

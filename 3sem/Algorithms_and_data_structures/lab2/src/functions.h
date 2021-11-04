@@ -14,8 +14,6 @@ void comprasionQuickSortAndInsertionSort();
 void CountingSort(std::string &arr);
 
 
-//#include "functions.h"
-
 int BinarySearch(const int* array, int arraySize, int searchValue) {
     bool flag = false;
     int high = arraySize - 1;
@@ -105,7 +103,7 @@ void BogoSort(int* array, int arraySize) {
 
 
 void CountingSort(std::string &arr){
-    std::string output;
+    char output[arr.size()];
 
     int count[256], i;
     for (int i = 0; i < 256; i++)
