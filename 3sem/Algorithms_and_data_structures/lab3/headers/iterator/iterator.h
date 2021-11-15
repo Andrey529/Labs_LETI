@@ -6,33 +6,34 @@
 template<class T>
 class iterator{
 public:
-    virtual T nextRight() = 0;
-    virtual bool hasNextRight() = 0;
-    virtual T nextLeft() = 0;
-    virtual bool hasNextLeft() = 0;
+    virtual T next() = 0;
+    virtual bool hasNext() = 0;
 };
 
 template<class T>
-class binaryTreeSearchIterator : public iterator{
+class binaryTreeSearchIterator : public iterator<T>{
 private:
     elemOfBinaryTreeSearch<T> *current;
 public:
     binaryTreeSearchIterator(elemOfBinaryTreeSearch<T> *start = nullptr) : current(start) {}
     ~binaryTreeSearchIterator() = default;
-
     elemOfBinaryTreeSearch<T> *getCurrent() const;
     void setCurrent(elemOfBinaryTreeSearch<T> *current);
 
-    T nextRight() override;
-    bool hasNextRight() override;
 
-    T nextLeft() override;
-    bool hasNextLeft() override;
 
-    create_dft_iterator(); // создание итератора, реализующего один из
-                            // методов обхода в глубину (depth-first traverse)
-    create_bft_iterator() // создание итератора, реализующего методы
-                            // обхода в ширину (breadth-first traverse)
+//
+//    T next() override;   // продумать, что именно считается следующим элементом,
+//                        // может понадобится хранить nextRight и nextLeft
+//
+//    bool hasNext() override;   // нужно дописать нормально
+//
+//    void create_dft_iterator(); // создание итератора, реализующего один из
+//                            // методов обхода в глубину (depth-first traverse)
+//    void create_bft_iterator(); // создание итератора, реализующего методы
+//                            // обхода в ширину (breadth-first traverse)
+
+// подумать нужно ли вообще использовать наследование
 };
 
 template<class T>
@@ -45,10 +46,20 @@ void binaryTreeSearchIterator<T>::setCurrent(elemOfBinaryTreeSearch<T> *current)
     this->current = current;
 }
 
-template<class T>
-T binaryTreeSearchIterator<T>::nextRight() {
-    return nullptr;
-}
 
+
+//template<class T>
+//T binaryTreeSearchIterator<T>::next() {
+//    if (!hasNext()) throw std::out_of_range("No more elements in binary tree search. Function next()");
+//
+////    T temp = this->current->getData();
+////    this->current = this->current->next;
+////    return temp;
+//}
+//
+//template<class T>
+//bool binaryTreeSearchIterator<T>::hasNext() {
+//    return this->current != nullptr;
+//}
 
 #endif //LAB3_ITERATOR_H
