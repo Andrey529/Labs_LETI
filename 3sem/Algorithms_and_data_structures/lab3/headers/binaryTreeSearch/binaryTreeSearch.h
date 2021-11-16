@@ -2,7 +2,8 @@
 #define LAB3_BINARYTREESEARCH_H
 
 #include "elemOfBinaryTreeSearch.h"
-#include "../iterator/iterator.h"
+#include "../iterators/binaryTreeSearchDepthFirstTraverseIterator.h"
+#include "../iterators/binaryTreeSearchBreadthFirstTraverseIterator.h"
 
 template<class T>
 class binaryTreeSearch{
@@ -18,10 +19,9 @@ public:
     binaryTreeSearch(elemOfBinaryTreeSearch<T> *head = nullptr) : head(head){}
     ~binaryTreeSearch() = default;
 
-
-    void create_dft_iterator(); // создание итератора, реализующего один из
+    iterator<T> *create_dft_iterator(); // создание итератора, реализующего один из
     // методов обхода в глубину (depth-first traverse)
-    void create_bft_iterator(); // создание итератора, реализующего методы
+    iterator<T> *create_bft_iterator(); // создание итератора, реализующего методы
     // обхода в ширину (breadth-first traverse)
 
     bool isEmpty();
@@ -267,6 +267,16 @@ elemOfBinaryTreeSearch<T> *binaryTreeSearch<T>::giveElemByData(T data) {
             continue;
         }
     }
+}
+
+template<class T>
+iterator<T> *binaryTreeSearch<T>::create_dft_iterator() {
+    return new binaryTreeSearchDepthFirstTraverseIterator<T>(this->head);
+}
+
+template<class T>
+iterator<T> *binaryTreeSearch<T>::create_bft_iterator() {
+    return new binaryTreeSearchBreadthFirstTraverseIterator<T>(this->head);
 }
 
 
