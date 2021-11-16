@@ -4,17 +4,24 @@
 #include "headers/binaryTreeSearch/binaryTreeSearch.h"
 int main() {
 
-    binaryTreeSearch<double> tree;
+    binaryTreeSearch<int> tree;
     // 4 9 8 10 9 3 5
-    tree.insert(4.1);
-    tree.insert(9.45);
-    tree.insert(8.654);
-    tree.insert(10.29);
-    tree.insert(9.65);
-    tree.insert(3.78);
-    tree.insert(5.184);
+    tree.insert(4);
+    tree.insert(8);
+    tree.insert(7);
+    tree.insert(10);
+    tree.insert(8);
+    tree.insert(2);
+    tree.insert(6);
+    tree.insert(11);
+    tree.insert(1);
+    tree.insert(3);
+    tree.insert(0);
+    tree.insert(9);
 
-    std::cout << tree.contains(4.1) << std::endl;
+//    std::cout << tree.contains(4.1) << std::endl;
+
+    tree.remove(8);
 
 
 //    {
