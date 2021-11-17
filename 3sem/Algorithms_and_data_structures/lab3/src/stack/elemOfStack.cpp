@@ -12,6 +12,10 @@ template<class T>
 elemOfStack<T>::elemOfStack(T data) : data(data), nextElem(nullptr) { }
 
 template<class T>
+elemOfStack<T>::elemOfStack(elemOfStack<T> *elem) : data(elem->getData()), nextElem(elem->getNextElem()) { }
+
+
+template<class T>
 T elemOfStack<T>::getData() const {
     return this->data;
 }

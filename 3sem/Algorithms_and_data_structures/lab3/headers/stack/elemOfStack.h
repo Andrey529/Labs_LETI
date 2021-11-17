@@ -9,6 +9,7 @@ private:
 public:
     elemOfStack();
     elemOfStack(T data);
+    elemOfStack(elemOfStack<T> *elem);
     ~elemOfStack() = default;
 
     T getData() const;

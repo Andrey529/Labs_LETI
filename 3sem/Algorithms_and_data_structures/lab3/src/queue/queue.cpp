@@ -37,7 +37,20 @@ bool queue<T>::isEmpty() const{
 }
 
 template<class T>
-void queue<T>::push(elemOfQueue<T> data) {
+void queue<T>::push(elemOfQueue<T> *newElem) {
+    if (this->head == nullptr) {
+        this->head = newElem;
+        return;
+    }
+    elemOfQueue<T> *temp = this->head;
+    while (temp->getNextElem() != nullptr) {
+        temp = temp->getNextElem();
+    }
+    temp->setNextElem(newElem);
+}
+
+template<class T>
+void queue<T>::push(T data) {
     auto *newElem = new elemOfQueue<T>(data);
     if (this->head == nullptr) {
         this->head = newElem;

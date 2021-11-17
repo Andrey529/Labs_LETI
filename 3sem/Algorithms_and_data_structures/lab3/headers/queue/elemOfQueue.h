@@ -9,6 +9,7 @@ private:
 public:
     elemOfQueue();
     elemOfQueue(T data);
+    elemOfQueue(elemOfQueue<T> *elem);
     ~elemOfQueue() = default;
 
     T getData() const;

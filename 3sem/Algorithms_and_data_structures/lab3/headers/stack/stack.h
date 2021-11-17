@@ -9,11 +9,12 @@ class stack{
 private:
     elemOfStack<T> *head;
 public:
-    stack();
     stack(elemOfStack<T> *elemOfStack);
     stack(T data);
+    stack();
 
-    void push(elemOfStack<T> data);
+    void push(elemOfStack<T> *newElem);
+    void push(T data);
     void push();
     void pop();
     elemOfStack<T> *getFront();

@@ -10,11 +10,12 @@ class queue{
 private:
     elemOfQueue<T> *head;
 public:
-    queue();
     queue(elemOfQueue<T> *elemOfQueue);
     queue(T data);
+    queue();
 
-    void push(elemOfQueue<T> data);
+    void push(elemOfQueue<T> *newElem);
+    void push(T data);
     void push();
     void pop();
     elemOfQueue<T> *getFront();

@@ -12,6 +12,9 @@ template<class T>
 elemOfQueue<T>::elemOfQueue() : data(0), nextElem(nullptr) { }
 
 template<class T>
+elemOfQueue<T>::elemOfQueue(elemOfQueue<T> *elem) : data(elem->getData()), nextElem(elem->getNextElem()) { }
+
+template<class T>
 T elemOfQueue<T>::getData() const{
     return this->data;
 }
@@ -30,5 +33,7 @@ template<class T>
 void elemOfQueue<T>::setNextElem(elemOfQueue *nextElem) {
     this->nextElem = nextElem;
 }
+
+
 
 #endif //LAB3_ELEMOFQUEUE_CPP

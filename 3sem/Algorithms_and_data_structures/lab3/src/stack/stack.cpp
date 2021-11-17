@@ -21,7 +21,21 @@ stack<T>::stack(T data) {
 }
 
 template<class T>
-void stack<T>::push(elemOfStack<T> data) {
+void stack<T>::push(elemOfStack<T> *newElem) {
+    if (this->head == nullptr) {
+        this->head = newElem;
+        return;
+    }
+
+    elemOfStack<T> *temp = this->head;
+    while (temp->getNextElem() != nullptr) {
+        temp = temp->getNextElem();
+    }
+    temp->setNextElem(newElem);
+}
+
+template<class T>
+void stack<T>::push(T data) {
     auto *newElem = new elemOfStack<T>(data);
     if (this->head == nullptr) {
         this->head = newElem;
