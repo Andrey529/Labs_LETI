@@ -9,8 +9,9 @@ template<class T>
 class binaryTreeSearchBreadthFirstTraverseIterator : public iterator<T>{   // методов обхода в ширину
 private:
     elemOfBinaryTreeSearch<T> *current;
+    queue<T> *queue;
 public:
-    binaryTreeSearchBreadthFirstTraverseIterator(elemOfBinaryTreeSearch<T> *start = nullptr) : current(start) {}
+    binaryTreeSearchBreadthFirstTraverseIterator(elemOfBinaryTreeSearch<T> *start = nullptr);
     ~binaryTreeSearchBreadthFirstTraverseIterator() = default;
     elemOfBinaryTreeSearch<T> *getCurrent() const;
     void setCurrent(elemOfBinaryTreeSearch<T> *current);
@@ -24,14 +25,7 @@ public:
 
 };
 
-template<class T>
-elemOfBinaryTreeSearch<T> *binaryTreeSearchBreadthFirstTraverseIterator<T>::getCurrent() const {
-    return this->current;
-}
+#include "../../src/iterators/binaryTreeSearchBreadthFirstTraverseIterator.cpp"
 
-template<class T>
-void binaryTreeSearchBreadthFirstTraverseIterator<T>::setCurrent(elemOfBinaryTreeSearch<T> *current) {
-    this->current = current;
-}
 
 #endif //LAB3_BINARYTREESEARCHBREADTHFIRSTTRAVERSEITERATOR_H
