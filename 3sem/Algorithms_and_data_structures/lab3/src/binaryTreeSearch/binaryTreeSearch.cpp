@@ -248,7 +248,7 @@ iterator<T> *binaryTreeSearch<T>::create_dft_iterator() {
 
 template<class T>
 iterator<T> *binaryTreeSearch<T>::create_bft_iterator() {
-    return new binaryTreeSearchBreadthFirstTraverseIterator<T>(this->head);
+    return new binaryTreeSearchBreadthFirstTraverseIterator<elemOfBinaryTreeSearch<T>>(this->head);
 }
 
 

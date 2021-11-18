@@ -7,7 +7,7 @@ template<class T>
 binaryTreeSearchBreadthFirstTraverseIterator<T>::binaryTreeSearchBreadthFirstTraverseIterator(
         elemOfBinaryTreeSearch<T> *start) {
     this->current = start;
-    this->queue = new queue<T>(start->getData());
+    this->Queue = new queue<elemOfBinaryTreeSearch<T>>(this->current);
 }
 
 template<class T>
@@ -25,15 +25,19 @@ void binaryTreeSearchBreadthFirstTraverseIterator<T>::setCurrent(elemOfBinaryTre
 //    if (!hasNext()) {
 //        throw std::out_of_range("No more elements in binary tree search. Function next()");
 //    }
-//
-//
-//    return nullptr;
+//    this->current = this->Queue->getFront();
+//    this->Queue->pop();  // delete current in queue
+//    if (this->current->getNextLeft() != nullptr)  // set in queue childs of current
+//        this->Queue->push(this->current->getNextLeft()->getData());
+//    if (this->current->getNextRight() != nullptr)
+//        this->Queue->push(this->current->getNextRight()->getData());
+//    return this->current->getData();  // return current
 //}
-//
-//template<class T>
-//bool binaryTreeSearchBreadthFirstTraverseIterator<T>::hasNext() {
-//    return this->current != nullptr;
-//}
+
+template<class T>
+bool binaryTreeSearchBreadthFirstTraverseIterator<T>::hasNext() {
+    return this->current != nullptr;
+}
 
 
 

@@ -9,20 +9,16 @@ template<class T>
 class binaryTreeSearchBreadthFirstTraverseIterator : public iterator<T>{   // методов обхода в ширину
 private:
     elemOfBinaryTreeSearch<T> *current;
-    queue<T> *queue;
+    queue<elemOfBinaryTreeSearch<T>> *Queue;
 public:
     binaryTreeSearchBreadthFirstTraverseIterator(elemOfBinaryTreeSearch<T> *start = nullptr);
     ~binaryTreeSearchBreadthFirstTraverseIterator() = default;
+
     elemOfBinaryTreeSearch<T> *getCurrent() const;
     void setCurrent(elemOfBinaryTreeSearch<T> *current);
 
-
-    T next() override;   // продумать, что именно считается следующим элементом,
-                        // может понадобится хранить nextRight и nextLeft
-
-    bool hasNext() override;   // нужно дописать нормально
-
-
+//    T next() override;
+    bool hasNext() override;
 };
 
 #include "../../src/iterators/binaryTreeSearchBreadthFirstTraverseIterator.cpp"
