@@ -81,7 +81,7 @@ template<class T>
 void queue<T>::pop() {
     if (this->head == nullptr) throw std::logic_error("The queue is already empty in function pop()");
     elemOfQueue<T> *elem = this->head->getNextElem();
-    delete this->head;
+//    delete this->head;
     this->head = elem;
 }
 

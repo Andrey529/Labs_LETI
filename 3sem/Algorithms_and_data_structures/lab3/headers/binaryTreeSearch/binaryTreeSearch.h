@@ -21,7 +21,7 @@ public:
 
     iterator<T> *create_dft_iterator(); // создание итератора, реализующего один из
     // методов обхода в глубину (depth-first traverse)
-    iterator<T> *create_bft_iterator(); // создание итератора, реализующего методы
+    iterator<elemOfBinaryTreeSearch<T>> *create_bft_iterator(); // создание итератора, реализующего методы
     // обхода в ширину (breadth-first traverse)
 
     bool isEmpty();

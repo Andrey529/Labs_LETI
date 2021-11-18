@@ -6,7 +6,7 @@
 #include "../queue/queue.h"
 
 template<class T>
-class binaryTreeSearchBreadthFirstTraverseIterator : public iterator<T>{   // методов обхода в ширину
+class binaryTreeSearchBreadthFirstTraverseIterator : public iterator<elemOfBinaryTreeSearch<T>>{   // методов обхода в ширину
 private:
     elemOfBinaryTreeSearch<T> *current;
     queue<elemOfBinaryTreeSearch<T>> *Queue;
@@ -17,7 +17,7 @@ public:
     elemOfBinaryTreeSearch<T> *getCurrent() const;
     void setCurrent(elemOfBinaryTreeSearch<T> *current);
 
-//    T next() override;
+    elemOfBinaryTreeSearch<T> next() override;
     bool hasNext() override;
 };
 

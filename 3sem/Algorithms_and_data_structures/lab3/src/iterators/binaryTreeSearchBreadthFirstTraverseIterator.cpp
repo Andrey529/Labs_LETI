@@ -7,7 +7,9 @@ template<class T>
 binaryTreeSearchBreadthFirstTraverseIterator<T>::binaryTreeSearchBreadthFirstTraverseIterator(
         elemOfBinaryTreeSearch<T> *start) {
     this->current = start;
-    this->Queue = new queue<elemOfBinaryTreeSearch<T>>(this->current);
+    this->Queue = new queue<elemOfBinaryTreeSearch<T>>(reinterpret_cast<elemOfQueue<struct elemOfBinaryTreeSearch<int>> *>(this->current));
+//    this->Queue = new queue<elemOfBinaryTreeSearch<T>>(this->current);
+
 }
 
 template<class T>
@@ -20,19 +22,21 @@ void binaryTreeSearchBreadthFirstTraverseIterator<T>::setCurrent(elemOfBinaryTre
     this->current = current;
 }
 
-//template<class T>
-//T binaryTreeSearchBreadthFirstTraverseIterator<T>::next() {
-//    if (!hasNext()) {
-//        throw std::out_of_range("No more elements in binary tree search. Function next()");
-//    }
-//    this->current = this->Queue->getFront();
-//    this->Queue->pop();  // delete current in queue
-//    if (this->current->getNextLeft() != nullptr)  // set in queue childs of current
-//        this->Queue->push(this->current->getNextLeft()->getData());
-//    if (this->current->getNextRight() != nullptr)
-//        this->Queue->push(this->current->getNextRight()->getData());
-//    return this->current->getData();  // return current
-//}
+template<class T>
+elemOfBinaryTreeSearch<T> binaryTreeSearchBreadthFirstTraverseIterator<T>::next() {
+    if (!hasNext()) {
+        throw std::out_of_range("No more elements in binary tree search. Function next()");
+    }
+    *(this->current) = this->Queue->getFront()->getData();
+    this->Queue->pop();  // delete current in queue
+    if (this->current->getNextLeft() != nullptr)  // set in queue childs of current
+        this->Queue->push(reinterpret_cast<elemOfQueue<struct elemOfBinaryTreeSearch<int>> *>(this->current->getNextLeft()));
+    //    this->Queue->push(this->current->getNextLeft);
+    if (this->current->getNextRight() != nullptr)
+        this->Queue->push(reinterpret_cast<elemOfQueue<struct elemOfBinaryTreeSearch<int>> *>(this->current->getNextRight()));
+    //    this->Queue->push(this->current->getNextLeft);
+    return this->current->getData();  // return current
+}
 
 template<class T>
 bool binaryTreeSearchBreadthFirstTraverseIterator<T>::hasNext() {
