@@ -7,9 +7,7 @@ template<class T>
 binaryTreeSearchBreadthFirstTraverseIterator<T>::binaryTreeSearchBreadthFirstTraverseIterator(
         elemOfBinaryTreeSearch<T> *start) {
     this->current = start;
-    this->Queue = new queue<elemOfBinaryTreeSearch<T>>(reinterpret_cast<elemOfQueue<struct elemOfBinaryTreeSearch<int>> *>(this->current));
-//    this->Queue = new queue<elemOfBinaryTreeSearch<T>>(this->current);
-
+    this->Queue = new queue<elemOfBinaryTreeSearch<T>>(*(this->current));
 }
 
 template<class T>
@@ -30,17 +28,15 @@ elemOfBinaryTreeSearch<T> binaryTreeSearchBreadthFirstTraverseIterator<T>::next(
     *(this->current) = this->Queue->getFront()->getData();
     this->Queue->pop();  // delete current in queue
     if (this->current->getNextLeft() != nullptr)  // set in queue childs of current
-        this->Queue->push(reinterpret_cast<elemOfQueue<struct elemOfBinaryTreeSearch<int>> *>(this->current->getNextLeft()));
-    //    this->Queue->push(this->current->getNextLeft);
+        this->Queue->push(*(this->current->getNextLeft()));
     if (this->current->getNextRight() != nullptr)
-        this->Queue->push(reinterpret_cast<elemOfQueue<struct elemOfBinaryTreeSearch<int>> *>(this->current->getNextRight()));
-    //    this->Queue->push(this->current->getNextLeft);
+        this->Queue->push(*(this->current->getNextRight()));
     return this->current->getData();  // return current
 }
 
 template<class T>
 bool binaryTreeSearchBreadthFirstTraverseIterator<T>::hasNext() {
-    return this->current != nullptr;
+    return ( (this->current != nullptr) && (this->Queue->getFront() != nullptr) );
 }
 
 

@@ -19,7 +19,7 @@ public:
     binaryTreeSearch(elemOfBinaryTreeSearch<T> *head = nullptr) : head(head){}
     ~binaryTreeSearch() = default;
 
-    iterator<T> *create_dft_iterator(); // создание итератора, реализующего один из
+    iterator<elemOfBinaryTreeSearch<T>> *create_dft_iterator(); // создание итератора, реализующего один из
     // методов обхода в глубину (depth-first traverse)
     iterator<elemOfBinaryTreeSearch<T>> *create_bft_iterator(); // создание итератора, реализующего методы
     // обхода в ширину (breadth-first traverse)

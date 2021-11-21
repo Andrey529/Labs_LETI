@@ -242,13 +242,12 @@ elemOfBinaryTreeSearch<T> *binaryTreeSearch<T>::giveElemByData(T data) {
 }
 
 template<class T>
-iterator<T> *binaryTreeSearch<T>::create_dft_iterator() {
-    return new binaryTreeSearchDepthFirstTraverseIterator<T>(this->head);
+iterator<elemOfBinaryTreeSearch<T>> *binaryTreeSearch<T>::create_dft_iterator() {
+    return new binaryTreeSearchDepthFirstTraverseIterator(this->head);
 }
 
 template<class T>
 iterator<elemOfBinaryTreeSearch<T>> *binaryTreeSearch<T>::create_bft_iterator() {
-//    return new binaryTreeSearchBreadthFirstTraverseIterator<elemOfBinaryTreeSearch<T>>(this->head);
     return new binaryTreeSearchBreadthFirstTraverseIterator(this->head);
 }
 
