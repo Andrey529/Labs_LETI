@@ -80,17 +80,17 @@ void stack<T>::pop() {
 
 template<class T>
 elemOfStack<T> *stack<T>::getFront() {
-    return this->head;
-}
-
-template<class T>
-elemOfStack<T> *stack<T>::getBack() {
     elemOfStack<T> *elem = this->head;
     if(elem == nullptr) return nullptr;
     while (elem->getNextElem() != nullptr) {
         elem = elem->getNextElem();
     }
     return elem;
+}
+
+template<class T>
+elemOfStack<T> *stack<T>::getBack() {
+    return this->head;
 }
 
 template<class T>
