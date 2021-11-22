@@ -243,11 +243,15 @@ elemOfBinaryTreeSearch<T> *binaryTreeSearch<T>::giveElemByData(T data) {
 
 template<class T>
 iterator<elemOfBinaryTreeSearch<T>> *binaryTreeSearch<T>::create_dft_iterator() {
+    if (this->head == nullptr)
+        throw std::logic_error("An iterator cannot be created because there is no element in the tree.");
     return new binaryTreeSearchDepthFirstTraverseIterator(this->head);
 }
 
 template<class T>
 iterator<elemOfBinaryTreeSearch<T>> *binaryTreeSearch<T>::create_bft_iterator() {
+    if (this->head == nullptr)
+        throw std::logic_error("An iterator cannot be created because there is no element in the tree.");
     return new binaryTreeSearchBreadthFirstTraverseIterator(this->head);
 }
 

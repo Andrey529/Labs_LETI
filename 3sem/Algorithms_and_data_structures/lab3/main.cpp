@@ -2,20 +2,10 @@
 #include "headers/queue/queue.h"
 #include "headers/stack/stack.h"
 #include "headers/binaryTreeSearch/binaryTreeSearch.h"
-#include <string>
 int main() {
 
-//    elemOfBinaryTreeSearch<int> elem(5);
-//
-//    binaryTreeSearch<int> tree;
-//    tree.insert(elem.getData());
-//    auto *Queue = new queue<elemOfBinaryTreeSearch<int>>(elem);
-
-//    auto *current = new elemOfBinaryTreeSearch(5);
-//    auto *Queue = new queue<elemOfBinaryTreeSearch<int>>();
-
     binaryTreeSearch<int> tree;
-    // 4 9 8 10 9 3 5
+
     tree.insert(4);
     tree.insert(8);
     tree.insert(7);
@@ -29,13 +19,20 @@ int main() {
     tree.insert(0);
     tree.insert(9);
 
-    iterator<elemOfBinaryTreeSearch<int>> *treeIterator = tree.create_bft_iterator();
-    while (treeIterator->hasNext()) {
-        std::cout << treeIterator->next().getData() << ' ';
+
+    iterator<elemOfBinaryTreeSearch<int>> *treeIteratorBreadth = tree.create_bft_iterator();
+    while (treeIteratorBreadth->hasNext()) {
+        std::cout << treeIteratorBreadth->next().getData() << ' ';
+    }
+    std::cout << std::endl;
+
+    iterator<elemOfBinaryTreeSearch<int>> *treeIteratorDepth = tree.create_dft_iterator();
+    while (treeIteratorDepth->hasNext()) {
+        std::cout << treeIteratorDepth->next().getData() << ' ';
     }
 
 
-////    std::cout << tree.contains(4.1) << std::endl;
+////    std::cout << tree.contains(4) << std::endl;
 //
 //    tree.remove(8);
 

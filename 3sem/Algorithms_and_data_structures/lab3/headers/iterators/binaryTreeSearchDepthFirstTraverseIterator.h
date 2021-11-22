@@ -6,21 +6,19 @@
 #include "../stack/stack.h"
 
 template<class T>
-class binaryTreeSearchDepthFirstTraverseIterator : public iterator<T>{   // методов обхода в глубину
+class binaryTreeSearchDepthFirstTraverseIterator : public iterator<elemOfBinaryTreeSearch<T>>{   // методов обхода в глубину
 private:
     elemOfBinaryTreeSearch<T> *current;
+    stack<elemOfBinaryTreeSearch<T>> *Stack;
 public:
-    binaryTreeSearchDepthFirstTraverseIterator(elemOfBinaryTreeSearch<T> *start = nullptr) : current(start) {}
+    binaryTreeSearchDepthFirstTraverseIterator(elemOfBinaryTreeSearch<T> *start = nullptr);
     ~binaryTreeSearchDepthFirstTraverseIterator() = default;
+
     elemOfBinaryTreeSearch<T> *getCurrent() const;
     void setCurrent(elemOfBinaryTreeSearch<T> *current);
 
-
-    T next() override;   // продумать, что именно считается следующим элементом,
-                        // может понадобится хранить nextRight и nextLeft
-
-    bool hasNext() override;   // нужно дописать нормально
-
+    elemOfBinaryTreeSearch<T> next() override;
+    bool hasNext() override;
 };
 
 #include "../../src/iterators/binaryTreeSearchDepthFirstTraverseIterator.cpp"
