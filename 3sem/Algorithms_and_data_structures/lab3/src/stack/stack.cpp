@@ -68,7 +68,6 @@ template<class T>
 void stack<T>::pop() {
     if (this->head == nullptr) throw std::logic_error("The stack is already empty in function pop()");
     if (this->head->getNextElem() == nullptr) {
-        delete this->head;
         this->head = nullptr;
         return;
     }
@@ -76,7 +75,6 @@ void stack<T>::pop() {
     while (temp->getNextElem()->getNextElem() != nullptr) {
         temp = temp->getNextElem();
     }
-    delete temp->getNextElem();
     temp->setNextElem(nullptr);
 }
 
