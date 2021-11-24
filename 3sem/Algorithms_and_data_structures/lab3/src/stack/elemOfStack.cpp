@@ -35,4 +35,9 @@ void elemOfStack<T>::setNextElem(elemOfStack *nextElem) {
     this->nextElem = nextElem;
 }
 
+template<class T>
+T *elemOfStack<T>::getData() {
+    return &(this->data);
+}
+
 #endif //LAB3_ELEMOFSTACK_H

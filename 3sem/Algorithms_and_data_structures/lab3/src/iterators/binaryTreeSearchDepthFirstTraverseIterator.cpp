@@ -33,7 +33,7 @@ elemOfBinaryTreeSearch<T> binaryTreeSearchDepthFirstTraverseIterator<T>::next() 
     if (this->current->getNextLeft() != nullptr)
         this->current = this->current->getNextLeft();
     else {
-        *(this->current) = this->Stack->getFront()->getData();
+        this->current = this->Stack->getFront()->getData();
         this->Stack->pop();
     }
 

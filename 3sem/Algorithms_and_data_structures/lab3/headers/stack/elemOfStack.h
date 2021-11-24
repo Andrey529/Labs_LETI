@@ -13,6 +13,7 @@ public:
     ~elemOfStack() = default;
 
     T getData() const;
+    T *getData();
     void setData(T data);
 
     elemOfStack *getNextElem() const;
