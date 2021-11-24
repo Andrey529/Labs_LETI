@@ -25,7 +25,7 @@ elemOfBinaryTreeSearch<T> binaryTreeSearchBreadthFirstTraverseIterator<T>::next(
     if (!hasNext()) {
         throw std::out_of_range("No more elements in binary tree search. Function next()");
     }
-    *(this->current) = this->Queue->getFront()->getData();
+    this->current = this->Queue->getFront()->getData();
     this->Queue->pop();  // delete current in queue
     if (this->current->getNextLeft() != nullptr)  // set in queue childs of current
         this->Queue->push(*(this->current->getNextLeft()));

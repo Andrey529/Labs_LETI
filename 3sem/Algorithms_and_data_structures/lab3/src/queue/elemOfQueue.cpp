@@ -34,6 +34,10 @@ void elemOfQueue<T>::setNextElem(elemOfQueue *nextElem) {
     this->nextElem = nextElem;
 }
 
+template<class T>
+T *elemOfQueue<T>::getData() {
+    return &(this->data);
+}
 
 
 #endif //LAB3_ELEMOFQUEUE_CPP

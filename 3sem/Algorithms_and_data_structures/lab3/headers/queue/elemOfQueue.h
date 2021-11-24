@@ -13,6 +13,8 @@ public:
     ~elemOfQueue() = default;
 
     T getData() const;
+    T *getData();
+
     void setData(T data);
 
     elemOfQueue *getNextElem() const;
