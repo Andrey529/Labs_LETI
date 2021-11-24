@@ -17,7 +17,8 @@ private:
     elemOfBinaryTreeSearch<T> *giveElemByData(T data);
 public:
     binaryTreeSearch(elemOfBinaryTreeSearch<T> *head = nullptr) : head(head){}
-    ~binaryTreeSearch() = default;
+    void destroyRecursive(elemOfBinaryTreeSearch<T> *elem);
+    ~binaryTreeSearch();
 
     iterator<elemOfBinaryTreeSearch<T>> *create_dft_iterator(); // создание итератора, реализующего один из
     // методов обхода в глубину (depth-first traverse)

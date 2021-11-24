@@ -255,5 +255,19 @@ iterator<elemOfBinaryTreeSearch<T>> *binaryTreeSearch<T>::create_bft_iterator() 
     return new binaryTreeSearchBreadthFirstTraverseIterator(this->head);
 }
 
+template<class T>
+void binaryTreeSearch<T>::destroyRecursive(elemOfBinaryTreeSearch<T> *elem) {
+    if (elem) {
+        destroyRecursive(elem->getNextLeft());
+        destroyRecursive(elem->getNextRight());
+        delete elem;
+    }
+}
+
+template<class T>
+binaryTreeSearch<T>::~binaryTreeSearch() {
+    destroyRecursive(this->head);
+}
+
 
 #endif //LAB3_BINARYTREESEARCH_H
