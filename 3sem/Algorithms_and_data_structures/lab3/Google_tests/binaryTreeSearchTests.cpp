@@ -8,7 +8,9 @@ public:
     TestBinaryTreeSearch() {
         this->treeOfInts = new binaryTreeSearch<int>;
     }
-    ~TestBinaryTreeSearch() = default;
+    ~TestBinaryTreeSearch() {
+        delete this->treeOfInts;
+    }
 
     void setUpNotEmptyTree(){
         treeOfInts->insert(10);
