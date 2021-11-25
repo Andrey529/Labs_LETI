@@ -1,4 +1,5 @@
 #include "gtest/gtest.h"
+
 #include "../headers/binaryTreeSearch/binaryTreeSearch.h"
 
 class TestBinaryTreeSearch : public ::testing::Test {
@@ -85,21 +86,21 @@ TEST_F(TestBinaryTreeSearch, containsInEmptyTree) {
     ASSERT_ANY_THROW(treeOfInts->contains(5));
 }
 
-TEST_F(TestBinaryTreeSearch, containsInNotEmptyTree1) {
+TEST_F(TestBinaryTreeSearch, containsRootInNotEmptyTree) {
     setUpNotEmptyTree();
 
     ASSERT_NO_THROW(treeOfInts->contains(10));
     GTEST_ASSERT_EQ(treeOfInts->contains(10), true);
 }
 
-TEST_F(TestBinaryTreeSearch, containsInNotEmptyTree2) {
+TEST_F(TestBinaryTreeSearch, containsHaveChildInNotEmptyTree) {
     setUpNotEmptyTree();
 
     ASSERT_NO_THROW(treeOfInts->contains(8));
     GTEST_ASSERT_EQ(treeOfInts->contains(8), true);
 }
 
-TEST_F(TestBinaryTreeSearch, containsInNotEmptyTree3) {
+TEST_F(TestBinaryTreeSearch, containsLeafInNotEmptyTree) {
     setUpNotEmptyTree();
 
     ASSERT_NO_THROW(treeOfInts->contains(12));
@@ -251,6 +252,243 @@ TEST_F(TestBinaryTreeSearch, depthIteratorInNotEmptyTree) {
     GTEST_ASSERT_EQ(treeIteratorDepth->next().getData(),17);
 
     GTEST_ASSERT_EQ(treeIteratorDepth->hasNext(), false);
+}
+
+class TestQueue : public ::testing::Test {
+protected:
+    queue<int> *Queue;
+public:
+    TestQueue() {
+        this->Queue = new queue<int>;
+    }
+    ~TestQueue() {
+        delete this->Queue;
+    }
+
+    void setUpNotEmptyQueue(){
+        Queue->push(1);
+        Queue->push(2);
+        Queue->push(3);
+        Queue->push(4);
+        Queue->push(5);
+    }
+    void setUpEmptyQueue() { }
+};
+
+TEST_F(TestQueue, isEmptyInEmptyQueue) {
+    setUpEmptyQueue();
+    GTEST_ASSERT_EQ(this->Queue->isEmpty(), true);
+}
+
+TEST_F(TestQueue, isEmptyInNotEmptyQueue) {
+    setUpNotEmptyQueue();
+    GTEST_ASSERT_EQ(this->Queue->isEmpty(), false);
+}
+
+TEST_F(TestQueue, getSizeInEmptyQueue) {
+    setUpEmptyQueue();
+    GTEST_ASSERT_EQ(this->Queue->getSize(), 0);
+}
+
+TEST_F(TestQueue, getSizeInNotEmptyQueue) {
+    setUpNotEmptyQueue();
+    GTEST_ASSERT_EQ(this->Queue->getSize(), 5);
+}
+
+TEST_F(TestQueue, getBackInEmptyQueue) {
+    setUpEmptyQueue();
+    GTEST_ASSERT_EQ(this->Queue->getBack(), nullptr);
+}
+
+TEST_F(TestQueue, getBackInNotEmptyQueue) {
+    setUpNotEmptyQueue();
+    GTEST_ASSERT_EQ(*(this->Queue->getBack()->getData()), 5);
+}
+
+TEST_F(TestQueue, getFrontInEmptyQueue) {
+    setUpEmptyQueue();
+    GTEST_ASSERT_EQ(this->Queue->getFront(), nullptr);
+}
+
+TEST_F(TestQueue, getFrontInNotEmptyQueue) {
+    setUpNotEmptyQueue();
+    GTEST_ASSERT_EQ(*(this->Queue->getFront()->getData()), 1);
+}
+
+TEST_F(TestQueue, popInEmptyQueue) {
+    setUpEmptyQueue();
+    ASSERT_ANY_THROW(this->Queue->pop());
+}
+
+TEST_F(TestQueue, popInNotEmptyQueue) {
+    setUpNotEmptyQueue();
+
+    ASSERT_NO_THROW(this->Queue->pop());
+    GTEST_ASSERT_EQ(*(this->Queue->getFront()->getData()),2);
+    GTEST_ASSERT_EQ(this->Queue->getSize(),4);
+}
+
+TEST_F(TestQueue, pushByDefaultInEmptyQueue) {
+    setUpEmptyQueue();
+    this->Queue->push();
+    GTEST_ASSERT_EQ(*(this->Queue->getFront()->getData()),0);
+    GTEST_ASSERT_EQ(this->Queue->getSize(),1);
+}
+
+TEST_F(TestQueue, pushByDefaultInNotEmptyQueue) {
+    setUpNotEmptyQueue();
+    this->Queue->push();
+    GTEST_ASSERT_EQ(*(this->Queue->getBack()->getData()),0);
+    GTEST_ASSERT_EQ(this->Queue->getSize(),6);
+}
+
+TEST_F(TestQueue, pushInEmptyQueue) {
+    setUpEmptyQueue();
+    this->Queue->push(100);
+    GTEST_ASSERT_EQ(*(this->Queue->getFront()->getData()),100);
+    GTEST_ASSERT_EQ(this->Queue->getSize(),1);
+}
+
+TEST_F(TestQueue, pushInNotEmptyQueue) {
+    setUpNotEmptyQueue();
+    this->Queue->push(100);
+    GTEST_ASSERT_EQ(*(this->Queue->getBack()->getData()),100);
+    GTEST_ASSERT_EQ(this->Queue->getSize(),6);
+}
+
+TEST_F(TestQueue, pushElementOfQueueInEmptyQueue) {
+    setUpEmptyQueue();
+    auto *newElem = new elemOfQueue<int>(100);
+    this->Queue->push(newElem);
+    GTEST_ASSERT_EQ(*(this->Queue->getFront()->getData()),100);
+    GTEST_ASSERT_EQ(this->Queue->getSize(),1);
+}
+
+TEST_F(TestQueue, pushElementOfQueueInNotEmptyQueue) {
+    setUpNotEmptyQueue();
+    auto *newElem = new elemOfQueue<int>(100);
+    this->Queue->push(newElem);
+    GTEST_ASSERT_EQ(*(this->Queue->getBack()->getData()),100);
+    GTEST_ASSERT_EQ(this->Queue->getSize(),6);
+}
+
+
+class TestStack : public ::testing::Test {
+protected:
+    stack<int> *Stack;
+public:
+    TestStack() {
+        this->Stack = new stack<int>;
+    }
+    ~TestStack() {
+        delete this->Stack;
+    }
+
+    void setUpNotEmptyStack(){
+        Stack->push(1);
+        Stack->push(2);
+        Stack->push(3);
+        Stack->push(4);
+        Stack->push(5);
+    }
+    void setUpEmptyStack() { }
+};
+
+TEST_F(TestStack, isEmptyInEmptyStack) {
+    setUpEmptyStack();
+    GTEST_ASSERT_EQ(this->Stack->isEmpty(), true);
+}
+
+TEST_F(TestStack, isEmptyInNotEmptyStack) {
+    setUpNotEmptyStack();
+    GTEST_ASSERT_EQ(this->Stack->isEmpty(), false);
+}
+
+TEST_F(TestStack, getSizeInEmptyStack) {
+    setUpEmptyStack();
+    GTEST_ASSERT_EQ(this->Stack->getSize(), 0);
+}
+
+TEST_F(TestStack, getSizeInNotEmptyStack) {
+    setUpNotEmptyStack();
+    GTEST_ASSERT_EQ(this->Stack->getSize(), 5);
+}
+
+TEST_F(TestStack, getBackInEmptyStack) {
+    setUpEmptyStack();
+    GTEST_ASSERT_EQ(this->Stack->getBack(), nullptr);
+}
+
+TEST_F(TestStack, getBackInNotEmptyStack) {
+    setUpNotEmptyStack();
+    GTEST_ASSERT_EQ(*(this->Stack->getBack()->getData()), 1);
+}
+
+TEST_F(TestStack, getFrontInEmptyStack) {
+    setUpEmptyStack();
+    GTEST_ASSERT_EQ(this->Stack->getFront(), nullptr);
+}
+
+TEST_F(TestStack, getFrontInNotEmptyStack) {
+    setUpNotEmptyStack();
+    GTEST_ASSERT_EQ(*(this->Stack->getFront()->getData()), 5);
+}
+
+TEST_F(TestStack, popInEmptyStack) {
+    setUpEmptyStack();
+    ASSERT_ANY_THROW(this->Stack->pop());
+}
+
+TEST_F(TestStack, popInNotEmptyStack) {
+    setUpNotEmptyStack();
+
+    ASSERT_NO_THROW(this->Stack->pop());
+    GTEST_ASSERT_EQ(*(this->Stack->getFront()->getData()),4);
+    GTEST_ASSERT_EQ(this->Stack->getSize(),4);
+}
+
+TEST_F(TestStack, pushByDefaultInEmptyStack) {
+    setUpEmptyStack();
+    this->Stack->push();
+    GTEST_ASSERT_EQ(*(this->Stack->getFront()->getData()),0);
+    GTEST_ASSERT_EQ(this->Stack->getSize(),1);
+}
+
+TEST_F(TestStack, pushByDefaultInNotEmptyStack) {
+    setUpNotEmptyStack();
+    this->Stack->push();
+    GTEST_ASSERT_EQ(*(this->Stack->getFront()->getData()),0);
+    GTEST_ASSERT_EQ(this->Stack->getSize(),6);
+}
+
+TEST_F(TestStack, pushInEmptyStack) {
+    setUpEmptyStack();
+    this->Stack->push(100);
+    GTEST_ASSERT_EQ(*(this->Stack->getFront()->getData()),100);
+    GTEST_ASSERT_EQ(this->Stack->getSize(),1);
+}
+
+TEST_F(TestStack, pushInNotEmptyStack) {
+    setUpNotEmptyStack();
+    this->Stack->push(100);
+    GTEST_ASSERT_EQ(*(this->Stack->getFront()->getData()),100);
+    GTEST_ASSERT_EQ(this->Stack->getSize(),6);
+}
+
+TEST_F(TestStack, pushElementOfStackInEmptyStack) {
+    setUpEmptyStack();
+    auto *newElem = new elemOfStack<int>(100);
+    this->Stack->push(newElem);
+    GTEST_ASSERT_EQ(*(this->Stack->getFront()->getData()),100);
+    GTEST_ASSERT_EQ(this->Stack->getSize(),1);
+}
+
+TEST_F(TestStack, pushElementOfStackInNotEmptyStack) {
+    setUpNotEmptyStack();
+    auto *newElem = new elemOfStack<int>(100);
+    this->Stack->push(newElem);
+    GTEST_ASSERT_EQ(*(this->Stack->getFront()->getData()),100);
+    GTEST_ASSERT_EQ(this->Stack->getSize(),6);
 }
 
 int main(int argc, char** argv) {
