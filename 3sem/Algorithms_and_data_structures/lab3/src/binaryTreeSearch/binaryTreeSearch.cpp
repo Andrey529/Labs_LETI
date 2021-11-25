@@ -169,18 +169,18 @@ void binaryTreeSearch<T>::removeWhenOneChildRight(elemOfBinaryTreeSearch<T> *del
 template<class T>
 void binaryTreeSearch<T>::removeWhenTwoChild(elemOfBinaryTreeSearch<T> *delElem) {
     elemOfBinaryTreeSearch<T> *theLowestElemInRightTree = delElem->getNextRight();
-    // доходим до самого левого элемента в правом поддереве относительно удаляемого элемента
+    // we reach the leftmost element in the right subtree relative to the deleted element
     while ( theLowestElemInRightTree->getNextLeft() != nullptr ) {
         theLowestElemInRightTree = theLowestElemInRightTree->getNextLeft();
     }
 
-    // устанавливаем потомкам удаляемого элемента нового родителя
+    // set a new parent to the descendants of the deleted element
     delElem->getNextLeft()->setParent(theLowestElemInRightTree);
     if (delElem->getNextRight() != theLowestElemInRightTree)
         delElem->getNextRight()->setParent(theLowestElemInRightTree);
 
 
-    // родителю самого левого элемента устанавливаем в значение, место самого левого, nullptr
+    // the parent of the leftmost element is set to the value, the place of the leftmost element, nullptr
     elemOfBinaryTreeSearch<T> *parentTheLowestElemInRightTree = theLowestElemInRightTree->getParent();
     if(parentTheLowestElemInRightTree->getNextLeft() == theLowestElemInRightTree) {
         parentTheLowestElemInRightTree->setNextLeft(theLowestElemInRightTree->getNextRight());
@@ -189,17 +189,17 @@ void binaryTreeSearch<T>::removeWhenTwoChild(elemOfBinaryTreeSearch<T> *delElem)
         parentTheLowestElemInRightTree->setNextRight(theLowestElemInRightTree->getNextRight());
     }
 
-    // присваиваем nextLeft и nextRight самому левому значения потомков удаляемого элемента
+    // assign nextLeft and nextRight to the leftmost child of the element to be removed
     theLowestElemInRightTree->setNextLeft(delElem->getNextLeft());
     theLowestElemInRightTree->setNextRight(delElem->getNextRight());
 
 
 
-    // устанавливаем родителя для нового элемента (самого левого в правом поддереве)
+    // set a parent for the new element (the leftmost in the right subtree)
     if (delElem != this->head) {
         theLowestElemInRightTree->setParent(delElem->getParent());
 
-        // присваиваем родителю удаляемого элемента вместо удаляемого элемента самый левый элемент
+        // assign the parent of the element to be deleted instead of the element to the leftmost element
         elemOfBinaryTreeSearch<T> *parentDelElem = delElem->getParent();
         if(parentDelElem->getNextLeft() == delElem) {
             parentDelElem->setNextLeft(theLowestElemInRightTree);

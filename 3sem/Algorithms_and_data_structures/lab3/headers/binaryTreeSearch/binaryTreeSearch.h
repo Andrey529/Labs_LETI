@@ -20,15 +20,13 @@ public:
     void destroyRecursive(elemOfBinaryTreeSearch<T> *elem);
     ~binaryTreeSearch();
 
-    iterator<elemOfBinaryTreeSearch<T>> *create_dft_iterator(); // создание итератора, реализующего один из
-    // методов обхода в глубину (depth-first traverse)
-    iterator<elemOfBinaryTreeSearch<T>> *create_bft_iterator(); // создание итератора, реализующего методы
-    // обхода в ширину (breadth-first traverse)
+    iterator<elemOfBinaryTreeSearch<T>> *create_dft_iterator(); // depth-first traverse
+    iterator<elemOfBinaryTreeSearch<T>> *create_bft_iterator(); // breadth-first traverse
 
     bool isEmpty();
-    bool contains(T data); // поиск элемента в дереве по ключу
-    void insert(T data); // добавление элемента в дерево по ключу. Должен работать за O(logN)
-    void remove(T data); // удаление элемента дерева по ключу
+    bool contains(T data); // search for an element in the tree by key
+    void insert(T data); // adding an element to the tree by key. Must work for O(logN)
+    void remove(T data); // deleting a tree element by key
 
 };
 
