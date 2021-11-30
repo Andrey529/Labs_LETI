@@ -28,10 +28,8 @@ void stack<T>::push(elemOfStack<T> *newElem) {
     }
 
     elemOfStack<T> *temp = this->head;
-    while (temp->getNextElem() != nullptr) {
-        temp = temp->getNextElem();
-    }
-    temp->setNextElem(newElem);
+    this->head = newElem;
+    newElem->setNextElem(temp);
 }
 
 template<class T>
@@ -43,10 +41,8 @@ void stack<T>::push(T data) {
     }
 
     elemOfStack<T> *temp = this->head;
-    while (temp->getNextElem() != nullptr) {
-        temp = temp->getNextElem();
-    }
-    temp->setNextElem(newElem);
+    this->head = newElem;
+    newElem->setNextElem(temp);
 }
 
 template<class T>
@@ -58,10 +54,8 @@ void stack<T>::push() {
     }
 
     elemOfStack<T> *temp = this->head;
-    while (temp->getNextElem() != nullptr) {
-        temp = temp->getNextElem();
-    }
-    temp->setNextElem(newElem);
+    this->head = newElem;
+    newElem->setNextElem(temp);
 }
 
 template<class T>
@@ -71,26 +65,22 @@ void stack<T>::pop() {
         this->head = nullptr;
         return;
     }
-    elemOfStack<T> *temp = this->head;
-    while (temp->getNextElem()->getNextElem() != nullptr) {
-        temp = temp->getNextElem();
-    }
-    temp->setNextElem(nullptr);
+    this->head = this->head->getNextElem();
 }
 
 template<class T>
 elemOfStack<T> *stack<T>::getFront() {
+    return this->head;
+}
+
+template<class T>
+elemOfStack<T> *stack<T>::getBack() {
     elemOfStack<T> *elem = this->head;
     if(elem == nullptr) return nullptr;
     while (elem->getNextElem() != nullptr) {
         elem = elem->getNextElem();
     }
     return elem;
-}
-
-template<class T>
-elemOfStack<T> *stack<T>::getBack() {
-    return this->head;
 }
 
 template<class T>
