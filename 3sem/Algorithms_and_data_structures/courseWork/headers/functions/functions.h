@@ -4,6 +4,7 @@
 #include "../stack/stack.h"
 #include <string>
 #include <iostream>
+#include <math.h>
 
 void inputExpression(std::string *expression); // inputs an expression and checks it correctness
 void convertToPostfix(std::string *expression); // converts expression in infix to postfix form

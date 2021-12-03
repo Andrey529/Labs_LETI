@@ -6,7 +6,9 @@ int main() {
 
 
     auto *expression = new std::string();
-    inputExpression(expression);
+//    inputExpression(expression);
+    *expression = "7 8 + ";
+    calculationPostfix(expression);
 
 //    std::string str = "2.2";
 //    double d = std::stod(str);
