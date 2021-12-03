@@ -17,11 +17,12 @@ void calculationPostfix(std::string *expression) {
         }
         else {
             if (tempStr.size() == 1) {
-                if ( (tempStr[0] >= 48 ) && (tempStr[0] <= 57) ) { // operands
+                if ( (tempStr[0] >= 48 ) && (tempStr[0] <= 57) ) { // operands: (0,1,2,...9)
                     currentOperand = std::stod(tempStr);
                     stackForCalculation.push(currentOperand);
+                    tempStr.clear();
                 }
-                else {
+                else {  // operators: +, -, *, /, ^
                     operand2 = stackForCalculation.getFront()->getData();
                     stackForCalculation.pop();
                     operand1 = stackForCalculation.getFront()->getData();
@@ -45,40 +46,59 @@ void calculationPostfix(std::string *expression) {
                     }
                     stackForCalculation.push(operand1);
                 }
-
             }
+            else { // tempStr.size() != 1
 
+                if ( (tempStr[1] >= 48) && (tempStr[1] <= 57) || (tempStr[1] == '.')) {  // operands with 2+ symbols (123, 329, 9923785, ...)
+                    currentOperand = std::stod(tempStr);
+                    stackForCalculation.push(currentOperand);
+                    tempStr.clear();
+                }
+                else { // functions: cos, sin, tg, ctg, ln, log, sqrt, abs
 
-            try {
-                currentOperand = std::stod(tempStr);
-            }
-            catch (const std::invalid_argument &e) {
-                if (tempStr.size() == 1) { // operators: +, -, *, /, ^
+                    operand1 = stackForCalculation.getFront()->getData();
+                    stackForCalculation.pop();
 
-
-
-                    switch (tempStr[0]) {
-
+                    if (tempStr.size() == 2) { // tg, ln
+                        switch (tempStr[0]) {
+                            case 't': // tg
+                                operand1 = tan(operand1 * M_PI/180);
+                                break;
+                            case 'l': // ln
+                                operand1 = log(operand1);
+                                break;
+                        }
                     }
-
+                    else if(tempStr.size() == 3) { // cos, sin, ctg, log, abs
+                        switch (tempStr[0]) {
+                            case 's':  // sin
+                                operand1 = sin(operand1);
+                                break;
+                            case 'l':  // log
+                                operand1 = log10(operand1);
+                                break;
+                            case 'a': // abs
+                                operand1 = fabs(operand1);
+                                break;
+                            case 'c':
+                                switch (tempStr[1]) {
+                                    case 'o':  // cos
+                                        operand1 = cos(operand1);
+                                        break;
+                                    case 't':  // ctg
+                                        operand1 = 1 / tan(operand1);
+                                        break;
+                                }
+                        }
+                    }
+                    else { // sqrt
+                        operand1 = sqrt(operand1);
+                    }
+                    stackForCalculation.push(operand1);
                 }
-                else{ // special functons: cos(), sin(), tg(), ctg(), ln(), log(), sqrt(), etc
-                    std::cout << "sssss";
-                }
-
             }
-            catch (const std::out_of_range &e) {
-                std::cerr << e.what();
-                std::cerr << "the converted value would fall out of the range of the result type or"
-                             "the underlying function (strtof, strtod or strtold) sets errno to ERANGE" << std::endl;
-                return;
-            }
-            stackForCalculation.push(currentOperand);
-            tempStr.clear();
         }
     }
-
-
     std::cout << stackForCalculation.getFront()->getData() << std::endl;
     stackForCalculation.pop();
 }
