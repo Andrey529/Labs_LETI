@@ -7,6 +7,14 @@ void inputExpression(std::string *expression){
     getline(std::cin, *expression);
 }
 
+bool priorityScale(std::string Operator1, std::string Operator2){
+    if ( (Operator1 == "^") && ( (Operator2 == "*") || (Operator2 == "/") || (Operator2 == "+") || (Operator2 == "-")) )
+        return true;
+    if ( ((Operator1 == "*") || (Operator1 == "/")) && ((Operator2 == "+") || (Operator2 == "-")) )
+        return true;
+    else return false;
+}
+
 std::string convertInfixToPostfix(std::string expression) {
     stack<std::string> stackForOperators;
     std::string operands, functions, result;
@@ -15,14 +23,16 @@ std::string convertInfixToPostfix(std::string expression) {
     expression.erase(remove_if(expression.begin(), expression.end(), isspace), expression.end());
 
     for (std::string::iterator it = expression.begin(); it != expression.end(); it++) {
-        if ((*it) == '(') stackForOperators.push(")"); // положить в стэк
+        if ((*it) == '(') {
+            stackForOperators.push(")"); // положить в стэк
+        }
         else if ((*it) == ')') {
-            //
+
         }
         else if( (((*it) >= '0') && ((*it) <= '9')) || ((*it) == '.') ) {
             // добавить в конец выходного списка
 
-            while ((*it)++){
+            while ( (((*it) >= '0') && ((*it) <= '9')) || ((*it) == '.') ){
 
             }
 
@@ -32,7 +42,30 @@ std::string convertInfixToPostfix(std::string expression) {
 
         }
         else if ( ((*it) == '^') || ((*it) == '*') || ((*it) == '/') || ((*it) == '+') || ((*it) == '-') ) {
+            if ( ((*it) == '^') && (stackForOperators.getFront()->getData() == "^") ) {
+                if (!stackForOperators.isEmpty()){
 
+                }
+            }
+            else if( (((*it) == '*') || ((*it) == '/')) && ( (stackForOperators.getFront()->getData() == "*")
+                || (stackForOperators.getFront()->getData() == "/") || (stackForOperators.getFront()->getData() == "^")) ) {
+                if (!stackForOperators.isEmpty()){
+
+                }
+            }
+            else if ( ((*it) == '+') || ((*it) == '-') ) {
+                if (stackForOperators.isEmpty()){
+                    std::string push(1, *it);
+                    stackForOperators.push(push);
+                }
+                else{
+                    result.push_back("adc");
+                }
+            }
+            else{
+                std::string push(1, *it);
+                stackForOperators.push(push);
+            }
         }
     }
 
@@ -78,6 +111,9 @@ double calculationPostfix(std::string *expression) {
                             operand1 = operand1 * operand2;
                             break;
                         case '/':
+                            if (operand2 == 0) {
+                                throw std::invalid_argument("impossible to do division");
+                            }
                             operand1 = operand1 / operand2;
                             break;
                         case '^':
