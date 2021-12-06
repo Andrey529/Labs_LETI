@@ -5,7 +5,39 @@
 
 void inputExpression(std::string *expression){
     getline(std::cin, *expression);
-//    std::cout << *expression << std::endl;
+}
+
+std::string convertInfixToPostfix(std::string expression) {
+    stack<std::string> stackForOperators;
+    std::string operands, functions, result;
+
+    // remove spaces in string
+    expression.erase(remove_if(expression.begin(), expression.end(), isspace), expression.end());
+
+    for (std::string::iterator it = expression.begin(); it != expression.end(); it++) {
+        if ((*it) == '(') stackForOperators.push(")"); // положить в стэк
+        else if ((*it) == ')') {
+            //
+        }
+        else if( (((*it) >= '0') && ((*it) <= '9')) || ((*it) == '.') ) {
+            // добавить в конец выходного списка
+
+            while ((*it)++){
+
+            }
+
+            result.push_back(*it);
+        }
+        else if ( ((*it) >= 'a') && ((*it) <= 'z') ) {
+
+        }
+        else if ( ((*it) == '^') || ((*it) == '*') || ((*it) == '/') || ((*it) == '+') || ((*it) == '-') ) {
+
+        }
+    }
+
+
+    return result;
 }
 
 double calculationPostfix(std::string *expression) {
@@ -161,7 +193,6 @@ double calculationPostfix(std::string *expression) {
     stackForCalculation.pop();
     return result;
 }
-
 
 bool approximatelyEqual(double a, double b, double epsilon){
     return fabs(a - b) <= ((fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * epsilon);

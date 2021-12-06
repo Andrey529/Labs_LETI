@@ -7,9 +7,21 @@
 #include <math.h>
 
 void inputExpression(std::string *expression); // inputs an expression and checks it correctness
-void convertToPostfix(std::string *expression); // converts expression in infix to postfix form
+std::string convertInfixToPostfix(std::string expression); // converts expression in infix to postfix form
 double calculationPostfix(std::string *expression); // calculates the result of an expression in postfix form
 bool approximatelyEqual(double a, double b, double epsilon);
-#include "../../src/functions/functions.cpp"
+
+template<typename T, typename P>
+T remove_if(T beg, T end, P pred)
+{
+    T dest = beg;
+    for (T itr = beg;itr != end; ++itr)
+        if (!pred(*itr))
+            *(dest++) = *itr;
+    return dest;
+}
+
+//#include "../../src/functions/functions.cpp"
+
 
 #endif //COURSEWORK_FUNCTIONS_H
