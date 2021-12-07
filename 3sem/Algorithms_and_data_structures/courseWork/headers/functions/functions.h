@@ -21,6 +21,14 @@ T remove_if(T beg, T end, P pred)
     return dest;
 }
 
+enum containerType{
+    LEFTPARENTHESIS,
+    RIGHTPARENTHESIS,
+    OPERATOR,
+    OPERAND,
+    FUNCTION,
+};
+
 //#include "../../src/functions/functions.cpp"
 
 

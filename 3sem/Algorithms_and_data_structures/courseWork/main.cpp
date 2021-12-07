@@ -7,8 +7,18 @@ int main() {
 
     auto *expression = new std::string();
 //    inputExpression(expression);
-    *expression = "30 15 tg ";
-    calculationPostfix(expression);
+    *expression = "((sin(123 + 56) + cos(15 - -6)) / 2)";
+
+    // ((sin(123 + 56) - cos(15 * 6)) / 2)
+
+    std::cout << *expression << std::endl;
+
+    *expression = convertInfixToPostfix(*expression);
+
+    std::cout << *expression << std::endl;
+
+
+//    std::cout << calculationPostfix(expression);
 
 //    std::string str = "2.2";
 //    double d = std::stod(str);

@@ -7,68 +7,92 @@ void inputExpression(std::string *expression){
     getline(std::cin, *expression);
 }
 
-bool priorityScale(std::string Operator1, std::string Operator2){
-    if ( (Operator1 == "^") && ( (Operator2 == "*") || (Operator2 == "/") || (Operator2 == "+") || (Operator2 == "-")) )
-        return true;
-    if ( ((Operator1 == "*") || (Operator1 == "/")) && ((Operator2 == "+") || (Operator2 == "-")) )
-        return true;
-    else return false;
-}
-
 std::string convertInfixToPostfix(std::string expression) {
     stack<std::string> stackForOperators;
-    std::string operands, functions, result;
-
+    stack<bool> stackForRightParenthesis;
+    std::string functions, result;
+    containerType nowTypeOfContainer;
     // remove spaces in string
     expression.erase(remove_if(expression.begin(), expression.end(), isspace), expression.end());
 
     for (std::string::iterator it = expression.begin(); it != expression.end(); it++) {
         if ((*it) == '(') {
-            stackForOperators.push(")"); // положить в стэк
+            if (nowTypeOfContainer == containerType::FUNCTION)    stackForRightParenthesis.push(true);
+            else    stackForRightParenthesis.push(false);
+
+            nowTypeOfContainer = containerType::LEFTPARENTHESIS;
+            stackForOperators.push("("); // положить в стэк
         }
         else if ((*it) == ')') {
-
+            if (nowTypeOfContainer != containerType::RIGHTPARENTHESIS) {
+                result.push_back(' ');
+            }
+            if (stackForRightParenthesis.getFront()->getData()) { // stackForRightParenthesis.getFront()->getData() == true
+                result += functions;
+                result.push_back(' ');
+                functions.clear();
+            }
+            stackForRightParenthesis.pop();
+            nowTypeOfContainer = containerType::RIGHTPARENTHESIS;
         }
         else if( (((*it) >= '0') && ((*it) <= '9')) || ((*it) == '.') ) {
             // добавить в конец выходного списка
-
-            while ( (((*it) >= '0') && ((*it) <= '9')) || ((*it) == '.') ){
-
-            }
-
+            nowTypeOfContainer = containerType::OPERAND;
             result.push_back(*it);
         }
         else if ( ((*it) >= 'a') && ((*it) <= 'z') ) {
-
+            if ( (*it) == 'e' ) {
+                result += "e ";
+                continue;
+            }
+            functions += *it;
+            if (functions == "pi") {
+                result += "pi ";
+            }
+            nowTypeOfContainer = containerType::FUNCTION;
         }
         else if ( ((*it) == '^') || ((*it) == '*') || ((*it) == '/') || ((*it) == '+') || ((*it) == '-') ) {
-            if ( ((*it) == '^') && (stackForOperators.getFront()->getData() == "^") ) {
-                if (!stackForOperators.isEmpty()){
 
-                }
+            if ( (nowTypeOfContainer == containerType::OPERAND) || (nowTypeOfContainer == containerType::FUNCTION) ) {
+                result.push_back(' ');
             }
-            else if( (((*it) == '*') || ((*it) == '/')) && ( (stackForOperators.getFront()->getData() == "*")
-                || (stackForOperators.getFront()->getData() == "/") || (stackForOperators.getFront()->getData() == "^")) ) {
-                if (!stackForOperators.isEmpty()){
+            if (nowTypeOfContainer == containerType::OPERATOR) { // unary minus
+                result.push_back('-');
+                continue;
+            }
 
+            nowTypeOfContainer = containerType::OPERATOR;
+
+            if (!stackForOperators.isEmpty()) {
+                if ( ((*it) == '^') && (stackForOperators.getFront()->getData() == "^") ) {
+                    result += stackForOperators.getFront()->getData();
+                    result.push_back(' ');
+                    stackForOperators.pop();
+                }
+                else if( (((*it) == '*') || ((*it) == '/')) && ( (stackForOperators.getFront()->getData() == "*")
+                    || (stackForOperators.getFront()->getData() == "/") || (stackForOperators.getFront()->getData() == "^")) ) {
+                    result += stackForOperators.getFront()->getData();
+                    result.push_back(' ');
+                    stackForOperators.pop();
+                }
+                else if ( (((*it) == '+') || ((*it) == '-')) && (stackForOperators.getFront()->getData() != "(") ) {
+                    result += stackForOperators.getFront()->getData();
+                    result.push_back(' ');
+                    stackForOperators.pop();
                 }
             }
-            else if ( ((*it) == '+') || ((*it) == '-') ) {
-                if (stackForOperators.isEmpty()){
-                    std::string push(1, *it);
-                    stackForOperators.push(push);
-                }
-                else{
-                    result.push_back("adc");
-                }
-            }
-            else{
-                std::string push(1, *it);
-                stackForOperators.push(push);
-            }
+            std::string currentSymbol( 1, *it );
+            stackForOperators.push(currentSymbol);
         }
     }
 
+    while ( !stackForOperators.isEmpty() ) {
+        if (stackForOperators.getFront()->getData() != "(") {
+            result += stackForOperators.getFront()->getData();
+            result.push_back(' ');
+        }
+        stackForOperators.pop();
+    }
 
     return result;
 }
