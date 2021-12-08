@@ -38,6 +38,7 @@ int main(){
     int xEnemy[5];
     int yEnemy[5];
     int side;
+    int rightRun, leftRun;
     x1 = 20; y1 = 3; x2 = 60; y2 = 23;
 
     leftTopX = 1; leftTopY = 1;
@@ -79,11 +80,7 @@ int main(){
                     break;
                 case LEFT:
                     if (xHero > leftTopX+2){
-                        while (xHero != leftTopX+2) {
-                            delay(20);
-                            clrscr();
-                            printHero(xHero--,yHero);
-                        }
+                        leftRun = 1;
                     }
                     break;
                 case UP:
@@ -92,11 +89,7 @@ int main(){
                     break;
                 case RIGHT:
                     if (xHero < rightTopX-2) {
-                        while (xHero != rightTopX-2) {
-                            delay(20);
-                            clrscr();
-                            printHero(xHero++,yHero);
-                        }
+                        rightRun = 1;
                     }
                     break;
                 case EXIT:
@@ -106,13 +99,24 @@ int main(){
             }
         }
 
+        if ( (rightRun == 1) && (xHero < (rightTopX-2)) )
+            xHero += 3;
+        else if( (rightRun == 1) && (xHero >= (rightTopX-2)) )
+            rightRun = 0;
+        else if ( (leftRun == 1) && (xHero > (leftTopX+2)) )
+            xHero -= 3;
+        else if ( (leftRun == 1) && (xHero <= (leftTopX+2)) )
+            leftRun = 0;
 
-        if (yEnemy[0] < leftDownY-1)
-            printEnemy(xEnemy[0], yEnemy[0]);
-        else
-            yEnemy[0] = 1;
-        yEnemy[0]++;
-        delay(150);
 
+        for (i = 0; i < 5; i++) {
+            if (yEnemy[i] < leftDownY-1)
+                printEnemy(xEnemy[i], yEnemy[i]);
+            else
+                yEnemy[i] = 1;
+            yEnemy[i]++;
+        }
+
+        delay(50);
     }
 }
