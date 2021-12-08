@@ -2,9 +2,7 @@
 #include <dos.h>
 
 #define EXIT 113
-#define DOWN 72
 #define LEFT 75
-#define UP 80
 #define RIGHT 77
 
 int getSymbol(){
@@ -23,6 +21,7 @@ void printHero(int xHero, int yHero) {
 }
 
 void printEnemy(int xEnemy, int yEnemy) {
+    if (yEnemy < 1) return;
     textcolor(RED);
     gotoxy(xEnemy, yEnemy); cprintf("z");
     gotoxy(xEnemy+1, yEnemy); cprintf("z");
@@ -31,13 +30,12 @@ void printEnemy(int xEnemy, int yEnemy) {
 }
 
 int main(){
-    int i, x1, y1, y2, x2, xHero, yHero, x, y;
+    int i, x1, y1, y2, x2, xHero, yHero, x, y, lives;
     int flagExit = 1;
     char symbol;
     int leftTopX, leftTopY, rightTopX, rightTopY, leftDownX, leftDownY, rightDownX, rightDownY;
-    int xEnemy[5];
-    int yEnemy[5];
-    int side;
+    int xEnemy[2];
+    int yEnemy[2];
     int rightRun, leftRun;
     x1 = 20; y1 = 3; x2 = 60; y2 = 23;
 
@@ -54,17 +52,12 @@ int main(){
 
     xHero = rightDownX-2; yHero = rightDownY-1;
 
+    lives = 3;
 
-
-    for (i = 0; i < 5; i++) {
-        srand(time(0));
-        side = rand() % 2;
-        if (side == 0)
-            xEnemy[i] = 3;
-        else
-            xEnemy[i] = rightDownX;
-        yEnemy[i] = 1;
-    }
+    xEnemy[0] = 3;
+    yEnemy[0] = 1;
+    xEnemy[1] = rightDownX-3;
+    yEnemy[1] =  yEnemy[1] - (rand() % 15) - 5;
 
     while (flagExit) {
         clrscr();
@@ -73,24 +66,13 @@ int main(){
 
         if (kbhit()) {
             symbol = getSymbol();
+
             switch (symbol) {
-                case DOWN:
-                    if (yHero > leftTopY+1) yHero--;
-                    symbol = 0;
-                    break;
                 case LEFT:
-                    if (xHero > leftTopX+2){
-                        leftRun = 1;
-                    }
-                    break;
-                case UP:
-                    if (yHero < leftDownY-1) yHero++;
-                    symbol = 0;
+                    if (xHero > leftTopX+2) leftRun = 1;
                     break;
                 case RIGHT:
-                    if (xHero < rightTopX-2) {
-                        rightRun = 1;
-                    }
+                    if (xHero < rightTopX-2) rightRun = 1;
                     break;
                 case EXIT:
                     flagExit = 0;
@@ -99,24 +81,82 @@ int main(){
             }
         }
 
-        if ( (rightRun == 1) && (xHero < (rightTopX-2)) )
-            xHero += 3;
-        else if( (rightRun == 1) && (xHero >= (rightTopX-2)) )
+        // move hero by horisontal
+        if ( (rightRun == 1) && (leftRun == 1) ){
+            if (xHero > rightTopX/2){
+                leftRun = 0;
+                xHero += 3;
+            }
+            else{
+                rightRun = 0;
+                xHero -= 3;
+            }
+        }
+        else if ( (rightRun == 1) && (xHero < (rightTopX-2)) ){
+            xHero += 4;
+            if (xHero >= (rightTopX-2)) xHero = (rightTopX-2);
+        }
+        else if( (rightRun == 1) && (xHero >= (rightTopX-2)) ) {
             rightRun = 0;
-        else if ( (leftRun == 1) && (xHero > (leftTopX+2)) )
-            xHero -= 3;
-        else if ( (leftRun == 1) && (xHero <= (leftTopX+2)) )
+        }
+        else if ( (leftRun == 1) && (xHero > (leftTopX+2)) ) {
+            xHero -= 4;
+            if (xHero <= (leftTopX+2)) xHero = (leftTopX+2);
+        }
+        else if ( (leftRun == 1) && (xHero <= (leftTopX+2)) ){
             leftRun = 0;
-
-
-        for (i = 0; i < 5; i++) {
-            if (yEnemy[i] < leftDownY-1)
-                printEnemy(xEnemy[i], yEnemy[i]);
-            else
-                yEnemy[i] = 1;
-            yEnemy[i]++;
         }
 
-        delay(50);
+
+        // move enemy1
+        if (yEnemy[0] < leftDownY-1)
+            printEnemy(xEnemy[0], yEnemy[0]);
+        else
+            yEnemy[0] = 1;
+        yEnemy[0]++;
+
+
+        // move enemy2
+        if (yEnemy[1] < leftDownY-1)
+            printEnemy(xEnemy[1], yEnemy[1]);
+        else
+            yEnemy[1] = 1 - (rand() % 15) - 5;
+        yEnemy[1]++;
+
+
+        if ( ( ((xHero-1) == (xEnemy[0])) && (yHero == yEnemy[0]+1) )
+             || ( ((xHero) == (xEnemy[0])) && (yHero == yEnemy[0]+1) )
+             || ( ((xHero+1) == (xEnemy[0])) && (yHero == yEnemy[0]+1) )
+
+             || ( ((xHero-1) == (xEnemy[0]+1)) && (yHero == yEnemy[0]+1) )
+             || ( ((xHero) == (xEnemy[0]+1)) && (yHero == yEnemy[0]+1) )
+             || ( ((xHero+1) == (xEnemy[0]+1)) && (yHero == yEnemy[0]+1) )
+
+             || ( ((xHero-1) == (xEnemy[0])) && (yHero == yEnemy[1]+1) )
+             || ( ((xHero) == (xEnemy[0])) && (yHero == yEnemy[1]+1) )
+             || ( ((xHero+1) == (xEnemy[0])) && (yHero == yEnemy[1]+1) )
+
+             || ( ((xHero-1) == (xEnemy[1]+1)) && (yHero == yEnemy[1]+1) )
+             || ( ((xHero) == (xEnemy[1]+1)) && (yHero == yEnemy[1]+1) )
+             || ( ((xHero+1) == (xEnemy[1]+1)) && (yHero == yEnemy[1]+1) )
+
+                ) {
+            lives--;
+        }
+
+
+        textcolor(RED);
+        gotoxy(rightDownX/2 - 3, 5);
+        cprintf("lives = %d", lives);
+
+        if (lives == 0) {
+            flagExit = 0;
+            clrscr();
+            textcolor(RED);
+            gotoxy(rightDownX/2 - 3, rightDownY/2); cprintf("GAME OVER");
+            gotoxy(rightDownX/2 - 3, rightDownY/2 + 1); cprintf("YOU LOSE");
+
+        }
+        delay(75);
     }
 }
