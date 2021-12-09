@@ -5,6 +5,137 @@
 
 void inputExpression(std::string *expression){
     getline(std::cin, *expression);
+
+
+    //check for not empty expression
+    if (expression->empty())
+        throw std::invalid_argument("String with expression is empty");
+
+    // check for paranthesis balance
+    stack<char> stackBalanceParanthesis;
+    for (std::string::iterator it = expression->begin(); it != expression->end(); it++) {
+        if ((*it) == '(') {
+            stackBalanceParanthesis.push('(');
+        }
+        else if((*it) == ')'){
+            stackBalanceParanthesis.pop();
+        }
+    }
+
+    if (!stackBalanceParanthesis.isEmpty())
+        throw std::invalid_argument("Count of left paranthesis not equal count of right parenthesis");
+
+
+    // check for "  + 123 - 234"
+    // check for "123 + +++++ 345"
+
+    // check for spaces between operands "123455 123456 + 13454 - 2435"
+    for (std::string::iterator it = expression->begin(); it != expression->end(); it++) {
+//        if (((*it) >= 'a'))
+    }
+
+    // checks correct functions in expression
+    for (std::string::iterator it = expression->begin(); it != expression->end(); it++) {
+        if ( ((*it) >= 'a') && ((*it) <= 'z') ){  // cos, sin, tg, ctg, ln, log, sqrt, abs, pi, e
+            if ((it+3) != expression->end()){
+                if ( ((*it) == 's') && ((*(it+1)) == 'q') && ((*(it+2)) == 'r') && ((*(it+3)) == 't')) {
+                    it += 4;
+                    char symbolIt = 't';
+                    while (true){
+                        if ((*it) == ' ') {
+                            it++;
+                            continue;
+                        }
+                        else if( (*it) == '(' )
+                            break;
+                        else
+                            throw std::invalid_argument("expression entered incorrectly: function");
+                    }
+                    while ((*it) != symbolIt)
+                        it--;
+                }
+            }
+            else if ((it+2) != expression->end()){
+                if ( ( ((*it) == 'c') && ((*(it+1)) == 'o') && ((*(it+2)) == 's') )
+                    || ( ((*it) == 's') && ((*(it+1)) == 'i') && ((*(it+2)) == 'n') )
+                    || ( ((*it) == 'c') && ((*(it+1)) == 't') && ((*(it+2)) == 'g') )
+                    || ( ((*it) == 'l') && ((*(it+1)) == 'o') && ((*(it+2)) == 'g') )
+                    || ( ((*it) == 'a') && ((*(it+1)) == 'b') && ((*(it+2)) == 's') ) ) {
+                    it += 3;
+                    char symbolIt = *(it-1);
+                    while (true){
+                        if ((*it) == ' ') {
+                            it++;
+                            continue;
+                        }
+                        else if( (*it) == '(' )
+                            break;
+                        else
+                            throw std::invalid_argument("expression entered incorrectly: function");
+                    }
+                    while ((*it) != symbolIt)
+                        it--;
+                }
+            }
+            else if ((it+1) != expression->end()){
+                if ( ( ((*it) == 't') && ((*(it+1) == 'g')) ) || ( ((*it) == 'l') && ((*(it+1) == 'n')) ) ){
+                    it += 2;
+                    char symbolIt = *(it-1);
+                    while (true){
+                        if ((*it) == ' ') {
+                            it++;
+                            continue;
+                        }
+                        else if( (*it) == '(' )
+                            break;
+                        else
+                            throw std::invalid_argument("expression entered incorrectly: function");
+                    }
+                    while ((*it) != symbolIt)
+                        it--;
+                }
+                else if ( ((*it) == 'p') && ((*(it+1) == 'i')) ) {
+                    it += 2;
+                    while (true){
+                        if (it == expression->end()) break;
+                        if ((*it) == ' ') {
+                            it++;
+                            continue;
+                        }
+                        else if ( ((*it) == ')') || ((*it) == '+') || ((*it) == '-')
+                                  || ((*it) == '*') || ((*it) == '/') || ((*it) == '^'))
+                            break;
+                        else
+                            throw std::invalid_argument("expression entered incorrectly: function");
+                    }
+                    while ((*it) != 'i')
+                        it--;
+                }
+            }
+            else if ((*it) == 'e'){
+                it++;
+                while (true){
+                    if (it == expression->end()) break;
+                    if ((*it) == ' ') {
+                        it++;
+                        continue;
+                    }
+                    else if ( ((*it) == ')') || ((*it) == '+') || ((*it) == '-')
+                        || ((*it) == '*') || ((*it) == '/') || ((*it) == '^'))
+                        break;
+                    else
+                        throw std::invalid_argument("expression entered incorrectly: function");
+                }
+                while ((*it) != 'e')
+                    it--;
+            }
+            else
+                throw std::invalid_argument("expression entered incorrectly: function");
+        }
+    }
+
+
+
 }
 
 void convertInfixToPostfix(std::string *expression) {
