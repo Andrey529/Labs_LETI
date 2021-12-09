@@ -7,15 +7,13 @@ void inputExpression(std::string *expression){
     getline(std::cin, *expression);
 }
 
-std::string convertInfixToPostfix(std::string expression) {
+void convertInfixToPostfix(std::string *expression) {
     stack<std::string> stackForOperators;
     stack<bool> stackForRightParenthesis;
     std::string functions, result;
     containerType nowTypeOfContainer;
-    // remove spaces in string
-    expression.erase(remove_if(expression.begin(), expression.end(), isspace), expression.end());
 
-    for (std::string::iterator it = expression.begin(); it != expression.end(); it++) {
+    for (std::string::iterator it = expression->begin(); it != expression->end(); it++) {
         if ((*it) == '(') {
             if (nowTypeOfContainer == containerType::FUNCTION)    stackForRightParenthesis.push(true);
             else    stackForRightParenthesis.push(false);
@@ -27,12 +25,20 @@ std::string convertInfixToPostfix(std::string expression) {
             if (nowTypeOfContainer != containerType::RIGHTPARENTHESIS) {
                 result.push_back(' ');
             }
+
+            while (stackForOperators.getFront()->getData() != "(") {
+                result += stackForOperators.getFront()->getData();
+                result.push_back(' ');
+                stackForOperators.pop();
+            }
+
             if (stackForRightParenthesis.getFront()->getData()) { // stackForRightParenthesis.getFront()->getData() == true
                 result += functions;
                 result.push_back(' ');
                 functions.clear();
             }
             stackForRightParenthesis.pop();
+
             nowTypeOfContainer = containerType::RIGHTPARENTHESIS;
         }
         else if( (((*it) >= '0') && ((*it) <= '9')) || ((*it) == '.') ) {
@@ -42,12 +48,13 @@ std::string convertInfixToPostfix(std::string expression) {
         }
         else if ( ((*it) >= 'a') && ((*it) <= 'z') ) {
             if ( (*it) == 'e' ) {
-                result += "e ";
+                result += "e";
                 continue;
             }
             functions += *it;
             if (functions == "pi") {
-                result += "pi ";
+                result += "pi";
+                functions.clear();
             }
             nowTypeOfContainer = containerType::FUNCTION;
         }
@@ -58,6 +65,7 @@ std::string convertInfixToPostfix(std::string expression) {
             }
             if (nowTypeOfContainer == containerType::OPERATOR) { // unary minus
                 result.push_back('-');
+                nowTypeOfContainer = containerType::OPERAND;
                 continue;
             }
 
@@ -94,7 +102,7 @@ std::string convertInfixToPostfix(std::string expression) {
         stackForOperators.pop();
     }
 
-    return result;
+    *expression = result;
 }
 
 double calculationPostfix(std::string *expression) {
