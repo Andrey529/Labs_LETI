@@ -11,41 +11,277 @@ void inputExpression(std::string *expression){
     if (expression->empty())
         throw std::invalid_argument("String with expression is empty");
 
-    // check for paranthesis balance
-    stack<char> stackBalanceParanthesis;
+
+
+    // checks correct functions in expression
     for (std::string::iterator it = expression->begin(); it != expression->end(); it++) {
-        if ((*it) == '(') {
-            stackBalanceParanthesis.push('(');
-        }
-        else if((*it) == ')'){
-            stackBalanceParanthesis.pop();
+        if ( ((*it) >= 'a') && ((*it) <= 'z') ){  // cos, sin, tg, ctg, ln, log, sqrt, abs, pi, e
+            if ( ((it+4) != expression->end()) &&
+                ( ((*it) == 's') && ((*(it+1)) == 'q') && ((*(it+2)) == 'r') && ((*(it+3)) == 't')) ){
+                it += 4;
+                std::string::iterator nowPos = (it-1);
+                while (true){
+                    if ((*it) == ' ') {
+                        if ((it+1) != expression->end()){
+                            it++;
+                        }
+                        else{
+                            throw std::invalid_argument("expression entered incorrectly:"
+                                                        "expression can not end with function");
+                        }
+                    }
+                    else if( (*it) == '(' ){
+                        break;
+                    }
+                    else{
+                        throw std::invalid_argument("expression entered incorrectly: unknown word");
+                    }
+
+                }
+                while (it != nowPos)
+                    it--;
+            }
+            else if ( ((it+3) != expression->end()) &&
+                ( ( ((*it) == 'c') && ((*(it+1)) == 'o') && ((*(it+2)) == 's') )
+                || ( ((*it) == 's') && ((*(it+1)) == 'i') && ((*(it+2)) == 'n') )
+                || ( ((*it) == 'c') && ((*(it+1)) == 't') && ((*(it+2)) == 'g') )
+                || ( ((*it) == 'l') && ((*(it+1)) == 'o') && ((*(it+2)) == 'g') )
+                || ( ((*it) == 'a') && ((*(it+1)) == 'b') && ((*(it+2)) == 's') ) )   ){
+
+                it += 3;
+                std::string::iterator nowPos = (it - 1);
+                while (true){
+                    if ((*it) == ' ') {
+                        if ((it+1) != expression->end()){
+                            it++;
+                        }
+                        else{
+                            throw std::invalid_argument("expression entered incorrectly:"
+                                                        "expression can not end with function");
+                        }
+                    }
+                    else if( (*it) == '(' )
+                        break;
+                    else
+                        throw std::invalid_argument("expression entered incorrectly: unknown word");
+                }
+                while (it != nowPos)
+                    it--;
+
+            }
+            else if ( ((it+2) != expression->end()) &&
+                ( ((*it) == 'p') && ((*(it+1) == 'i')) )  ) {
+
+                it += 2;
+                std::string::iterator nowPos = (it - 1);
+                while (true) {
+                    if ((*it) == ' ') {
+                        if ((it+1) != expression->end()){
+                            it++;
+                        }
+                        else{
+                            break;
+                        }
+                    }
+                    else if (((*it) == ')') || ((*it) == '+') || ((*it) == '-')
+                               || ((*it) == '*') || ((*it) == '/') || ((*it) == '^'))
+                        break;
+                    else
+                        throw std::invalid_argument("expression entered incorrectly: unknown word");
+                }
+                while (it != nowPos)
+                    it--;
+            }
+            else if ( ((it+2) != expression->end()) &&
+                ( ( ((*it) == 't') && ((*(it+1) == 'g')) ) || ( ((*it) == 'l') && ((*(it+1) == 'n')) ) ) ){
+                    it += 2;
+                    std::string::iterator nowPos = (it - 1);
+                    while (true){
+                        if ((*it) == ' ') {
+                            if ((it+1) != expression->end()){
+                                it++;
+                            }
+                            else{
+                                throw std::invalid_argument("expression entered incorrectly:"
+                                                            "expression can not end with function");
+                            }
+                        }
+                        else if( (*it) == '(' )
+                            break;
+                        else
+                            throw std::invalid_argument("expression entered incorrectly: unknown word");
+                    }
+                    while (it != nowPos)
+                        it--;
+            }
+            else if ((*it) == 'e'){
+                if ((it+1) != expression->end()){
+                    it++;
+                    std::string::iterator nowPos = (it-1);
+                    while (true){
+                        if ((*it) == ' ') {
+                            if ((it+1) != expression->end()){
+                                it++;
+                            }
+                            else{
+                                break;
+                            }
+                        }
+                        else if ( ((*it) == ')') || ((*it) == '+') || ((*it) == '-')
+                                  || ((*it) == '*') || ((*it) == '/') || ((*it) == '^'))
+                            break;
+                        else
+                            throw std::invalid_argument("expression entered incorrectly: unknown word");
+                    }
+                    while (it != nowPos)
+                        it--;
+                }
+            }
+            else{
+                throw std::invalid_argument("expression entered incorrectly: unknown word");
+            }
         }
     }
-    if (!stackBalanceParanthesis.isEmpty())
-        throw std::invalid_argument("Count of left paranthesis not equal count of right parenthesis");
 
+    for (std::string::iterator it = expression->end(); it != expression->begin(); it--) {
+        if ( ((*it) >= 'a') && ((*it) <= 'z') ){  // cos, sin, tg, ctg, ln, log, sqrt, abs, pi, e
+            if ( ((it-4) != expression->begin()) &&
+                 ( ((*(it-3)) == 's') && ((*(it-2)) == 'q') && ((*(it-1)) == 'r') && ((*it) == 't')) ){
+                it -= 4;
+                std::string::iterator nowPos = (it+1);
+                while (true){
+                    if ((*it) == ' ') {
+                        if ((it-1) != expression->begin()){
+                            it--;
+                        }
+                        else{
+                            break;
+                        }
+                    }
+                    else if ( ((*it) == '+') || ((*it) == '-') || ((*it) == '*') || ((*it) == '/') || ((*it) == '^') ){
+                        break;
+                    }
+                    else if( (*it) == '(' ){
+                        break;
+                    }
+                    else{
+                        throw std::invalid_argument("expression entered incorrectly: unknown word");
+                    }
 
+                }
+                while (it != nowPos)
+                    it++;
+            }
+            else if ( ((it-3) != expression->begin()) &&
+                      ( ( ((*(it-2)) == 'c') && ((*(it-1)) == 'o') && ((*it)) == 's') )
+                        || ( ((*(it-2)) == 's') && ((*(it-1)) == 'i') && ((*it) == 'n') )
+                        || ( ((*(it-2)) == 'c') && ((*(it-1)) == 't') && ((*it) == 'g') )
+                        || ( ((*(it-2)) == 'l') && ((*(it-1)) == 'o') && ((*it) == 'g') )
+                        || ( ((*(it-2)) == 'a') && ((*(it-1)) == 'b') && ((*it) == 's') ) )   {
 
-    // check for "  )  123 + 43 - 23"
-    // check for "  + 123 - 234"
+                it -= 3;
+                std::string::iterator nowPos = (it + 1);
+                while (true){
+                    if ((*it) == ' ') {
+                        if ((it-1) != expression->begin()){
+                            it--;
+                        }
+                        else{
+                            break;
+                        }
+                    }
+                    else if ( ((*it) == '+') || ((*it) == '-') || ((*it) == '*') || ((*it) == '/') || ((*it) == '^') ){
+                        break;
+                    }
+                    else if( (*it) == '(' )
+                        break;
+                    else
+                        throw std::invalid_argument("expression entered incorrectly: unknown word");
+                }
+                while (it != nowPos)
+                    it++;
 
-    // check for "))))))"
-    // check for "(((())))"
+            }
+            else if ( ((it-2) != expression->begin()) &&
+                      ( ((*(it-1)) == 'p') && ((*(it) == 'i')) )  ) {
 
-
-    // check for "123 + +++++ 345"
-    // check for "123..........45"
-
-    for (std::string::iterator it = expression->begin(); it != expression->end(); it++) {
-
+                it -= 2;
+                std::string::iterator nowPos = (it + 1);
+                while (true) {
+                    if ((*it) == ' ') {
+                        if ((it-1) != expression->begin()){
+                            it--;
+                        }
+                        else{
+                            break;
+                        }
+                    }
+                    else if (((*it) == '(') || ((*it) == '+') || ((*it) == '-')
+                             || ((*it) == '*') || ((*it) == '/') || ((*it) == '^'))
+                        break;
+                    else
+                        throw std::invalid_argument("expression entered incorrectly: unknown word");
+                }
+                while (it != nowPos)
+                    it++;
+            }
+            else if ( ((it-2) != expression->begin()) &&
+                      ( ( ((*(it-1)) == 't') && ((*(it) == 'g')) ) || ( ((*(it-1)) == 'l') && ((*(it) == 'n')) ) ) ){
+                it -= 2;
+                std::string::iterator nowPos = (it + 1);
+                while (true){
+                    if ((*it) == ' ') {
+                        if ((it-1) != expression->begin()){
+                            it--;
+                        }
+                        else{
+                            break;
+                        }
+                    }
+                    else if ( ((*it) == '+') || ((*it) == '-') || ((*it) == '*') || ((*it) == '/') || ((*it) == '^') ){
+                        break;
+                    }
+                    else if( (*it) == '(' )
+                        break;
+                    else
+                        throw std::invalid_argument("expression entered incorrectly: unknown word");
+                }
+                while (it != nowPos)
+                    it++;
+            }
+            else if ((*it) == 'e'){
+                if ((it-1) != expression->begin()){
+                    it--;
+                    std::string::iterator nowPos = (it+1);
+                    while (true){
+                        if ((*it) == ' ') {
+                            if ((it-1) != expression->begin()){
+                                it--;
+                            }
+                            else{
+                                break;
+                            }
+                        }
+                        else if ( ((*it) == '(') || ((*it) == '+') || ((*it) == '-')
+                                  || ((*it) == '*') || ((*it) == '/') || ((*it) == '^'))
+                            break;
+                        else
+                            throw std::invalid_argument("expression entered incorrectly: unknown word");
+                    }
+                    while (it != nowPos)
+                        it++;
+                }
+            }
+            else{
+                throw std::invalid_argument("expression entered incorrectly: unknown word");
+            }
+        }
     }
-
 
 
     // check after operands "123455    123456 + 13454 - 2435"
     // check after operands "123456 + 13454 - 2435   sin"
     // check after operands "123456 + 13454 - 2435 ("
-
     for (std::string::iterator it = expression->begin(); it != expression->end(); it++) {
         if (  (((*it) >= '0') && ((*it) <= '9')) || ((*it) == '.')   ) {
             std::string::iterator nowPos = it;
@@ -54,12 +290,13 @@ void inputExpression(std::string *expression){
                 it++;
                 while (true) {
                     if (  (((*it) >= '0') && ((*it) <= '9')) || ((*it) == '.')   ) {
+                        nowPos = it;
                         if ((it+1) != expression->end()){
                             it++;
-                            continue;
                         }
-                        else
+                        else{
                             break;
+                        }
                     }
                     else if ( ((*it) == '+') || ((*it) == '-') || ((*it) == '*') || ((*it) == '/') || ((*it) == '^') ) {
                         break;
@@ -79,21 +316,27 @@ void inputExpression(std::string *expression){
                                     break;
                                 }
                                 else if ((*it) == ' '){
+                                    nowPos = it;
                                     if ((it+1) != expression->end()) {
                                         it++;
                                     }
-                                    else    break;
+                                    else{
+                                        break;
+                                    }
                                 }
-                                else
-                                    throw std::invalid_argument("expression entered incorrectly: operands");
+                                else{
+                                    throw std::invalid_argument("expression entered incorrectly: after operands can "
+                                                                "stay only \")\" or operators");
+                                }
                             }
                         }
                         else{
                             break;
                         }
                     }
-                    else
-                        throw std::invalid_argument("expression entered incorrectly: operands");
+                    else{
+                        throw std::invalid_argument("expression entered incorrectly: after operands can stay only \")\" or operators");
+                    }
                 }
                 while (it != nowPos)
                     it--;
@@ -101,107 +344,349 @@ void inputExpression(std::string *expression){
         }
     }
 
-    // checks correct functions in expression
-    for (std::string::iterator it = expression->begin(); it != expression->end(); it++) {
-        if ( ((*it) >= 'a') && ((*it) <= 'z') ){  // cos, sin, tg, ctg, ln, log, sqrt, abs, pi, e
-            if ((it+3) != expression->end()){
-                if ( ((*it) == 's') && ((*(it+1)) == 'q') && ((*(it+2)) == 'r') && ((*(it+3)) == 't')) {
-                    it += 4;
-                    std::string::iterator nowPos = (it-1);
-                    while (true){
-                        if ((*it) == ' ') {
-                            it++;
-                            continue;
+    for (std::string::iterator it = expression->end(); it != expression->begin(); it--) {
+        if (  (((*it) >= '0') && ((*it) <= '9')) || ((*it) == '.')   ) {
+            std::string::iterator nowPos = it;
+
+            if ((it-1) != expression->begin()){
+                it--;
+                while (true) {
+                    if (  (((*it) >= '0') && ((*it) <= '9')) || ((*it) == '.')   ) {
+                        nowPos = it;
+                        if ((it-1) != expression->begin()){
+                            it--;
                         }
-                        else if( (*it) == '(' )
-                            break;
                         else
-                            throw std::invalid_argument("expression entered incorrectly: function");
-                    }
-                    while (it != nowPos)
-                        it--;
-                }
-            }
-            else if ((it+2) != expression->end()){
-                if ( ( ((*it) == 'c') && ((*(it+1)) == 'o') && ((*(it+2)) == 's') )
-                    || ( ((*it) == 's') && ((*(it+1)) == 'i') && ((*(it+2)) == 'n') )
-                    || ( ((*it) == 'c') && ((*(it+1)) == 't') && ((*(it+2)) == 'g') )
-                    || ( ((*it) == 'l') && ((*(it+1)) == 'o') && ((*(it+2)) == 'g') )
-                    || ( ((*it) == 'a') && ((*(it+1)) == 'b') && ((*(it+2)) == 's') ) ) {
-                    it += 3;
-                    std::string::iterator nowPos = (it - 1);
-                    while (true){
-                        if ((*it) == ' ') {
-                            it++;
-                            continue;
-                        }
-                        else if( (*it) == '(' )
                             break;
-                        else
-                            throw std::invalid_argument("expression entered incorrectly: function");
                     }
-                    while (it != nowPos)
-                        it--;
-                }
-            }
-            else if ((it+1) != expression->end()){
-                if ( ( ((*it) == 't') && ((*(it+1) == 'g')) ) || ( ((*it) == 'l') && ((*(it+1) == 'n')) ) ){
-                    it += 2;
-                    std::string::iterator nowPos = (it - 1);
-                    while (true){
-                        if ((*it) == ' ') {
-                            it++;
-                            continue;
-                        }
-                        else if( (*it) == '(' )
-                            break;
-                        else
-                            throw std::invalid_argument("expression entered incorrectly: function");
-                    }
-                    while (it != nowPos)
-                        it--;
-                }
-                else if ( ((*it) == 'p') && ((*(it+1) == 'i')) ) {
-                    it += 2;
-                    std::string::iterator nowPos = (it - 1);
-                    while (true){
-                        if (it == expression->end()) break;
-                        if ((*it) == ' ') {
-                            it++;
-                            continue;
-                        }
-                        else if ( ((*it) == ')') || ((*it) == '+') || ((*it) == '-')
-                                  || ((*it) == '*') || ((*it) == '/') || ((*it) == '^'))
-                            break;
-                        else
-                            throw std::invalid_argument("expression entered incorrectly: function");
-                    }
-                    while (it != nowPos)
-                        it--;
-                }
-            }
-            else if ((*it) == 'e'){
-                it++;
-                std::string::iterator nowPos = (it-1);
-                while (true){
-                    if (it == expression->end()) break;
-                    if ((*it) == ' ') {
-                        it++;
-                        continue;
-                    }
-                    else if ( ((*it) == ')') || ((*it) == '+') || ((*it) == '-')
-                        || ((*it) == '*') || ((*it) == '/') || ((*it) == '^'))
+                    else if ( ((*it) == '+') || ((*it) == '-') || ((*it) == '*') || ((*it) == '/') || ((*it) == '^') ) {
                         break;
-                    else
-                        throw std::invalid_argument("expression entered incorrectly: function");
+                    }
+                    else if ((*it) == '(') {
+                        break;
+                    }
+                    else if ((*it) == ' ') {
+                        nowPos = it;
+                        if ((it-1) != expression->begin()){
+                            it--;
+                            while (true) {
+                                if ( ((*it) == '+') || ((*it) == '-') || ((*it) == '*') || ((*it) == '/') || ((*it) == '^') ) {
+                                    break;
+                                }
+                                else if ((*it) == '(') {
+                                    break;
+                                }
+                                else if ((*it) == ' '){
+                                    if ((it-1) != expression->begin()) {
+                                        it--;
+                                    }
+                                    else{
+                                        break;
+                                    }
+                                }
+                                else{
+                                    throw std::invalid_argument("expression entered incorrectly: before operands can "
+                                                                "stay only \"(\" or operators");
+                                }
+                            }
+                        }
+                        else{
+                            break;
+                        }
+                    }
+                    else{
+                        throw std::invalid_argument("expression entered incorrectly: before operands can stay only \"(\" or operators");
+                    }
                 }
                 while (it != nowPos)
-                    it--;
+                    it++;
             }
-            else
-                throw std::invalid_argument("expression entered incorrectly: function");
         }
     }
+
+
+
+    // check for "  + 123 - 234"
+    // check for "123 + +++++ 345"
+    // check for "123 +   )"
+    // check for "123 +**  ** * "
+    // check for "123..........45"
+    for (std::string::iterator it = expression->begin(); it != expression->end(); it++) {
+        if ( ((*it) == '+') || ((*it) == '-') || ((*it) == '*') || ((*it) == '/') || ((*it) == '^') ) {
+            std::string::iterator nowPos = it;
+
+            if ((it+1) != expression->end()){
+                it++;
+                while (true) {
+                    if ((*it) == ' '){
+                        if ((it+1) != expression->end()){
+                            nowPos = it;
+                            it++;
+                        }
+                        else{
+                            throw std::invalid_argument("expression entered incorrectly: expression can not end with operator");
+                        }
+                    }
+                    else if(((*it) >= '0') && ((*it) <= '9')) {
+                        break;
+                    }
+                    else if((*it) == '('){
+                        break;
+                    }
+                    else if(((*it) >= 'a') && ((*it) <= 'z')){
+                        break;
+                    }
+                    else {
+                        throw std::invalid_argument("expression entered incorrectly: after operators can stay only "
+                                                    "digits or \"(\" or functions");
+                    }
+                }
+                while (it != nowPos){
+                    it--;
+                }
+            }
+            else {
+                throw std::invalid_argument("expression entered incorrectly: expression can not end with operator");
+            }
+        }
+    }
+
+    for (std::string::iterator it = expression->end(); it != expression->begin(); it--) {
+        if ( ((*it) == '+') || ((*it) == '-') || ((*it) == '*') || ((*it) == '/') || ((*it) == '^') ) {
+            std::string::iterator nowPos = it;
+
+            if ((it-1) != expression->begin()) {
+                it--;
+                while (true) {
+                    if ((*it) == ' '){
+                        if ((it-1) != expression->begin()){
+                            nowPos = it;
+                            it--;
+                        }
+                        else{
+                            throw std::invalid_argument("expression entered incorrectly: expression can not begin with operator");
+                        }
+                    }
+                    else if(((*it) >= '0') && ((*it) <= '9')) {
+                        break;
+                    }
+                    else if((*it) == ')'){
+                        break;
+                    }
+                    else {
+                        throw std::invalid_argument("expression entered incorrectly: before operators can stay only digits or \")\"");
+                    }
+                }
+                while (it != nowPos){
+                    it++;
+                }
+            }
+            else {
+                throw std::invalid_argument("expression entered incorrectly: expression can not begin with operator");
+            }
+        }
+    }
+
+
+    for (std::string::iterator it = expression->begin(); it != expression->end(); it++){
+        if ((*it) == '.') {
+            if ((it+1) != expression->end()){
+                it++;
+                while (true){
+                    if (((*it) >= '0') && ((*it) <= '9')){
+                        break;
+                    }
+                    else{
+                        throw std::invalid_argument("expression entered incorrectly: after \".\" can stay only digits");
+                    }
+                }
+            }
+            else {
+                throw std::invalid_argument("expression entered incorrectly: expression can not end with \".\"");
+            }
+        }
+    }
+
+    for (std::string::iterator it = expression->end(); it != expression->begin(); it--) {
+        if ((*it) == '.') {
+            if ((it-1) != expression->begin()) {
+                it--;
+                while (true) {
+                    if (((*it) >= '0') && ((*it) <= '9')){
+                        break;
+                    }
+                    else{
+                        throw std::invalid_argument("expression entered incorrectly: before \".\" can stay only digits");
+                    }
+                }
+            }
+            else {
+                throw std::invalid_argument("expression entered incorrectly: expression can not begin with \".\"");
+            }
+        }
+    }
+
+    for (std::string::iterator it = expression->begin(); it != expression->end(); it++){
+        if ((*it) == '(') {
+            std::string::iterator nowPos = it;
+
+            if ((it+1) != expression->end()){
+                it++;
+                while (true){
+                    if ((*it) == ' ') {
+                        if ((it+1) != expression->end()){
+                            nowPos = it;
+                            it++;
+                        }
+                        else {
+                            throw std::invalid_argument("expression entered incorrectly: expression can not end with \"(\"");
+                        }
+                    }
+                    else if (((*it) >= '0') && ((*it) <= '9')){
+                        break;
+                    }
+                    else if ((*it) == '('){
+                        break;
+                    }
+                    else if(((*it) >= 'a') && ((*it) <= 'z')) {
+                        break;
+                    }
+                    else{
+                        throw std::invalid_argument("expression entered incorrectly: after \"(\" can stay only \"(\""
+                                                    " or digits or functions");
+                    }
+                }
+                while (it != nowPos){
+                    it--;
+                }
+            }
+            else {
+                throw std::invalid_argument("expression entered incorrectly: expression can not end with \"(\"");
+            }
+        }
+    }
+
+
+    for (std::string::iterator it = expression->end(); it != expression->begin(); it--) {
+        if ((*it) == '(') {
+            std::string::iterator nowPos = it;
+
+            if ((it-1) != expression->begin()) {
+                it--;
+                while (true) {
+                    if ((*it) == ' ') {
+                        if ((it-1) != expression->begin()){
+                            nowPos = it;
+                            it--;
+                        }
+                        else{
+                            break;
+                        }
+                    }
+                    else if (((*it) >= 'a') && ((*it) <= 'z')) {
+                        break;
+                    }
+                    else if((*it) == '('){
+                        break;
+                    }
+                    else if ( ((*it) == '+') || ((*it) == '-') || ((*it) == '*') || ((*it) == '/') || ((*it) == '^') ){
+                        break;
+                    }
+                    else
+                        throw std::invalid_argument("expression entered incorrectly: before \"(\" can stay only "
+                                                    "\"(\" or functions or operators");
+                }
+                while (it != nowPos){
+                    it++;
+                }
+            }
+        }
+    }
+
+
+    // check for "  )  123 + 43 - 23"
+    for (std::string::iterator it = expression->begin(); it != expression->end(); it++) {
+        if ((*it) == ')') {
+            std::string::iterator nowPos = it;
+
+            if ((it+1) != expression->end()){
+                it++;
+                while (true){
+                    if ((*it) == ' ') {
+                        if ((it+1) != expression->end()){
+                            nowPos = it;
+                            it++;
+                        }
+                        else {
+                            break;
+                        }
+                    }
+                    else if ((*it) == ')'){
+                        break;
+                    }
+                    else if ( ((*it) == '+') || ((*it) == '-') || ((*it) == '*') || ((*it) == '/') || ((*it) == '^') ){
+                        break;
+                    }
+                    else{
+                        throw std::invalid_argument("expression entered incorrectly: after \")\" can stay only \")\" or operators");
+                    }
+                }
+                while (it != nowPos){
+                    it--;
+                }
+            }
+        }
+    }
+
+    for (std::string::iterator it = expression->end(); it != expression->begin(); it--) {
+        if ((*it) == ')') {
+            std::string::iterator nowPos = it;
+
+            if ((it-1) != expression->begin()) {
+                it--;
+                while (true) {
+                    if ((*it) == ' ') {
+                        if ((it-1) != expression->begin()){
+                            nowPos = it;
+                            it--;
+                        }
+                        else{
+                            throw std::invalid_argument("expression entered incorrectly: expression can not begin with \")\"");
+                        }
+                    }
+                    else if ((*it) == ')') {
+                        break;
+                    }
+                    else if (((*it) >= '0') && ((*it) <= '9')) {
+                        break;
+                    }
+                    else
+                        throw std::invalid_argument("expression entered incorrectly: before \")\" can stay only \")\" or digits");
+                }
+                while (it != nowPos){
+                    it++;
+                }
+            }
+            else {
+                throw std::invalid_argument("expression entered incorrectly: expression can not begin with \")\"");
+            }
+        }
+    }
+
+    // check for paranthesis balance
+    stack<char> stackBalanceParanthesis;
+    for (std::string::iterator it = expression->begin(); it != expression->end(); it++) {
+        if ((*it) == '(') {
+            stackBalanceParanthesis.push('(');
+        }
+        else if((*it) == ')'){
+            stackBalanceParanthesis.pop();
+        }
+    }
+    if (!stackBalanceParanthesis.isEmpty())
+        throw std::invalid_argument("Count of left paranthesis not equal count of right parenthesis");
+
+
 }
 
 void convertInfixToPostfix(std::string *expression) {
