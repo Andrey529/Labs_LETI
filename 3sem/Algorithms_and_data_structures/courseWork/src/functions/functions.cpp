@@ -4,9 +4,181 @@
 #include "../../headers/functions/functions.h"
 
 void setParanthesis(std::string *expression){
-    for(std::string::iterator it = expression->begin(); it != expression->end(); it++) {
+    stack<char> stackForParentHesis;
+    std::string::iterator it, beginString, endString;
+    std::string partOfString;
 
+//    for(it = expression->begin(); it != expression->end(); it++) {
+//
+//        if (!stackForParentHesis.isEmpty()){
+//            partOfString.push_back(*(it));
+//        }
+//
+//        if(*(it) == '('){
+//            if (stackForParentHesis.isEmpty()){
+//                beginString = it;
+//            }
+//            stackForParentHesis.push('(');
+//        }
+//        else if (*(it) == ')'){
+//            stackForParentHesis.pop();
+//            if (stackForParentHesis.isEmpty()){
+//                endString = it;
+//                break;
+//            }
+//        }
+//    }
+//
+//    if (partOfString == ""){
+//        return;
+//    }
+
+//    partOfString.pop_back();
+
+//    setParanthesis(&partOfString);
+
+    std::string tempStr = *expression;
+
+//    for (it = expression->begin(); it != expression->end(); it++){
+//        if (it < beginString){
+//            tempStr.push_back(*it);
+//        }
+//        else if (it == beginString){
+//            tempStr.push_back('F');
+//            beginString = it;
+//        }
+//        else if (it > endString){
+//            tempStr.push_back(*it);
+//        }
+//    }
+
+
+//    while (!stackForParentHesis.isEmpty())
+//        stackForParentHesis.pop();
+
+
+
+    std::string::iterator nowPos;
+
+    bool flagExit = true;
+
+    for (it = tempStr.begin(); it != tempStr.end(); it++){
+        if ((*it) == '^'){
+            nowPos = it;
+            while (flagExit) {
+                if ((it-1) == tempStr.begin()) {
+                    tempStr.insert(0,"(");
+                }
+                else{
+                    it--;
+                    if (*(it) == ' ') continue;
+                    else if( (((*it) >= '0') && ((*it) <= '9')) || ((*it) == '.') ) {
+                        while ( (((*it) >= '0') && ((*it) <= '9')) || ((*it) == '.') ){
+                            if ((it-1) == tempStr.begin()){
+                                tempStr.insert(0,"(");
+                                flagExit = false;
+                                break;
+                            }
+                            else{
+                                it--;
+                            }
+                        }
+                        tempStr.insert(it-tempStr.begin()+1,"(");
+                        flagExit = false;
+                    }
+//                    else if ((*it) == 'F'){
+//                        tempStr.insert(it-tempStr.begin(),"(");
+//                        flagExit = false;
+//                    }
+                    else if ((*it) == ')') {
+                        if (it == tempStr.begin()){
+                            tempStr.insert(0,"(");
+                            flagExit = false;
+                        }
+                        stackForParentHesis.push(')');
+                        while (!stackForParentHesis.isEmpty()){
+                            if ((it-1) == tempStr.begin()){
+                                tempStr.insert(0,"(");
+                                flagExit = false;
+                                break;
+                            }
+                            it--;
+                            if ((*it) == '('){
+                                stackForParentHesis.pop();
+                            }
+                            else if((*it) == ')'){
+                                stackForParentHesis.push(')');
+                            }
+                        }
+                        if (!flagExit) {
+                            break;
+                        }
+                        while (true) {
+                            if ((it-1) == tempStr.begin()){
+                                tempStr.insert(0,"(");
+                                flagExit = false;
+                                break;
+                            }
+                            it--;
+                            if (*(it) == ' ') continue;
+                            else if( ((*it) == '+') || ((*it) == '-') || ((*it) == '*') || ((*it) == '/') || ((*it) == '^') ){
+                                it++;
+                                break;
+                            }
+                            else if( ((*it) >= 'a') && ((*it) <= 'z') ) {
+                                while ( ((*it) >= 'a') && ((*it) <= 'z') ){
+                                    it--;
+                                }
+                                break;
+                            }
+                        }
+                        tempStr.insert(it-tempStr.begin()+1,"(");
+                        flagExit = false;
+                    }
+                }
+            }
+        }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
+//    for (it = tempStr.begin(); it < tempStr.end(); it++) {
+//        if ((*it) == 'F'){
+//            beginString = it;
+//            break;
+//        }
+//    }
+//    std::string part1OfTempStr, part2OfTempStr;
+//
+//    for (it = tempStr.begin(); it < tempStr.end(); it++){
+//        if (it < beginString){
+//            part1OfTempStr.push_back(*it);
+//        }
+//        else if(it > beginString){
+//            part2OfTempStr.push_back(*it);
+//        }
+//    }
+//
+//    tempStr = part1OfTempStr;
+//    tempStr.push_back('(');
+//    tempStr += partOfString;
+//    tempStr.push_back(')');
+//    tempStr += part2OfTempStr;
+
+    std::cout << tempStr;
 }
 
 
@@ -339,7 +511,9 @@ void inputExpression(std::string *expression){
                 it--;
                 while (true) {
                     if ((*it) == ' '){
-                        if ((it-1) != expression->begin()){
+                        //////////////////////////////////////////////
+                        if ((it-1) >= expression->begin()){
+                            /////////////////////////////////////////////
                             nowPos = it;
                             it--;
                         }

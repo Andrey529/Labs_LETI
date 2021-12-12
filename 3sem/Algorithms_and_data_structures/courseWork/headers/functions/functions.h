@@ -4,12 +4,14 @@
 #include "../stack/stack.h"
 #include <string>
 #include <iostream>
-#include <math.h>
+#include <cmath>
 
 void inputExpression(std::string *expression); // inputs an expression and checks it correctness
 void convertInfixToPostfix(std::string *expression); // converts expression in infix to postfix form
 double calculationPostfix(std::string *expression); // calculates the result of an expression in postfix form
 bool approximatelyEqual(double a, double b, double epsilon);
+void setParanthesis(std::string *expression);
+
 
 enum containerType{
     LEFTPARENTHESIS,
@@ -18,8 +20,5 @@ enum containerType{
     OPERAND,
     FUNCTION,
 };
-
-#include "../../src/functions/functions.cpp"
-
 
 #endif //COURSEWORK_FUNCTIONS_H
