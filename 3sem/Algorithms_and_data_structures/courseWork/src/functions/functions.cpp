@@ -3,6 +3,13 @@
 
 #include "../../headers/functions/functions.h"
 
+void setParanthesis(std::string *expression){
+    for(std::string::iterator it = expression->begin(); it != expression->end(); it++) {
+
+    }
+}
+
+
 void inputExpression(std::string *expression){
     getline(std::cin, *expression);
 
@@ -143,140 +150,13 @@ void inputExpression(std::string *expression){
         }
     }
 
-    for (std::string::iterator it = expression->end(); it != expression->begin(); it--) {
-        if ( ((*it) >= 'a') && ((*it) <= 'z') ){  // cos, sin, tg, ctg, ln, log, sqrt, abs, pi, e
-            if ( ((it-4) != expression->begin()) &&
-                 ( ((*(it-3)) == 's') && ((*(it-2)) == 'q') && ((*(it-1)) == 'r') && ((*it) == 't')) ){
-                it -= 4;
-                std::string::iterator nowPos = (it+1);
-                while (true){
-                    if ((*it) == ' ') {
-                        if ((it-1) != expression->begin()){
-                            it--;
-                        }
-                        else{
-                            break;
-                        }
-                    }
-                    else if ( ((*it) == '+') || ((*it) == '-') || ((*it) == '*') || ((*it) == '/') || ((*it) == '^') ){
-                        break;
-                    }
-                    else if( (*it) == '(' ){
-                        break;
-                    }
-                    else{
-                        throw std::invalid_argument("expression entered incorrectly: unknown word");
-                    }
 
-                }
-                while (it != nowPos)
-                    it++;
-            }
-            else if ( ((it-3) != expression->begin()) &&
-                      ( ( ((*(it-2)) == 'c') && ((*(it-1)) == 'o') && ((*it)) == 's') )
-                        || ( ((*(it-2)) == 's') && ((*(it-1)) == 'i') && ((*it) == 'n') )
-                        || ( ((*(it-2)) == 'c') && ((*(it-1)) == 't') && ((*it) == 'g') )
-                        || ( ((*(it-2)) == 'l') && ((*(it-1)) == 'o') && ((*it) == 'g') )
-                        || ( ((*(it-2)) == 'a') && ((*(it-1)) == 'b') && ((*it) == 's') ) )   {
 
-                it -= 3;
-                std::string::iterator nowPos = (it + 1);
-                while (true){
-                    if ((*it) == ' ') {
-                        if ((it-1) != expression->begin()){
-                            it--;
-                        }
-                        else{
-                            break;
-                        }
-                    }
-                    else if ( ((*it) == '+') || ((*it) == '-') || ((*it) == '*') || ((*it) == '/') || ((*it) == '^') ){
-                        break;
-                    }
-                    else if( (*it) == '(' )
-                        break;
-                    else
-                        throw std::invalid_argument("expression entered incorrectly: unknown word");
-                }
-                while (it != nowPos)
-                    it++;
 
-            }
-            else if ( ((it-2) != expression->begin()) &&
-                      ( ((*(it-1)) == 'p') && ((*(it) == 'i')) )  ) {
 
-                it -= 2;
-                std::string::iterator nowPos = (it + 1);
-                while (true) {
-                    if ((*it) == ' ') {
-                        if ((it-1) != expression->begin()){
-                            it--;
-                        }
-                        else{
-                            break;
-                        }
-                    }
-                    else if (((*it) == '(') || ((*it) == '+') || ((*it) == '-')
-                             || ((*it) == '*') || ((*it) == '/') || ((*it) == '^'))
-                        break;
-                    else
-                        throw std::invalid_argument("expression entered incorrectly: unknown word");
-                }
-                while (it != nowPos)
-                    it++;
-            }
-            else if ( ((it-2) != expression->begin()) &&
-                      ( ( ((*(it-1)) == 't') && ((*(it) == 'g')) ) || ( ((*(it-1)) == 'l') && ((*(it) == 'n')) ) ) ){
-                it -= 2;
-                std::string::iterator nowPos = (it + 1);
-                while (true){
-                    if ((*it) == ' ') {
-                        if ((it-1) != expression->begin()){
-                            it--;
-                        }
-                        else{
-                            break;
-                        }
-                    }
-                    else if ( ((*it) == '+') || ((*it) == '-') || ((*it) == '*') || ((*it) == '/') || ((*it) == '^') ){
-                        break;
-                    }
-                    else if( (*it) == '(' )
-                        break;
-                    else
-                        throw std::invalid_argument("expression entered incorrectly: unknown word");
-                }
-                while (it != nowPos)
-                    it++;
-            }
-            else if ((*it) == 'e'){
-                if ((it-1) != expression->begin()){
-                    it--;
-                    std::string::iterator nowPos = (it+1);
-                    while (true){
-                        if ((*it) == ' ') {
-                            if ((it-1) != expression->begin()){
-                                it--;
-                            }
-                            else{
-                                break;
-                            }
-                        }
-                        else if ( ((*it) == '(') || ((*it) == '+') || ((*it) == '-')
-                                  || ((*it) == '*') || ((*it) == '/') || ((*it) == '^'))
-                            break;
-                        else
-                            throw std::invalid_argument("expression entered incorrectly: unknown word");
-                    }
-                    while (it != nowPos)
-                        it++;
-                }
-            }
-            else{
-                throw std::invalid_argument("expression entered incorrectly: unknown word");
-            }
-        }
-    }
+
+
+
 
 
     // check after operands "123455    123456 + 13454 - 2435"
@@ -713,6 +593,9 @@ void convertInfixToPostfix(std::string *expression) {
                 result.push_back(' ');
                 stackForOperators.pop();
             }
+            if (stackForOperators.getFront()->getData() == "("){
+                stackForOperators.pop();
+            }
 
             if (stackForRightParenthesis.getFront()->getData()) { // stackForRightParenthesis.getFront()->getData() == true
                 result += functions;
@@ -935,6 +818,7 @@ double calculationPostfix(std::string *expression) {
                         operand1 = sqrt(operand1);
                     }
                     stackForCalculation.push(operand1);
+                    tempStr.clear();
                 }
             }
         }
