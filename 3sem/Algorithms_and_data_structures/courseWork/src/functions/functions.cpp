@@ -5,108 +5,58 @@
 
 void setParanthesis(std::string *expression){
     stack<char> stackForParentHesis;
-    std::string::iterator it, beginString, endString;
+//    std::string::iterator it, beginString, endString, nowPos;
     std::string partOfString;
-
-//    for(it = expression->begin(); it != expression->end(); it++) {
-//
-//        if (!stackForParentHesis.isEmpty()){
-//            partOfString.push_back(*(it));
-//        }
-//
-//        if(*(it) == '('){
-//            if (stackForParentHesis.isEmpty()){
-//                beginString = it;
-//            }
-//            stackForParentHesis.push('(');
-//        }
-//        else if (*(it) == ')'){
-//            stackForParentHesis.pop();
-//            if (stackForParentHesis.isEmpty()){
-//                endString = it;
-//                break;
-//            }
-//        }
-//    }
-//
-//    if (partOfString == ""){
-//        return;
-//    }
-
-//    partOfString.pop_back();
-
-//    setParanthesis(&partOfString);
-
+    int nowPos;
     std::string tempStr = *expression;
-
-//    for (it = expression->begin(); it != expression->end(); it++){
-//        if (it < beginString){
-//            tempStr.push_back(*it);
-//        }
-//        else if (it == beginString){
-//            tempStr.push_back('F');
-//            beginString = it;
-//        }
-//        else if (it > endString){
-//            tempStr.push_back(*it);
-//        }
-//    }
-
-
-//    while (!stackForParentHesis.isEmpty())
-//        stackForParentHesis.pop();
-
-
-
-    std::string::iterator nowPos;
 
     bool flagExit = true;
 
-    for (it = tempStr.begin(); it != tempStr.end(); it++){
-        if ((*it) == '^'){
-            nowPos = it;
+    for (int i = 0; i < tempStr.size(); i++){
+        if (tempStr[i] == '^'){
+            nowPos = i;
+            flagExit = true;
             while (flagExit) {
-                if ((it-1) == tempStr.begin()) {
+                if (i-1 == 0) {
                     tempStr.insert(0,"(");
+                    flagExit = false;
+                    break;
                 }
                 else{
-                    it--;
-                    if (*(it) == ' ') continue;
-                    else if( (((*it) >= '0') && ((*it) <= '9')) || ((*it) == '.') ) {
-                        while ( (((*it) >= '0') && ((*it) <= '9')) || ((*it) == '.') ){
-                            if ((it-1) == tempStr.begin()){
+                    i--;
+                    if (tempStr[i] == ' ') continue;
+                    else if( ((tempStr[i] >= '0') && (tempStr[i] <= '9')) || (tempStr[i] == '.') ) {
+                        while ( ((tempStr[i] >= '0') && (tempStr[i] <= '9')) || (tempStr[i] == '.') ){
+                            if (i-1 == 0){
                                 tempStr.insert(0,"(");
                                 flagExit = false;
                                 break;
                             }
                             else{
-                                it--;
+                                i--;
                             }
                         }
-                        tempStr.insert(it-tempStr.begin()+1,"(");
+                        tempStr.insert(i+1,"(");
                         flagExit = false;
                     }
-//                    else if ((*it) == 'F'){
-//                        tempStr.insert(it-tempStr.begin(),"(");
-//                        flagExit = false;
-//                    }
-                    else if ((*it) == ')') {
-                        if (it == tempStr.begin()){
+                    else if (tempStr[i] == ')') {
+                        if (i == 0){
                             tempStr.insert(0,"(");
                             flagExit = false;
+                            break;
                         }
                         stackForParentHesis.push(')');
                         while (!stackForParentHesis.isEmpty()){
-                            if ((it-1) == tempStr.begin()){
+                            if ((i-1) == 0){
                                 tempStr.insert(0,"(");
                                 flagExit = false;
                                 break;
                             }
-                            it--;
-                            if ((*it) == '('){
+                            i--;
+                            if (tempStr[i] == '('){
                                 stackForParentHesis.pop();
                             }
-                            else if((*it) == ')'){
+                            else if(tempStr[i] == ')'){
                                 stackForParentHesis.push(')');
                             }
                         }
@@ -114,76 +64,453 @@ void setParanthesis(std::string *expression){
                             break;
                         }
                         while (true) {
-                            if ((it-1) == tempStr.begin()){
+                            if (i-1 == 0){
                                 tempStr.insert(0,"(");
                                 flagExit = false;
                                 break;
                             }
-                            it--;
-                            if (*(it) == ' ') continue;
-                            else if( ((*it) == '+') || ((*it) == '-') || ((*it) == '*') || ((*it) == '/') || ((*it) == '^') ){
-                                it++;
+                            i--;
+                            if (tempStr[i] == ' ') continue;
+                            else if( (tempStr[i] == '+') || (tempStr[i] == '-') || (tempStr[i] == '*') || (tempStr[i] == '/') || (tempStr[i] == '^') ){
+                                i++;
                                 break;
                             }
-                            else if( ((*it) >= 'a') && ((*it) <= 'z') ) {
-                                while ( ((*it) >= 'a') && ((*it) <= 'z') ){
-                                    it--;
+                            else if( (tempStr[i] >= 'a') && (tempStr[i] <= 'z') ) {
+                                while ( (tempStr[i] >= 'a') && (tempStr[i] <= 'z') ){
+                                    i--;
                                 }
                                 break;
                             }
                         }
-                        tempStr.insert(it-tempStr.begin()+1,"(");
+                        tempStr.insert(i+1,"(");
                         flagExit = false;
                     }
                 }
             }
+            i = nowPos;
+            while (!stackForParentHesis.isEmpty()){
+                stackForParentHesis.pop();
+            }
+            flagExit = true;
+            while (flagExit){
+                if (i+1 == tempStr.size()) {
+                    tempStr.push_back(')');
+                    flagExit = false;
+                    i = tempStr.size() - 1;
+                    break;
+                }
+                else{
+                    i++;
+                    if (tempStr[i] == ' ') continue;
+                    else if( ((tempStr[i] >= '0') && (tempStr[i] <= '9')) || (tempStr[i] == '.') ) {
+                        while ( ((tempStr[i] >= '0') && (tempStr[i] <= '9')) || (tempStr[i] == '.') ){
+                            if ( (tempStr[i] == '\0') || (tempStr[i+1] == '\0')){
+                                tempStr.push_back(')');
+                                flagExit = false;
+                                break;
+                            }
+                            else{
+                                i++;
+                            }
+                        }
+                        if (!flagExit){
+                            break;
+                        }
+                        tempStr.insert(i,")");
+                        flagExit = false;
+                    }
+                    else if (tempStr[i] == '(') {
+                        if (tempStr[i] == '\0'){
+                            tempStr.push_back(')');
+                            flagExit = false;
+                            break;
+                        }
+                        stackForParentHesis.push('(');
+                        while (!stackForParentHesis.isEmpty()){
+                            if (tempStr[i+1] == '\0'){
+                                tempStr.push_back(')');
+                                flagExit = false;
+                                break;
+                            }
+                            i++;
+                            if (tempStr[i] == ')'){
+                                stackForParentHesis.pop();
+                            }
+                            else if(tempStr[i] == '('){
+                                stackForParentHesis.push('(');
+                            }
+                        }
+                        if (!flagExit) {
+                            break;
+                        }
+                        while (true) {
+                            if (tempStr[i+1] == '\0'){
+                                tempStr.push_back(')');
+                                flagExit = false;
+                                break;
+                            }
+                            i++;
+                            if (tempStr[i] == ' ') continue;
+                            else if( (tempStr[i] == '+') || (tempStr[i] == '-') || (tempStr[i] == '*') || (tempStr[i] == '/') || (tempStr[i] == '^') ){
+                                while (tempStr[i] != ')'){
+                                    i--;
+                                }
+                                break;
+                            }
+                            else if( (tempStr[i] >= 'a') && (tempStr[i] <= 'z') ) {
+                                while ( (tempStr[i] >= 'a') && (tempStr[i] <= 'z') ){
+                                    i++;
+                                }
+                                break;
+                            }
+                        }
+                        if (!flagExit){
+                            break;
+                        }
+                        tempStr.insert(i+1,")");
+                        flagExit = false;
+                    }
+                }
+            }
+            i = nowPos+1;
         }
     }
 
 
+    for (int i = 0; i < tempStr.size(); i++){
+        if ( (tempStr[i] == '*') || (tempStr[i] == '/') ){
+            nowPos = i;
+            flagExit = true;
+            while (flagExit) {
+                if (i-1 == 0) {
+                    tempStr.insert(0,"(");
+                    flagExit = false;
+                    break;
+                }
+                else{
+                    i--;
+                    if (tempStr[i] == ' ') continue;
+                    else if( ((tempStr[i] >= '0') && (tempStr[i] <= '9')) || (tempStr[i] == '.') ) {
+                        while ( ((tempStr[i] >= '0') && (tempStr[i] <= '9')) || (tempStr[i] == '.') ){
+                            if (i-1 == 0){
+                                tempStr.insert(0,"(");
+                                flagExit = false;
+                                break;
+                            }
+                            else{
+                                i--;
+                            }
+                        }
+                        tempStr.insert(i+1,"(");
+                        flagExit = false;
+                    }
+                    else if (tempStr[i] == ')') {
+                        if (i == 0){
+                            tempStr.insert(0,"(");
+                            flagExit = false;
+                            break;
+                        }
+                        stackForParentHesis.push(')');
+                        while (!stackForParentHesis.isEmpty()){
+                            if ((i-1) == 0){
+                                tempStr.insert(0,"(");
+                                flagExit = false;
+                                break;
+                            }
+                            i--;
+                            if (tempStr[i] == '('){
+                                stackForParentHesis.pop();
+                            }
+                            else if(tempStr[i] == ')'){
+                                stackForParentHesis.push(')');
+                            }
+                        }
+                        if (!flagExit) {
+                            break;
+                        }
+                        while (true) {
+                            if (i-1 == 0){
+                                tempStr.insert(0,"(");
+                                flagExit = false;
+                                break;
+                            }
+                            i--;
+                            if (tempStr[i] == ' ') continue;
+                            else if( (tempStr[i] == '(') || (tempStr[i] == '+') || (tempStr[i] == '-') || (tempStr[i] == '*') || (tempStr[i] == '/') || (tempStr[i] == '^') ){
+                                i++;
+                                break;
+                            }
+                            else if( (tempStr[i] >= 'a') && (tempStr[i] <= 'z') ) {
+                                while ( (tempStr[i] >= 'a') && (tempStr[i] <= 'z') ){
+                                    i--;
+                                }
+                                break;
+                            }
+                        }
+                        tempStr.insert(i+1,"(");
+                        flagExit = false;
+                    }
+                }
+            }
+            i = nowPos;
+            while (!stackForParentHesis.isEmpty()){
+                stackForParentHesis.pop();
+            }
+            flagExit = true;
+            while (flagExit){
+                if (i+1 == tempStr.size()) {
+                    tempStr.push_back(')');
+                    flagExit = false;
+                    i = tempStr.size() - 1;
+                    break;
+                }
+                else{
+                    i++;
+                    if (tempStr[i] == ' ') continue;
+                    else if( ((tempStr[i] >= '0') && (tempStr[i] <= '9')) || (tempStr[i] == '.') ) {
+                        while ( ((tempStr[i] >= '0') && (tempStr[i] <= '9')) || (tempStr[i] == '.') ){
+                            if ( (tempStr[i] == '\0') || (tempStr[i+1] == '\0')){
+                                tempStr.push_back(')');
+                                flagExit = false;
+                                break;
+                            }
+                            else{
+                                i++;
+                            }
+                        }
+                        if (!flagExit){
+                            break;
+                        }
+                        tempStr.insert(i,")");
+                        flagExit = false;
+                    }
+                    else if (tempStr[i] == '(') {
+                        if (tempStr[i] == '\0'){
+                            tempStr.push_back(')');
+                            flagExit = false;
+                            break;
+                        }
+                        stackForParentHesis.push('(');
+                        while (!stackForParentHesis.isEmpty()){
+                            if (tempStr[i+1] == '\0'){
+                                tempStr.push_back(')');
+                                flagExit = false;
+                                break;
+                            }
+                            i++;
+                            if (tempStr[i] == ')'){
+                                stackForParentHesis.pop();
+                            }
+                            else if(tempStr[i] == '('){
+                                stackForParentHesis.push('(');
+                            }
+                        }
+                        if (!flagExit) {
+                            break;
+                        }
+                        while (true) {
+                            if (tempStr[i+1] == '\0'){
+                                tempStr.push_back(')');
+                                flagExit = false;
+                                break;
+                            }
+                            i++;
+                            if (tempStr[i] == ' ') continue;
+                            else if( (tempStr[i] == '+') || (tempStr[i] == '-') || (tempStr[i] == '*') || (tempStr[i] == '/') || (tempStr[i] == '^') ){
+                                while (tempStr[i] != ')'){
+                                    i--;
+                                }
+                                break;
+                            }
+                            else if( (tempStr[i] >= 'a') && (tempStr[i] <= 'z') ) {
+                                while ( (tempStr[i] >= 'a') && (tempStr[i] <= 'z') ){
+                                    i++;
+                                }
+                                break;
+                            }
+                        }
+                        if (!flagExit){
+                            break;
+                        }
+                        tempStr.insert(i+1,")");
+                        flagExit = false;
+                    }
+                }
+            }
+            i = nowPos+1;
+        }
+    }
 
 
-
-
-
-
-
-
-
-
-
-
-
-//
-//    for (it = tempStr.begin(); it < tempStr.end(); it++) {
-//        if ((*it) == 'F'){
-//            beginString = it;
-//            break;
-//        }
-//    }
-//    std::string part1OfTempStr, part2OfTempStr;
-//
-//    for (it = tempStr.begin(); it < tempStr.end(); it++){
-//        if (it < beginString){
-//            part1OfTempStr.push_back(*it);
-//        }
-//        else if(it > beginString){
-//            part2OfTempStr.push_back(*it);
-//        }
-//    }
-//
-//    tempStr = part1OfTempStr;
-//    tempStr.push_back('(');
-//    tempStr += partOfString;
-//    tempStr.push_back(')');
-//    tempStr += part2OfTempStr;
-
-    std::cout << tempStr;
+    for (int i = 0; i < tempStr.size(); i++){
+        if ( (tempStr[i] == '+') || (tempStr[i] == '-') ){
+            nowPos = i;
+            flagExit = true;
+            while (flagExit) {
+                if (i-1 == 0) {
+                    tempStr.insert(0,"(");
+                    flagExit = false;
+                    break;
+                }
+                else{
+                    i--;
+                    if (tempStr[i] == ' ') continue;
+                    else if( ((tempStr[i] >= '0') && (tempStr[i] <= '9')) || (tempStr[i] == '.') ) {
+                        while ( ((tempStr[i] >= '0') && (tempStr[i] <= '9')) || (tempStr[i] == '.') ){
+                            if (i-1 == 0){
+                                tempStr.insert(0,"(");
+                                flagExit = false;
+                                break;
+                            }
+                            else{
+                                i--;
+                            }
+                        }
+                        tempStr.insert(i+1,"(");
+                        flagExit = false;
+                    }
+                    else if (tempStr[i] == ')') {
+                        if (i == 0){
+                            tempStr.insert(0,"(");
+                            flagExit = false;
+                            break;
+                        }
+                        stackForParentHesis.push(')');
+                        while (!stackForParentHesis.isEmpty()){
+                            if ((i-1) == 0){
+                                tempStr.insert(0,"(");
+                                flagExit = false;
+                                break;
+                            }
+                            i--;
+                            if (tempStr[i] == '('){
+                                stackForParentHesis.pop();
+                            }
+                            else if(tempStr[i] == ')'){
+                                stackForParentHesis.push(')');
+                            }
+                        }
+                        if (!flagExit) {
+                            break;
+                        }
+                        while (true) {
+                            if (i-1 == 0){
+                                tempStr.insert(0,"(");
+                                flagExit = false;
+                                break;
+                            }
+                            i--;
+                            if (tempStr[i] == ' ') continue;
+                            else if( (tempStr[i] == '+') || (tempStr[i] == '-') || (tempStr[i] == '*') || (tempStr[i] == '/') || (tempStr[i] == '^') ){
+                                i++;
+                                break;
+                            }
+                            else if( (tempStr[i] >= 'a') && (tempStr[i] <= 'z') ) {
+                                while ( (tempStr[i] >= 'a') && (tempStr[i] <= 'z') ){
+                                    i--;
+                                }
+                                break;
+                            }
+                        }
+                        tempStr.insert(i+1,"(");
+                        flagExit = false;
+                    }
+                }
+            }
+            i = nowPos;
+            while (!stackForParentHesis.isEmpty()){
+                stackForParentHesis.pop();
+            }
+            flagExit = true;
+            while (flagExit){
+                if (i+1 == tempStr.size()) {
+                    tempStr.push_back(')');
+                    flagExit = false;
+                    i = tempStr.size() - 1;
+                    break;
+                }
+                else{
+                    i++;
+                    if (tempStr[i] == ' ') continue;
+                    else if( ((tempStr[i] >= '0') && (tempStr[i] <= '9')) || (tempStr[i] == '.') ) {
+                        while ( ((tempStr[i] >= '0') && (tempStr[i] <= '9')) || (tempStr[i] == '.') ){
+                            if ( (tempStr[i] == '\0') || (tempStr[i+1] == '\0')){
+                                tempStr.push_back(')');
+                                flagExit = false;
+                                break;
+                            }
+                            else{
+                                i++;
+                            }
+                        }
+                        if (!flagExit){
+                            break;
+                        }
+                        tempStr.insert(i,")");
+                        flagExit = false;
+                    }
+                    else if (tempStr[i] == '(') {
+                        if (tempStr[i] == '\0'){
+                            tempStr.push_back(')');
+                            flagExit = false;
+                            break;
+                        }
+                        stackForParentHesis.push('(');
+                        while (!stackForParentHesis.isEmpty()){
+                            if (tempStr[i+1] == '\0'){
+                                tempStr.push_back(')');
+                                flagExit = false;
+                                break;
+                            }
+                            i++;
+                            if (tempStr[i] == ')'){
+                                stackForParentHesis.pop();
+                            }
+                            else if(tempStr[i] == '('){
+                                stackForParentHesis.push('(');
+                            }
+                        }
+                        if (!flagExit) {
+                            break;
+                        }
+                        while (true) {
+                            if (tempStr[i+1] == '\0'){
+                                tempStr.push_back(')');
+                                flagExit = false;
+                                break;
+                            }
+                            i++;
+                            if (tempStr[i] == ' ') continue;
+                            else if( (tempStr[i] == '+') || (tempStr[i] == '-') || (tempStr[i] == '*') || (tempStr[i] == '/') || (tempStr[i] == '^') ){
+                                while (tempStr[i] != ')'){
+                                    i--;
+                                }
+                                break;
+                            }
+                            else if( (tempStr[i] >= 'a') && (tempStr[i] <= 'z') ) {
+                                while ( (tempStr[i] >= 'a') && (tempStr[i] <= 'z') ){
+                                    i++;
+                                }
+                                break;
+                            }
+                        }
+                        if (!flagExit){
+                            break;
+                        }
+                        tempStr.insert(i+1,")");
+                        flagExit = false;
+                    }
+                }
+            }
+            i = nowPos+1;
+        }
+    }
+    *expression = tempStr;
 }
 
 
 void inputExpression(std::string *expression){
-    getline(std::cin, *expression);
+//    getline(std::cin, *expression);
 
 
     //check for not empty expression
@@ -248,7 +575,10 @@ void inputExpression(std::string *expression){
                     it--;
 
             }
-            else if ( ((it+2) != expression->end()) &&
+            else if ( ((it+2) == expression->end()) && ( ((*it) == 'p') && ((*(it+1) == 'i')) )  ) {
+                break;
+            }
+            else if ( ((it+2) <= expression->end()) &&
                 ( ((*it) == 'p') && ((*(it+1) == 'i')) )  ) {
 
                 it += 2;
@@ -524,6 +854,9 @@ void inputExpression(std::string *expression){
                     else if(((*it) >= '0') && ((*it) <= '9')) {
                         break;
                     }
+                    else if (((*it) == 'e') || (((*it) == 'i') && ((*(it-1) == 'p'))) ){
+                        break;
+                    }
                     else if((*it) == ')'){
                         break;
                     }
@@ -788,12 +1121,15 @@ void convertInfixToPostfix(std::string *expression) {
         else if ( ((*it) >= 'a') && ((*it) <= 'z') ) {
             if ( (*it) == 'e' ) {
                 result += "e";
+                nowTypeOfContainer = containerType::OPERAND;
                 continue;
             }
             functions += *it;
             if (functions == "pi") {
                 result += "pi";
                 functions.clear();
+                nowTypeOfContainer = containerType::OPERAND;
+                continue;
             }
             nowTypeOfContainer = containerType::FUNCTION;
         }
@@ -903,7 +1239,7 @@ double calculationPostfix(std::string *expression) {
                     tempStr.clear();
                 }
                 else if ( (tempStr.size() == 2) && (tempStr[0] == 'p') && (tempStr[1] == 'i')) {
-                    currentOperand = 180;
+                    currentOperand = M_PI;
                     stackForCalculation.push(currentOperand);
                     tempStr.clear();
                 }

@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 
 #include <string>
-#include "../headers/functions/functions.h"
+#include "../src/functions/functions.cpp"
 
 class TestCourseWork : public ::testing::Test {
 protected:
@@ -445,11 +445,6 @@ TEST_F(TestCourseWork, calculationPostfixSin720){
     GTEST_ASSERT_EQ(approximatelyEqual(result, 0, 0.0000001), true);
 }
 
-TEST_F(TestCourseWork, calculationPostfixSinPi45){
-    *(this->str) = "pi 4 / sin ";
-    double result = calculationPostfix(this->str);
-    GTEST_ASSERT_EQ(approximatelyEqual(result, sqrt(2)/2, 0.0000001), true);
-}
 
 
 
@@ -654,11 +649,6 @@ TEST_F(TestCourseWork, calculationPostfixCos720){
     GTEST_ASSERT_EQ(approximatelyEqual(result, 1, 0.0000001), true);
 }
 
-TEST_F(TestCourseWork, calculationPostfixCosPi45){
-    *(this->str) = "pi 4 / cos ";
-    double result = calculationPostfix(this->str);
-    GTEST_ASSERT_EQ(approximatelyEqual(result, sqrt(2)/2, 0.0000001), true);
-}
 
 
 
@@ -859,11 +849,6 @@ TEST_F(TestCourseWork, calculationPostfixTg720){
     GTEST_ASSERT_EQ(approximatelyEqual(result, 0, 0.0000001), true);
 }
 
-TEST_F(TestCourseWork, calculationPostfixTgPi45){
-    *(this->str) = "pi 4 / tg ";
-    double result = calculationPostfix(this->str);
-    GTEST_ASSERT_EQ(approximatelyEqual(result, 1, 0.0000001), true);
-}
 
 
 
@@ -1063,11 +1048,364 @@ TEST_F(TestCourseWork, calculationPostfixCtg720){
     ASSERT_ANY_THROW(calculationPostfix(this->str));
 }
 
-TEST_F(TestCourseWork, calculationPostfixCtgPi45){
-    *(this->str) = "pi 4 / ctg ";
-    double result = calculationPostfix(this->str);
-    GTEST_ASSERT_EQ(approximatelyEqual(result, 1, 0.0000001), true);
+
+
+
+
+TEST_F(TestCourseWork, convertInfixToPostfix1){
+    *(this->str) = "((sin(123 - 56) + e) - 2)";
+    convertInfixToPostfix(this->str);
+    GTEST_ASSERT_EQ(*(this->str), "123 56 - sin e + 2 - ");
 }
+
+TEST_F(TestCourseWork, convertInfixToPostfix2){
+    *(this->str) = "((sin(123 - 56) + pi) - 2)";
+    convertInfixToPostfix(this->str);
+    GTEST_ASSERT_EQ(*(this->str), "123 56 - sin pi + 2 - ");
+}
+
+TEST_F(TestCourseWork, convertInfixToPostfi3){
+    *(this->str) = "((sin(123 - 56) + cos(5 ^ 4)) / 2)";
+    convertInfixToPostfix(this->str);
+    GTEST_ASSERT_EQ(*(this->str), "123 56 - sin 5 4 ^ cos + 2 / ");
+}
+
+
+
+
+
+TEST_F(TestCourseWork, setParentHesis1){
+    *(this->str) = "1 + 2 ^ 3";
+    setParanthesis(this->str);
+    GTEST_ASSERT_EQ(*(this->str), "(1 + (2 ^ 3))");
+}
+
+TEST_F(TestCourseWork, setParentHesis2){
+    *(this->str) = "2 ^ 3";
+    setParanthesis(this->str);
+    GTEST_ASSERT_EQ(*(this->str), "(2 ^ 3)");
+}
+
+TEST_F(TestCourseWork, setParentHesis3){
+    *(this->str) = "1 + (1 + 2) ^ 3";
+    setParanthesis(this->str);
+    GTEST_ASSERT_EQ(*(this->str), "(1 + (((1 + 2)) ^ 3))");
+}
+
+TEST_F(TestCourseWork, setParentHesis4){
+    *(this->str) = "(1 + 2) ^ 3";
+    setParanthesis(this->str);
+    GTEST_ASSERT_EQ(*(this->str), "(((1 + 2)) ^ 3)");
+}
+
+TEST_F(TestCourseWork, setParentHesis5){
+    *(this->str) = "1 + sin(1 + 2) ^ 3";
+    setParanthesis(this->str);
+    GTEST_ASSERT_EQ(*(this->str), "(1 + (sin((1 + 2)) ^ 3))");
+}
+
+TEST_F(TestCourseWork, setParentHesis6){
+    *(this->str) = "sin(1 + 2) ^ 3";
+    setParanthesis(this->str);
+    GTEST_ASSERT_EQ(*(this->str), "(sin((1 + 2)) ^ 3)");
+}
+
+TEST_F(TestCourseWork, setParentHesis7){
+    *(this->str) = "sin(1 + 2) ^ 3 + 4";
+    setParanthesis(this->str);
+    GTEST_ASSERT_EQ(*(this->str), "((sin((1 + 2)) ^ 3) + 4)");
+}
+
+TEST_F(TestCourseWork, setParentHesis8){
+    *(this->str) = "sin(1 + 2) ^ (3 + 4)";
+    setParanthesis(this->str);
+    GTEST_ASSERT_EQ(*(this->str), "(sin((1 + 2)) ^ ((3 + 4)))");
+}
+
+TEST_F(TestCourseWork, setParentHesis9){
+    *(this->str) = "sin(1 + 2) ^ (3 + 4) + 5";
+    setParanthesis(this->str);
+    GTEST_ASSERT_EQ(*(this->str), "((sin((1 + 2)) ^ ((3 + 4))) + 5)");
+}
+
+TEST_F(TestCourseWork, setParentHesis10){
+    *(this->str) = "sin(1 + 2) ^ sin(3 + 4)";
+    setParanthesis(this->str);
+    GTEST_ASSERT_EQ(*(this->str), "(sin((1 + 2)) ^ sin((3 + 4)))");
+}
+
+TEST_F(TestCourseWork, setParentHesis11){
+    *(this->str) = "sin(1 + 2) ^ sin(3 + 4) + 5";
+    setParanthesis(this->str);
+    GTEST_ASSERT_EQ(*(this->str), "((sin((1 + 2)) ^ sin((3 + 4))) + 5)");
+}
+
+TEST_F(TestCourseWork, setParentHesis12){
+    *(this->str) = "sin(1 + 2) ^ (3 + 4) + 5";
+    setParanthesis(this->str);
+    GTEST_ASSERT_EQ(*(this->str), "((sin((1 + 2)) ^ ((3 + 4))) + 5)");
+}
+
+TEST_F(TestCourseWork, setParentHesis13){
+    *(this->str) = "1 + 2 + 3 + 4";
+    setParanthesis(this->str);
+    GTEST_ASSERT_EQ(*(this->str), "(((1 + 2) + 3) + 4)");
+}
+
+TEST_F(TestCourseWork, setParentHesis14){
+    *(this->str) = "1 + 2 * 3 + 4";
+    setParanthesis(this->str);
+    GTEST_ASSERT_EQ(*(this->str), "((1 + (2 * 3)) + 4)");
+}
+
+
+TEST_F(TestCourseWork, setParentHesis15){
+    *(this->str) = "1 + 2 * 3 / 4";
+    setParanthesis(this->str);
+    GTEST_ASSERT_EQ(*(this->str), "(1 + ((2 * 3) / 4))");
+}
+
+TEST_F(TestCourseWork, setParentHesis16){
+    *(this->str) = "2 ^ 3 + 3 * 6 * 7 - 2";
+    setParanthesis(this->str);
+    GTEST_ASSERT_EQ(*(this->str), "(((2 ^ 3) + ((3 * 6) * 7)) - 2)");
+}
+
+TEST_F(TestCourseWork, setParentHesis17){
+    *(this->str) = "2 ^ 3 + 3 * 6 - 2";
+    setParanthesis(this->str);
+    GTEST_ASSERT_EQ(*(this->str), "(((2 ^ 3) + (3 * 6)) - 2)");
+}
+
+TEST_F(TestCourseWork, setParentHesis18){
+    *(this->str) = "2 ^ (3 + 4) * sin((7 - 8) * (9 * 10)) - (11 * 12)";
+    setParanthesis(this->str);
+    GTEST_ASSERT_EQ(*(this->str), "(((2 ^ ((3 + 4))) * sin((((7 - 8)) * ((9 * 10))))) - ((11 * 12)))");
+}
+
+TEST_F(TestCourseWork, setParentHesis19){
+    *(this->str) = "sin((7 - 8) * (9 * 10))";
+    setParanthesis(this->str);
+    GTEST_ASSERT_EQ(*(this->str), "sin((((7 - 8)) * ((9 * 10))))");
+}
+
+
+TEST_F(TestCourseWork, inputExpressionGOOD1){
+    *(this->str) = "1 + 2";
+    ASSERT_NO_THROW(inputExpression(this->str));
+}
+
+TEST_F(TestCourseWork, inputExpressionGOOD2){
+    *(this->str) = "1 +2";
+    ASSERT_NO_THROW(inputExpression(this->str));
+}
+
+TEST_F(TestCourseWork, inputExpressionGOOD3){
+    *(this->str) = "1 + 2.22222";
+    ASSERT_NO_THROW(inputExpression(this->str));
+}
+
+TEST_F(TestCourseWork, inputExpressionGOOD4){
+    *(this->str) = "1 +                  2";
+    ASSERT_NO_THROW(inputExpression(this->str));
+}
+
+TEST_F(TestCourseWork, inputExpressionGOOD5){
+    *(this->str) = "1 + (2.13256 - 3)";
+    ASSERT_NO_THROW(inputExpression(this->str));
+}
+
+TEST_F(TestCourseWork, inputExpressionGOOD6){
+    *(this->str) = "sin(45)";
+    ASSERT_NO_THROW(inputExpression(this->str));
+}
+
+TEST_F(TestCourseWork, inputExpressionGOOD7){
+    *(this->str) = "sin(45 + 45)";
+    ASSERT_NO_THROW(inputExpression(this->str));
+}
+
+TEST_F(TestCourseWork, inputExpressionGOOD8){
+    *(this->str) = "sin(45        + 45.1564)";
+    ASSERT_NO_THROW(inputExpression(this->str));
+}
+
+TEST_F(TestCourseWork, inputExpressionGOOD9){
+    *(this->str) = "sin((23 - 8) * (0.2 * 10))";
+    ASSERT_NO_THROW(inputExpression(this->str));
+}
+
+TEST_F(TestCourseWork, inputExpressionGOOD10){
+    *(this->str) = "e + pi * sin((23 - 8) * (0.2 * 10))";
+    ASSERT_NO_THROW(inputExpression(this->str));
+}
+
+TEST_F(TestCourseWork, inputExpressionERROR1){
+    *(this->str) = "1 2";
+    ASSERT_ANY_THROW(inputExpression(this->str));
+}
+
+TEST_F(TestCourseWork, inputExpressionERROR2){
+    *(this->str) = "1 + 2 +";
+    ASSERT_ANY_THROW(inputExpression(this->str));
+}
+
+TEST_F(TestCourseWork, inputExpressionERROR3){
+    *(this->str) = "1 + +++ 2.2";
+    ASSERT_ANY_THROW(inputExpression(this->str));
+}
+
+TEST_F(TestCourseWork, inputExpressionERROR4){
+    *(this->str) = "1 + 2....2";
+    ASSERT_ANY_THROW(inputExpression(this->str));
+}
+
+TEST_F(TestCourseWork, inputExpressionERROR5){
+    *(this->str) = "((()))";
+    ASSERT_ANY_THROW(inputExpression(this->str));
+}
+
+TEST_F(TestCourseWork, inputExpressionERROR6){
+    *(this->str) = "((())";
+    ASSERT_ANY_THROW(inputExpression(this->str));
+}
+
+TEST_F(TestCourseWork, inputExpressionERROR7){
+    *(this->str) = "(((+)))";
+    ASSERT_ANY_THROW(inputExpression(this->str));
+}
+
+TEST_F(TestCourseWork, inputExpressionERROR8){
+    *(this->str) = "";
+    ASSERT_ANY_THROW(inputExpression(this->str));
+}
+
+TEST_F(TestCourseWork, inputExpressionERROR9){
+    *(this->str) = "1 + 2)";
+    ASSERT_ANY_THROW(inputExpression(this->str));
+}
+
+TEST_F(TestCourseWork, inputExpressionERROR10){
+    *(this->str) = "sin";
+    ASSERT_ANY_THROW(inputExpression(this->str));
+}
+
+TEST_F(TestCourseWork, inputExpressionERROR11){
+    *(this->str) = "sin(23 ";
+    ASSERT_ANY_THROW(inputExpression(this->str));
+}
+
+TEST_F(TestCourseWork, inputExpressionERROR12){
+    *(this->str) = "sinjdad(45)";
+    ASSERT_ANY_THROW(inputExpression(this->str));
+}
+
+TEST_F(TestCourseWork, inputExpressionERROR13){
+    *(this->str) = "asfmlk + 2";
+    ASSERT_ANY_THROW(inputExpression(this->str));
+}
+
+TEST_F(TestCourseWork, inputExpressionERROR14){
+    *(this->str) = "sin ( +  23";
+    ASSERT_ANY_THROW(inputExpression(this->str));
+}
+
+TEST_F(TestCourseWork, inputExpressionERROR15){
+    *(this->str) = "sin  +  23";
+    ASSERT_ANY_THROW(inputExpression(this->str));
+}
+
+TEST_F(TestCourseWork, inputExpressionERROR16){
+    *(this->str) = "sin(12) - ()  +  23";
+    ASSERT_ANY_THROW(inputExpression(this->str));
+}
+
+
+TEST_F(TestCourseWork, fullTest1){
+    *(this->str) = "1 + 2 ^ 3";
+
+    ASSERT_NO_THROW(inputExpression(this->str));
+    setParanthesis(this->str);
+    GTEST_ASSERT_EQ(*(this->str), "(1 + (2 ^ 3))");
+    convertInfixToPostfix(this->str);
+    GTEST_ASSERT_EQ(*(this->str),"1 2 3 ^ + ");
+    double result = calculationPostfix(this->str);
+    GTEST_ASSERT_EQ(approximatelyEqual(result, 9, 0.0000001), true);
+}
+
+TEST_F(TestCourseWork, fullTest2){
+    *(this->str) = "1 + 2 ^ 3 - (5 * 2)";
+
+    ASSERT_NO_THROW(inputExpression(this->str));
+    setParanthesis(this->str);
+    GTEST_ASSERT_EQ(*(this->str), "((1 + (2 ^ 3)) - ((5 * 2)))");
+    convertInfixToPostfix(this->str);
+    GTEST_ASSERT_EQ(*(this->str),"1 2 3 ^ + 5 2 * - ");
+    double result = calculationPostfix(this->str);
+    GTEST_ASSERT_EQ(approximatelyEqual(result, -1, 0.0000001), true);
+}
+
+TEST_F(TestCourseWork, fullTest3){
+    *(this->str) = "(1 + 2) ^ 3 - (5 * 2)";
+
+    ASSERT_NO_THROW(inputExpression(this->str));
+    setParanthesis(this->str);
+    GTEST_ASSERT_EQ(*(this->str), "((((1 + 2)) ^ 3) - ((5 * 2)))");
+    convertInfixToPostfix(this->str);
+    GTEST_ASSERT_EQ(*(this->str),"1 2 + 3 ^ 5 2 * - ");
+    double result = calculationPostfix(this->str);
+    GTEST_ASSERT_EQ(approximatelyEqual(result, 17, 0.0000001), true);
+}
+
+TEST_F(TestCourseWork, fullTest4){
+    *(this->str) = "(1 + 2) ^ 3 - sin(45 / 1.5)";
+
+    ASSERT_NO_THROW(inputExpression(this->str));
+    setParanthesis(this->str);
+    GTEST_ASSERT_EQ(*(this->str), "((((1 + 2)) ^ 3) - sin((45 / 1.5)))");
+    convertInfixToPostfix(this->str);
+    GTEST_ASSERT_EQ(*(this->str),"1 2 + 3 ^ 45 1.5 / sin - ");
+    double result = calculationPostfix(this->str);
+    GTEST_ASSERT_EQ(approximatelyEqual(result, 26.5, 0.0000001), true);
+}
+
+TEST_F(TestCourseWork, fullTest5){
+    *(this->str) = "sin((23 - 8) * (0.2 * 10))";
+
+    ASSERT_NO_THROW(inputExpression(this->str));
+    setParanthesis(this->str);
+    GTEST_ASSERT_EQ(*(this->str), "sin((((23 - 8)) * ((0.2 * 10))))");
+    convertInfixToPostfix(this->str);
+    GTEST_ASSERT_EQ(*(this->str),"23 8 - 0.2 10 * * sin ");
+    double result = calculationPostfix(this->str);
+    GTEST_ASSERT_EQ(approximatelyEqual(result, 0.5, 0.0000001), true);
+}
+
+TEST_F(TestCourseWork, fullTest6){
+    *(this->str) = "2 - (3 + 1) ^ 2 + sin((23 - 8) * (0.2 * 10)) + 34 / 2";
+
+    ASSERT_NO_THROW(inputExpression(this->str));
+    setParanthesis(this->str);
+    GTEST_ASSERT_EQ(*(this->str), "(((2 - (((3 + 1)) ^ 2)) + sin((((23 - 8)) * ((0.2 * 10))))) + (34 / 2))");
+    convertInfixToPostfix(this->str);
+    GTEST_ASSERT_EQ(*(this->str),"2 3 1 + 2 ^ - 23 8 - 0.2 10 * * sin + 34 2 / + ");
+    double result = calculationPostfix(this->str);
+    GTEST_ASSERT_EQ(approximatelyEqual(result, 3.5, 0.0000001), true);
+}
+
+
+TEST_F(TestCourseWork, fullTest7){
+    *(this->str) = "e + 3 * 4 - pi";
+
+    ASSERT_NO_THROW(inputExpression(this->str));
+    setParanthesis(this->str);
+    GTEST_ASSERT_EQ(*(this->str), "((e + (3 * 4)) - pi)");
+    convertInfixToPostfix(this->str);
+    GTEST_ASSERT_EQ(*(this->str),"e 3 4 * + pi - ");
+    double result = calculationPostfix(this->str);
+    GTEST_ASSERT_EQ(approximatelyEqual(result, (M_E + 12 - M_PI), 0.0000001), true);
+}
+
 
 int main(int argc, char** argv) {
     testing::InitGoogleTest(&argc, argv);
