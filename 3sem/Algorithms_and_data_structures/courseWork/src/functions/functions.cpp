@@ -5,7 +5,6 @@
 
 void setParanthesis(std::string *expression){
     stack<char> stackForParentHesis;
-//    std::string::iterator it, beginString, endString, nowPos;
     std::string partOfString;
     int nowPos;
     std::string tempStr = *expression;
@@ -510,7 +509,8 @@ void setParanthesis(std::string *expression){
 
 
 void inputExpression(std::string *expression){
-//    getline(std::cin, *expression);
+
+    getline(std::cin, *expression);
 
 
     //check for not empty expression
@@ -653,17 +653,7 @@ void inputExpression(std::string *expression){
     }
 
 
-
-
-
-
-
-
-
-
-    // check after operands "123455    123456 + 13454 - 2435"
-    // check after operands "123456 + 13454 - 2435   sin"
-    // check after operands "123456 + 13454 - 2435 ("
+    // checks for operands
     for (std::string::iterator it = expression->begin(); it != expression->end(); it++) {
         if (  (((*it) >= '0') && ((*it) <= '9')) || ((*it) == '.')   ) {
             std::string::iterator nowPos = it;
@@ -788,11 +778,7 @@ void inputExpression(std::string *expression){
 
 
 
-    // check for "  + 123 - 234"
-    // check for "123 + +++++ 345"
-    // check for "123 +   )"
-    // check for "123 +**  ** * "
-    // check for "123..........45"
+    // checks for operators
     for (std::string::iterator it = expression->begin(); it != expression->end(); it++) {
         if ( ((*it) == '+') || ((*it) == '-') || ((*it) == '*') || ((*it) == '/') || ((*it) == '^') ) {
             std::string::iterator nowPos = it;
@@ -874,7 +860,7 @@ void inputExpression(std::string *expression){
         }
     }
 
-
+    // checks for dot
     for (std::string::iterator it = expression->begin(); it != expression->end(); it++){
         if ((*it) == '.') {
             if ((it+1) != expression->end()){
@@ -913,6 +899,7 @@ void inputExpression(std::string *expression){
         }
     }
 
+    // checks for (
     for (std::string::iterator it = expression->begin(); it != expression->end(); it++){
         if ((*it) == '(') {
             std::string::iterator nowPos = it;
@@ -991,7 +978,7 @@ void inputExpression(std::string *expression){
     }
 
 
-    // check for "  )  123 + 43 - 23"
+    // checks for )
     for (std::string::iterator it = expression->begin(); it != expression->end(); it++) {
         if ((*it) == ')') {
             std::string::iterator nowPos = it;
@@ -1070,9 +1057,9 @@ void inputExpression(std::string *expression){
             stackBalanceParanthesis.pop();
         }
     }
+
     if (!stackBalanceParanthesis.isEmpty())
         throw std::invalid_argument("Count of left paranthesis not equal count of right parenthesis");
-
 
 }
 

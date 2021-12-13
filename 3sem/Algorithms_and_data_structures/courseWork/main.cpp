@@ -3,26 +3,17 @@
 #include "headers/functions/functions.h"
 
 int main() {
-
-
     auto *expression = new std::string();
-//    inputExpression(expression);
-    *expression = "((sin(123 + 56) + cos(15 - -6)) / 2)";
 
-    // ((sin(123 + 56) - cos(15 * 6)) / 2)
+    std::cout << "Please input an expression: " << std::endl;
+    inputExpression(expression);
+    std::cout << "You inputed: \n" << *expression << std::endl;
 
-    std::cout << *expression << std::endl;
+    setParanthesis(expression);
 
-    *expression = convertInfixToPostfix(*expression);
+    convertInfixToPostfix(expression);
+    std::cout << "The expression after tranlation from infix to postfix form: \n" << *expression << std::endl;
 
-    std::cout << *expression << std::endl;
-
-
-//    std::cout << calculationPostfix(expression);
-
-//    std::string str = "2.2";
-//    double d = std::stod(str);
-//    std::cout << d << std::endl;
-
+    std::cout << "The result = " << calculationPostfix(expression) << std::endl;
     return 0;
 }
